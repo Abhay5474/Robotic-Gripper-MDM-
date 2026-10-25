@@ -1,0 +1,394 @@
+{
+ "_comment": "Shared by backend/tests/test_safety.py and frontend/tests/safety.test.ts. Limits are the demo defaults.",
+ "limits": {
+  "gripper_id": "demo-parallel-gripper",
+  "finger_count": 2,
+  "contact_pad_material": "silicone",
+  "force_definition": "normal_force_per_finger",
+  "force_unit": "N",
+  "min_force_n": 1.0,
+  "max_force_n": 40.0,
+  "force_step_n": 0.5,
+  "max_opening_mm": 120.0,
+  "lift_acceleration_m_s2": 2.0,
+  "holding_safety_factor": 1.5,
+  "limits_source": "demo"
+ },
+ "cases": [
+  {
+   "name": "bottle at recommended margin",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 350,
+    "width_mm": 65,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 20
+   },
+   "force_n": 8.0,
+   "expected": {
+    "status": "ok",
+    "required_min_force_n": 5.165,
+    "recommended_min_force_n": 7.748,
+    "upper_limit_n": 20.0,
+    "can_test": true,
+    "can_save_as_calibrated": true,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "bottle marginal",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 350,
+    "width_mm": 65,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 20
+   },
+   "force_n": 6.0,
+   "expected": {
+    "status": "marginal",
+    "required_min_force_n": 5.165,
+    "recommended_min_force_n": 7.748,
+    "upper_limit_n": 20.0,
+    "can_test": true,
+    "can_save_as_calibrated": true,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "bottle below required",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 350,
+    "width_mm": 65,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 20
+   },
+   "force_n": 3.0,
+   "expected": {
+    "status": "below_required",
+    "required_min_force_n": 5.165,
+    "recommended_min_force_n": 7.748,
+    "upper_limit_n": 20.0,
+    "can_test": true,
+    "can_save_as_calibrated": false,
+    "requires_override": true
+   }
+  },
+  {
+   "name": "bottle below gripper minimum",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 350,
+    "width_mm": 65,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 20
+   },
+   "force_n": 0.5,
+   "expected": {
+    "status": "below_minimum",
+    "required_min_force_n": 5.165,
+    "recommended_min_force_n": 7.748,
+    "upper_limit_n": 20.0,
+    "can_test": false,
+    "can_save_as_calibrated": false,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "bottle above object limit",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 350,
+    "width_mm": 65,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 20
+   },
+   "force_n": 21.0,
+   "expected": {
+    "status": "exceeds_limit",
+    "required_min_force_n": 5.165,
+    "recommended_min_force_n": 7.748,
+    "upper_limit_n": 20.0,
+    "can_test": false,
+    "can_save_as_calibrated": false,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "bottle at object limit",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 350,
+    "width_mm": 65,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 20
+   },
+   "force_n": 20.0,
+   "expected": {
+    "status": "ok",
+    "required_min_force_n": 5.165,
+    "recommended_min_force_n": 7.748,
+    "upper_limit_n": 20.0,
+    "can_test": true,
+    "can_save_as_calibrated": true,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "wooden block above gripper max",
+   "object": {
+    "object_id": "wooden-block",
+    "name": "Wooden block",
+    "mass_g": 200,
+    "width_mm": 50,
+    "height_mm": 50,
+    "depth_mm": 50,
+    "material": "wood",
+    "friction_coefficient": 0.45,
+    "fragility": "robust",
+    "max_contact_force_n": null
+   },
+   "force_n": 41.0,
+   "expected": {
+    "status": "exceeds_limit",
+    "required_min_force_n": 2.624,
+    "recommended_min_force_n": 3.936,
+    "upper_limit_n": 40.0,
+    "can_test": false,
+    "can_save_as_calibrated": false,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "wooden block ok",
+   "object": {
+    "object_id": "wooden-block",
+    "name": "Wooden block",
+    "mass_g": 200,
+    "width_mm": 50,
+    "height_mm": 50,
+    "depth_mm": 50,
+    "material": "wood",
+    "friction_coefficient": 0.45,
+    "fragility": "robust",
+    "max_contact_force_n": null
+   },
+   "force_n": 6.0,
+   "expected": {
+    "status": "ok",
+    "required_min_force_n": 2.624,
+    "recommended_min_force_n": 3.936,
+    "upper_limit_n": 40.0,
+    "can_test": true,
+    "can_save_as_calibrated": true,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "fragile ok",
+   "object": {
+    "object_id": "fragile-object",
+    "name": "Fragile object",
+    "mass_g": 80,
+    "width_mm": 60,
+    "height_mm": 60,
+    "depth_mm": 60,
+    "material": "thin glass",
+    "friction_coefficient": 0.3,
+    "fragility": "fragile",
+    "max_contact_force_n": 6
+   },
+   "force_n": 3.0,
+   "expected": {
+    "status": "ok",
+    "required_min_force_n": 1.574,
+    "recommended_min_force_n": 2.361,
+    "upper_limit_n": 6.0,
+    "can_test": true,
+    "can_save_as_calibrated": true,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "fragile above limit",
+   "object": {
+    "object_id": "fragile-object",
+    "name": "Fragile object",
+    "mass_g": 80,
+    "width_mm": 60,
+    "height_mm": 60,
+    "depth_mm": 60,
+    "material": "thin glass",
+    "friction_coefficient": 0.3,
+    "fragility": "fragile",
+    "max_contact_force_n": 6
+   },
+   "force_n": 6.5,
+   "expected": {
+    "status": "exceeds_limit",
+    "required_min_force_n": 1.574,
+    "recommended_min_force_n": 2.361,
+    "upper_limit_n": 6.0,
+    "can_test": false,
+    "can_save_as_calibrated": false,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "heavy object no safe range",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 3000,
+    "width_mm": 65,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 5
+   },
+   "force_n": 4.0,
+   "expected": {
+    "status": "no_safe_range",
+    "required_min_force_n": 44.275,
+    "recommended_min_force_n": 66.412,
+    "upper_limit_n": 5.0,
+    "can_test": false,
+    "can_save_as_calibrated": false,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "object wider than opening",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 350,
+    "width_mm": 130,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 20
+   },
+   "force_n": 10.0,
+   "expected": {
+    "status": "no_safe_range",
+    "required_min_force_n": 5.165,
+    "recommended_min_force_n": 7.748,
+    "upper_limit_n": 20.0,
+    "can_test": false,
+    "can_save_as_calibrated": false,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "rubber ball above hold but below margin",
+   "object": {
+    "object_id": "rubber-ball",
+    "name": "Rubber ball",
+    "mass_g": 150,
+    "width_mm": 70,
+    "height_mm": 70,
+    "depth_mm": 70,
+    "material": "rubber",
+    "friction_coefficient": 0.9,
+    "fragility": "robust",
+    "max_contact_force_n": null
+   },
+   "force_n": 1.2,
+   "expected": {
+    "status": "marginal",
+    "required_min_force_n": 0.984,
+    "recommended_min_force_n": 1.476,
+    "upper_limit_n": 40.0,
+    "can_test": true,
+    "can_save_as_calibrated": true,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "margin unavailable",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 1200,
+    "width_mm": 65,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 20
+   },
+   "force_n": 19.0,
+   "expected": {
+    "status": "marginal",
+    "required_min_force_n": 17.71,
+    "recommended_min_force_n": 26.565,
+    "upper_limit_n": 20.0,
+    "can_test": true,
+    "can_save_as_calibrated": true,
+    "requires_override": false
+   }
+  },
+  {
+   "name": "invalid zero",
+   "object": {
+    "object_id": "plastic-bottle",
+    "name": "Plastic bottle",
+    "mass_g": 350,
+    "width_mm": 65,
+    "height_mm": 210,
+    "depth_mm": 65,
+    "material": "PET plastic",
+    "friction_coefficient": 0.4,
+    "fragility": "moderate",
+    "max_contact_force_n": 20
+   },
+   "force_n": 0,
+   "expected": {
+    "status": "invalid",
+    "required_min_force_n": null,
+    "recommended_min_force_n": null,
+    "upper_limit_n": null,
+    "can_test": false,
+    "can_save_as_calibrated": false,
+    "requires_override": false
+   }
+  }
+ ]
+}

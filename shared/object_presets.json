@@ -1,0 +1,13 @@
+{
+  "_comment": "Illustrative ESTIMATES only. Mass/size/friction are generic placeholder values, not measurements. width_mm is the dimension between the finger pads. Shared by backend (GET /api/objects) and frontend.",
+  "presets": [
+    {"object_id": "plastic-bottle", "name": "Plastic bottle", "mass_g": 350, "width_mm": 65, "height_mm": 210, "depth_mm": 65, "material": "PET plastic", "friction_coefficient": 0.40, "fragility": "moderate", "max_contact_force_n": 20},
+    {"object_id": "aluminum-can", "name": "Aluminum can", "mass_g": 380, "width_mm": 66, "height_mm": 122, "depth_mm": 66, "material": "aluminum", "friction_coefficient": 0.35, "fragility": "moderate", "max_contact_force_n": 25},
+    {"object_id": "wooden-block", "name": "Wooden block", "mass_g": 200, "width_mm": 50, "height_mm": 50, "depth_mm": 50, "material": "wood", "friction_coefficient": 0.45, "fragility": "robust", "max_contact_force_n": null},
+    {"object_id": "cardboard-box", "name": "Cardboard box", "mass_g": 250, "width_mm": 80, "height_mm": 60, "depth_mm": 100, "material": "cardboard", "friction_coefficient": 0.50, "fragility": "moderate", "max_contact_force_n": 15},
+    {"object_id": "rubber-ball", "name": "Rubber ball", "mass_g": 150, "width_mm": 70, "height_mm": 70, "depth_mm": 70, "material": "rubber", "friction_coefficient": 0.90, "fragility": "robust", "max_contact_force_n": null},
+    {"object_id": "ceramic-cup", "name": "Ceramic cup", "mass_g": 300, "width_mm": 85, "height_mm": 95, "depth_mm": 85, "material": "ceramic", "friction_coefficient": 0.50, "fragility": "fragile", "max_contact_force_n": 12},
+    {"object_id": "fragile-object", "name": "Fragile object", "mass_g": 80, "width_mm": 60, "height_mm": 60, "depth_mm": 60, "material": "thin glass", "friction_coefficient": 0.30, "fragility": "fragile", "max_contact_force_n": 6},
+    {"object_id": "custom-object", "name": "Custom object", "mass_g": 100, "width_mm": 50, "height_mm": 50, "depth_mm": 50, "material": "unknown", "friction_coefficient": 0.40, "fragility": "moderate", "max_contact_force_n": null}
+  ]
+}

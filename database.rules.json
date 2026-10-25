@@ -1,0 +1,19 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "gripper_telemetry": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.hardware === true"
+    },
+    "grip_predictions": { ".read": false, ".write": false },
+    "grip_calibrations": { ".read": false, ".write": false, ".indexOn": ["configuration_key", "created_at_ms"] },
+    "active_calibrations": { ".read": false, ".write": false },
+    "operations": { ".read": false, ".write": false, ".indexOn": ["timestamp_ms"] },
+    "demo": {
+      "grip_calibrations": { ".indexOn": ["configuration_key", "created_at_ms"] },
+      "operations": { ".indexOn": ["timestamp_ms"] }
+    },
+    "gripper_commands": { ".read": "auth != null && auth.token.hardware === true", ".write": false }
+  }
+}
