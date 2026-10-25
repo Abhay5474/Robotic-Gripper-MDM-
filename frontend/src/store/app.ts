@@ -3,7 +3,7 @@ import { api, ApiError } from '@/lib/api'
 import { cacheDrop, cacheGet, cachePut, type CachedCalibration } from '@/lib/localCache'
 import { CUSTOM_ID, fingerprint, PRESETS, slugify, toForm, validateForm, type ObjectForm } from '@/lib/objects'
 import { assess } from '@/lib/safety'
-import { DEFAULT_SETTINGS, loadSettings, saveSettings, type UiSettings } from '@/lib/settings'
+import { DEFAULT_SETTINGS, loadSelection, loadSettings, saveSelection, saveSettings, type UiSettings } from '@/lib/settings'
 import type { ApiErrorBody, CalibrationRecord, GripperLimits, Health, Mode, ObjectProps, PredictGripResponse } from '@/lib/types'
 import { clamp, roundToStep } from '@/lib/format'
 import { useTelemetry } from './telemetry'
@@ -55,6 +55,12 @@ interface AppState {
 
 let seq = 0
 const initialPreset = PRESETS[0]
+const restored = (() => {
+  const sel = loadSelection()
+  if (!sel || !PRESETS.some((p) => p.object_id === sel.presetId)) return null
+  return sel as unknown as { presetId: string; form: ObjectForm }
+})()
+const persistSelection = (presetId: string, form: ObjectForm) => saveSelection({ presetId, form: form as unknown as Record<string, string> })
 
 export const limitsOf = (s: AppState): GripperLimits | null => s.health?.limits ?? null
 export const staleAfter = (s: AppState) => s.settings.staleAfterS ?? s.health?.telemetry.stale_after_s ?? 5
@@ -66,8 +72,8 @@ export const useApp = create<AppState>((set, get) => ({
   settings: loadSettings(),
   health: null,
   healthError: null,
-  presetId: initialPreset.object_id,
-  form: toForm(initialPreset),
+  presetId: restored?.presetId ?? initialPreset.object_id,
+  form: restored?.form ?? toForm(initialPreset),
   resolution: EMPTY_RES,
   selectedForce: null,
   session: null,
@@ -106,6 +112,7 @@ export const useApp = create<AppState>((set, get) => ({
     if (get().session) return
     const p = PRESETS.find((x) => x.object_id === id)
     if (!p) return
+    persistSelection(id, toForm(p))
     set({ presetId: id, form: toForm(p), resolution: EMPTY_RES, selectedForce: null })
     void get().resolve()
   },
@@ -115,11 +122,13 @@ export const useApp = create<AppState>((set, get) => ({
     const form = { ...get().form, [field]: value } as ObjectForm
     if (get().presetId === CUSTOM_ID && field === 'name') form.object_id = slugify(value) || 'custom-object'
     // Any edit invalidates the previous resolution: a force must never be carried over to a changed configuration.
+    persistSelection(get().presetId, form)
     set({ form, resolution: EMPTY_RES, selectedForce: null })
   },
 
   loadObject(o) {
     const known = PRESETS.some((p) => p.object_id === o.object_id)
+    persistSelection(known ? o.object_id : CUSTOM_ID, toForm(o))
     set({ presetId: known ? o.object_id : CUSTOM_ID, form: toForm(o), resolution: EMPTY_RES, selectedForce: null, session: null })
     void get().resolve()
   },

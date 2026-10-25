@@ -173,3 +173,25 @@ describe('calibration session', () => {
     expect(useApp.getState().session?.error).toBe('test it first')
   })
 })
+
+describe('selection persistence', () => {
+  it('stores the chosen object and restores it after a reload', async () => {
+    const { loadSelection } = await import('@/lib/settings')
+    useApp.getState().selectPreset('ceramic-cup')
+    expect(loadSelection()?.presetId).toBe('ceramic-cup')
+    useApp.getState().editForm('mass_g', '320')
+    expect(loadSelection()?.form.mass_g).toBe('320')
+    vi.resetModules()
+    vi.doMock('@/lib/firebase', () => ({ subscribeTelemetry: () => () => {}, firebaseConfigured: false }))
+    const fresh = await import('@/store/app')
+    expect(fresh.useApp.getState().presetId).toBe('ceramic-cup')
+    expect(fresh.useApp.getState().form.mass_g).toBe('320')
+  })
+  it('ignores malformed or unknown stored selections', async () => {
+    const { loadSelection } = await import('@/lib/settings')
+    localStorage.setItem('gripsense.selection.v1', '{"presetId":"x","form":{"mass_g":5}}')
+    expect(loadSelection()).toBeNull()
+    localStorage.setItem('gripsense.selection.v1', 'not json')
+    expect(loadSelection()).toBeNull()
+  })
+})
