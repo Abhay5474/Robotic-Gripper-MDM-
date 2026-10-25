@@ -1,0 +1,2260 @@
+{
+  "active_calibrations": {
+    "cfg_03aac8dbaa28632523bd77accc8b42be": {
+      "calibrated_force": 12.0,
+      "calibration_id": "cal_1791975600000_e90751",
+      "calibration_status": "calibrated",
+      "confirmed_at_ms": 1791975780000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "last_verified_at": "2026-10-14T11:03:00.000+00:00",
+      "version": 1
+    },
+    "cfg_29ffb4969ca2c1ff0e38cec9f0515c18": {
+      "calibrated_force": 4.5,
+      "calibration_id": "cal_1792159200000_513f6d",
+      "calibration_status": "calibrated",
+      "confirmed_at_ms": 1792159460000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "last_verified_at": "2026-10-16T14:04:20.000+00:00",
+      "version": 1
+    },
+    "cfg_37c4e74a4ca0abfe26d1bcf3fe93f584": {
+      "calibrated_force": 4.0,
+      "calibration_id": "cal_1757926800000_aabab3",
+      "calibration_status": "calibrated",
+      "confirmed_at_ms": 1757926900000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "last_verified_at": "2025-09-15T09:01:40.000+00:00",
+      "version": 1
+    },
+    "cfg_7423534b39685bf1fecdda3c09a76fe8": {
+      "calibration_id": "cal_1791802800000_6b3421",
+      "calibration_status": "invalidated",
+      "confirmed_at_ms": 1791802900000,
+      "invalidated_at_ms": 1791885600000,
+      "version": 2
+    },
+    "cfg_7562cd426f92c14fa181f911a8e83c5c": {
+      "calibrated_force": 5.5,
+      "calibration_id": "cal_1792069200000_d6eb78",
+      "calibration_status": "calibrated",
+      "confirmed_at_ms": 1792069380000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "last_verified_at": "2026-10-15T13:03:00.000+00:00",
+      "version": 1
+    },
+    "cfg_a3f578102f275bba5c2a2cd13f773dac": {
+      "calibrated_force": 22.0,
+      "calibration_id": "cal_1792335620000_faa55c",
+      "calibration_status": "calibrated",
+      "confirmed_at_ms": 1792335742000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "last_verified_at": "2026-10-18T15:02:22.000+00:00",
+      "version": 1
+    },
+    "cfg_f28aa39b9cf305952555612beda580e8": {
+      "calibrated_force": 9.5,
+      "calibration_id": "cal_1792324800000_f1a234",
+      "calibration_status": "calibrated",
+      "confirmed_at_ms": 1792324900000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "last_verified_at": "2026-10-18T12:01:40.000+00:00",
+      "version": 2
+    }
+  },
+  "grip_calibrations": {
+    "cal_1757926800000_aabab3": {
+      "calibrated_force": 4.0,
+      "calibration_id": "cal_1757926800000_aabab3",
+      "calibration_outcome": "success",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_37c4e74a4ca0abfe26d1bcf3fe93f584",
+      "confirmation_method": "manual",
+      "confirmed_at": "2025-09-15T09:01:40.000+00:00",
+      "confirmed_at_ms": 1757926900000,
+      "created_at": "2025-09-15T09:00:00.000+00:00",
+      "created_at_ms": 1757926800000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 4.43,
+      "input_properties": {
+        "depth_mm": 100.0,
+        "fragility": "moderate",
+        "friction_coefficient": 0.5,
+        "height_mm": 60.0,
+        "mass_g": 250.0,
+        "material": "cardboard",
+        "max_contact_force_n": 15.0,
+        "name": "Cardboard box",
+        "object_id": "cardboard-box",
+        "width_mm": 80.0
+      },
+      "last_verified_at": "2025-09-15T09:01:40.000+00:00",
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "cardboard-box",
+      "original_llm_force": 4.43,
+      "prediction_id": "pred_1757926800000_b4ed91",
+      "prompt_version": "force-estimate-v1",
+      "safety_assessment": {
+        "can_save_as_calibrated": true,
+        "can_test": true,
+        "checks": [
+          {
+            "id": "force_definition",
+            "message": "Force definition: normal_force_per_finger.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_unit",
+            "message": "Force unit: N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_numeric",
+            "message": "Force is a valid number.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "object_fits",
+            "message": "Object width 80 mm fits the 120 mm opening.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "contact_limit_known",
+            "message": "Object contact-force limit: 15 N.",
+            "passed": true,
+            "severity": "info"
+          },
+          {
+            "id": "safe_range_exists",
+            "message": "Estimated permitted range 2.952-15.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "safety_margin_available",
+            "message": "Safety factor 1.5 is achievable.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "above_gripper_minimum",
+            "message": "Force 4.0 N vs gripper minimum 1 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "below_upper_limit",
+            "message": "Force is within the object max contact limit of 15.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "meets_holding_requirement",
+            "message": "Force meets the estimated holding requirement 2.952 N.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "meets_safety_margin",
+            "message": "Force 4.0 N is below the recommended 4.427 N (holding requirement x 1.5).",
+            "passed": false,
+            "severity": "warning"
+          }
+        ],
+        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "recommended_min_force_n": 4.427,
+        "required_min_force_n": 2.952,
+        "requires_override": false,
+        "safe_range_n": [
+          4.427,
+          15.0
+        ],
+        "selected_force_n": 4.0,
+        "status": "marginal",
+        "summary": "Meets the holding estimate but not the full safety margin.",
+        "upper_limit_n": 15.0,
+        "upper_limit_source": "object_max_contact"
+      },
+      "sensor_summary": {
+        "available": false,
+        "corroborated": false,
+        "data_source": "firebase_live",
+        "reason": "No telemetry node found in Firebase."
+      },
+      "tests": {
+        "t_0001": {
+          "at": "2025-09-15T09:00:40.000+00:00",
+          "at_ms": 1757926840000,
+          "event": "test_started",
+          "force_n": 4.0,
+          "safety_status": "marginal",
+          "seq": 1
+        }
+      },
+      "warnings": [
+        "Force 4.0 N is below the recommended 4.427 N (holding requirement x 1.5).",
+        "Manually confirmed: no reliable sensor-based success signal."
+      ]
+    },
+    "cal_1791713160000_04fd7e": {
+      "calibrated_force": 9.0,
+      "calibration_id": "cal_1791713160000_04fd7e",
+      "calibration_outcome": "success",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_f28aa39b9cf305952555612beda580e8",
+      "confirmation_method": "sensor_assisted",
+      "confirmed_at": "2026-10-11T10:08:30.000+00:00",
+      "confirmed_at_ms": 1791713310000,
+      "created_at": "2026-10-11T10:06:00.000+00:00",
+      "created_at_ms": 1791713160000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 7.75,
+      "input_properties": {
+        "depth_mm": 65.0,
+        "fragility": "moderate",
+        "friction_coefficient": 0.4,
+        "height_mm": 210.0,
+        "mass_g": 350.0,
+        "material": "PET plastic",
+        "max_contact_force_n": 20.0,
+        "name": "Plastic bottle",
+        "object_id": "plastic-bottle",
+        "width_mm": 65.0
+      },
+      "last_verified_at": "2026-10-11T10:08:30.000+00:00",
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "notes": "Held and lifted twice, no creep.",
+      "object_id": "plastic-bottle",
+      "original_llm_force": 7.75,
+      "prediction_id": "pred_1791712800000_651755",
+      "prompt_version": "force-estimate-v1",
+      "safety_assessment": {
+        "can_save_as_calibrated": true,
+        "can_test": true,
+        "checks": [
+          {
+            "id": "force_definition",
+            "message": "Force definition: normal_force_per_finger.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_unit",
+            "message": "Force unit: N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_numeric",
+            "message": "Force is a valid number.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "object_fits",
+            "message": "Object width 65 mm fits the 120 mm opening.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "contact_limit_known",
+            "message": "Object contact-force limit: 20 N.",
+            "passed": true,
+            "severity": "info"
+          },
+          {
+            "id": "safe_range_exists",
+            "message": "Estimated permitted range 5.165-20.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "safety_margin_available",
+            "message": "Safety factor 1.5 is achievable.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "above_gripper_minimum",
+            "message": "Force 9.0 N vs gripper minimum 1 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "below_upper_limit",
+            "message": "Force is within the object max contact limit of 20.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "meets_holding_requirement",
+            "message": "Force meets the estimated holding requirement 5.165 N.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "meets_safety_margin",
+            "message": "Force includes the configured safety margin.",
+            "passed": true,
+            "severity": "warning"
+          }
+        ],
+        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "recommended_min_force_n": 7.748,
+        "required_min_force_n": 5.165,
+        "requires_override": false,
+        "safe_range_n": [
+          7.748,
+          20.0
+        ],
+        "selected_force_n": 9.0,
+        "status": "ok",
+        "summary": "Within the estimated permitted range (unvalidated).",
+        "upper_limit_n": 20.0,
+        "upper_limit_source": "object_max_contact"
+      },
+      "sensor_summary": {
+        "available": true,
+        "corroborated": true,
+        "data_source": "firebase_live",
+        "snapshot": {
+          "age_s": 0.0,
+          "available": true,
+          "finger_opening_mm": 65.0,
+          "measured_force_n": 9.04,
+          "object_detected": true,
+          "operation_state": "holding",
+          "slip_detected": false,
+          "stale": false,
+          "timestamp_ms": 1791713310000
+        }
+      },
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-11T10:06:40.000+00:00",
+          "at_ms": 1791713200000,
+          "event": "test_started",
+          "force_n": 7.75,
+          "safety_status": "ok",
+          "sensor_snapshot": {
+            "age_s": 40.0,
+            "available": true,
+            "finger_opening_mm": 65.2,
+            "measured_force_n": 7.8,
+            "object_detected": true,
+            "operation_state": "slipped",
+            "reason": "Last telemetry is 40.0s old (limit 5s).",
+            "slip_detected": true,
+            "stale": true,
+            "timestamp_ms": 1791713160000
+          },
+          "seq": 1
+        },
+        "t_0002": {
+          "at": "2026-10-11T10:07:20.000+00:00",
+          "at_ms": 1791713240000,
+          "event": "slipped",
+          "force_n": 7.75,
+          "safety_status": "ok",
+          "sensor_snapshot": {
+            "age_s": 80.0,
+            "available": true,
+            "finger_opening_mm": 65.2,
+            "measured_force_n": 7.8,
+            "object_detected": true,
+            "operation_state": "slipped",
+            "reason": "Last telemetry is 80.0s old (limit 5s).",
+            "slip_detected": true,
+            "stale": true,
+            "timestamp_ms": 1791713160000
+          },
+          "seq": 2
+        },
+        "t_0003": {
+          "at": "2026-10-11T10:08:00.000+00:00",
+          "at_ms": 1791713280000,
+          "event": "test_started",
+          "force_n": 9.0,
+          "safety_status": "ok",
+          "sensor_snapshot": {
+            "age_s": 120.0,
+            "available": true,
+            "finger_opening_mm": 65.2,
+            "measured_force_n": 7.8,
+            "object_detected": true,
+            "operation_state": "slipped",
+            "reason": "Last telemetry is 120.0s old (limit 5s).",
+            "slip_detected": true,
+            "stale": true,
+            "timestamp_ms": 1791713160000
+          },
+          "seq": 3
+        }
+      }
+    },
+    "cal_1791802800000_6b3421": {
+      "calibrated_force": 1.5,
+      "calibration_id": "cal_1791802800000_6b3421",
+      "calibration_outcome": "success",
+      "calibration_status": "invalidated",
+      "configuration_key": "cfg_7423534b39685bf1fecdda3c09a76fe8",
+      "confirmation_method": "manual",
+      "confirmed_at": "2026-10-12T11:01:40.000+00:00",
+      "confirmed_at_ms": 1791802900000,
+      "created_at": "2026-10-12T11:00:00.000+00:00",
+      "created_at_ms": 1791802800000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 1.48,
+      "input_properties": {
+        "depth_mm": 70.0,
+        "fragility": "robust",
+        "friction_coefficient": 0.9,
+        "height_mm": 70.0,
+        "mass_g": 150.0,
+        "material": "rubber",
+        "name": "Rubber ball",
+        "object_id": "rubber-ball",
+        "width_mm": 70.0
+      },
+      "invalidated_at": "2026-10-13T10:00:00.000+00:00",
+      "invalidation_reason": "Gripper pads replaced with softer silicone; previous force no longer valid.",
+      "last_verified_at": "2026-10-12T11:01:40.000+00:00",
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "rubber-ball",
+      "original_llm_force": 1.48,
+      "prediction_id": "pred_1791802800000_74327c",
+      "prompt_version": "force-estimate-v1",
+      "safety_assessment": {
+        "can_save_as_calibrated": true,
+        "can_test": true,
+        "checks": [
+          {
+            "id": "force_definition",
+            "message": "Force definition: normal_force_per_finger.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_unit",
+            "message": "Force unit: N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_numeric",
+            "message": "Force is a valid number.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "object_fits",
+            "message": "Object width 70 mm fits the 120 mm opening.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "contact_limit_known",
+            "message": "No maximum allowable contact force was provided; only the gripper maximum is enforced.",
+            "passed": false,
+            "severity": "info"
+          },
+          {
+            "id": "safe_range_exists",
+            "message": "Estimated permitted range 1.0-40.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "safety_margin_available",
+            "message": "Safety factor 1.5 is achievable.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "above_gripper_minimum",
+            "message": "Force 1.5 N vs gripper minimum 1 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "below_upper_limit",
+            "message": "Force is within the gripper max limit of 40.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "meets_holding_requirement",
+            "message": "Force meets the estimated holding requirement 0.984 N.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "meets_safety_margin",
+            "message": "Force includes the configured safety margin.",
+            "passed": true,
+            "severity": "warning"
+          }
+        ],
+        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "recommended_min_force_n": 1.476,
+        "required_min_force_n": 0.984,
+        "requires_override": false,
+        "safe_range_n": [
+          1.476,
+          40.0
+        ],
+        "selected_force_n": 1.5,
+        "status": "ok",
+        "summary": "Within the estimated permitted range (unvalidated).",
+        "upper_limit_n": 40.0,
+        "upper_limit_source": "gripper_max"
+      },
+      "sensor_summary": {
+        "available": false,
+        "corroborated": false,
+        "data_source": "firebase_live",
+        "reason": "No telemetry node found in Firebase."
+      },
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-12T11:00:40.000+00:00",
+          "at_ms": 1791802840000,
+          "event": "test_started",
+          "force_n": 1.5,
+          "safety_status": "ok",
+          "seq": 1
+        }
+      },
+      "warnings": [
+        "Manually confirmed: no reliable sensor-based success signal."
+      ]
+    },
+    "cal_1791975600000_e90751": {
+      "calibrated_force": 12.0,
+      "calibration_id": "cal_1791975600000_e90751",
+      "calibration_outcome": "success",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_03aac8dbaa28632523bd77accc8b42be",
+      "confirmation_method": "manual",
+      "confirmed_at": "2026-10-14T11:03:00.000+00:00",
+      "confirmed_at_ms": 1791975780000,
+      "created_at": "2026-10-14T11:00:00.000+00:00",
+      "created_at_ms": 1791975600000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 9.62,
+      "input_properties": {
+        "depth_mm": 66.0,
+        "fragility": "moderate",
+        "friction_coefficient": 0.35,
+        "height_mm": 122.0,
+        "mass_g": 380.0,
+        "material": "aluminum",
+        "max_contact_force_n": 25.0,
+        "name": "Aluminum can",
+        "object_id": "aluminum-can",
+        "width_mm": 66.0
+      },
+      "last_verified_at": "2026-10-14T11:03:00.000+00:00",
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "aluminum-can",
+      "original_llm_force": 9.62,
+      "prediction_id": "pred_1791975600000_6c206b",
+      "prompt_version": "force-estimate-v1",
+      "safety_assessment": {
+        "can_save_as_calibrated": true,
+        "can_test": true,
+        "checks": [
+          {
+            "id": "force_definition",
+            "message": "Force definition: normal_force_per_finger.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_unit",
+            "message": "Force unit: N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_numeric",
+            "message": "Force is a valid number.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "object_fits",
+            "message": "Object width 66 mm fits the 120 mm opening.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "contact_limit_known",
+            "message": "Object contact-force limit: 25 N.",
+            "passed": true,
+            "severity": "info"
+          },
+          {
+            "id": "safe_range_exists",
+            "message": "Estimated permitted range 6.409-25.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "safety_margin_available",
+            "message": "Safety factor 1.5 is achievable.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "above_gripper_minimum",
+            "message": "Force 12.0 N vs gripper minimum 1 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "below_upper_limit",
+            "message": "Force is within the object max contact limit of 25.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "meets_holding_requirement",
+            "message": "Force meets the estimated holding requirement 6.409 N.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "meets_safety_margin",
+            "message": "Force includes the configured safety margin.",
+            "passed": true,
+            "severity": "warning"
+          }
+        ],
+        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "recommended_min_force_n": 9.614,
+        "required_min_force_n": 6.409,
+        "requires_override": false,
+        "safe_range_n": [
+          9.614,
+          25.0
+        ],
+        "selected_force_n": 12.0,
+        "status": "ok",
+        "summary": "Within the estimated permitted range (unvalidated).",
+        "upper_limit_n": 25.0,
+        "upper_limit_source": "object_max_contact"
+      },
+      "sensor_summary": {
+        "available": false,
+        "corroborated": false,
+        "data_source": "firebase_live",
+        "reason": "No telemetry node found in Firebase."
+      },
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-14T11:00:40.000+00:00",
+          "at_ms": 1791975640000,
+          "event": "test_started",
+          "force_n": 9.62,
+          "safety_status": "ok",
+          "seq": 1
+        },
+        "t_0002": {
+          "at": "2026-10-14T11:01:20.000+00:00",
+          "at_ms": 1791975680000,
+          "event": "slipped",
+          "force_n": 9.62,
+          "safety_status": "ok",
+          "seq": 2
+        },
+        "t_0003": {
+          "at": "2026-10-14T11:02:00.000+00:00",
+          "at_ms": 1791975720000,
+          "event": "test_started",
+          "force_n": 12.0,
+          "safety_status": "ok",
+          "seq": 3
+        }
+      },
+      "warnings": [
+        "Manually confirmed: no reliable sensor-based success signal."
+      ]
+    },
+    "cal_1792069200000_d6eb78": {
+      "calibrated_force": 5.5,
+      "calibration_id": "cal_1792069200000_d6eb78",
+      "calibration_outcome": "success",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_7562cd426f92c14fa181f911a8e83c5c",
+      "confirmation_method": "manual",
+      "confirmed_at": "2026-10-15T13:03:00.000+00:00",
+      "confirmed_at_ms": 1792069380000,
+      "created_at": "2026-10-15T13:00:00.000+00:00",
+      "created_at_ms": 1792069200000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 3.94,
+      "input_properties": {
+        "depth_mm": 50.0,
+        "fragility": "robust",
+        "friction_coefficient": 0.45,
+        "height_mm": 50.0,
+        "mass_g": 200.0,
+        "material": "wood",
+        "name": "Wooden block",
+        "object_id": "wooden-block",
+        "width_mm": 50.0
+      },
+      "last_verified_at": "2026-10-15T13:03:00.000+00:00",
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "wooden-block",
+      "original_llm_force": 3.94,
+      "prediction_id": "pred_1792069200000_72b827",
+      "prompt_version": "force-estimate-v1",
+      "safety_assessment": {
+        "can_save_as_calibrated": true,
+        "can_test": true,
+        "checks": [
+          {
+            "id": "force_definition",
+            "message": "Force definition: normal_force_per_finger.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_unit",
+            "message": "Force unit: N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_numeric",
+            "message": "Force is a valid number.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "object_fits",
+            "message": "Object width 50 mm fits the 120 mm opening.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "contact_limit_known",
+            "message": "No maximum allowable contact force was provided; only the gripper maximum is enforced.",
+            "passed": false,
+            "severity": "info"
+          },
+          {
+            "id": "safe_range_exists",
+            "message": "Estimated permitted range 2.624-40.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "safety_margin_available",
+            "message": "Safety factor 1.5 is achievable.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "above_gripper_minimum",
+            "message": "Force 5.5 N vs gripper minimum 1 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "below_upper_limit",
+            "message": "Force is within the gripper max limit of 40.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "meets_holding_requirement",
+            "message": "Force meets the estimated holding requirement 2.624 N.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "meets_safety_margin",
+            "message": "Force includes the configured safety margin.",
+            "passed": true,
+            "severity": "warning"
+          }
+        ],
+        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "recommended_min_force_n": 3.936,
+        "required_min_force_n": 2.624,
+        "requires_override": false,
+        "safe_range_n": [
+          3.936,
+          40.0
+        ],
+        "selected_force_n": 5.5,
+        "status": "ok",
+        "summary": "Within the estimated permitted range (unvalidated).",
+        "upper_limit_n": 40.0,
+        "upper_limit_source": "gripper_max"
+      },
+      "sensor_summary": {
+        "available": false,
+        "corroborated": false,
+        "data_source": "firebase_live",
+        "reason": "No telemetry node found in Firebase."
+      },
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-15T13:00:40.000+00:00",
+          "at_ms": 1792069240000,
+          "event": "test_started",
+          "force_n": 3.94,
+          "safety_status": "ok",
+          "seq": 1
+        },
+        "t_0002": {
+          "at": "2026-10-15T13:01:20.000+00:00",
+          "at_ms": 1792069280000,
+          "event": "slipped",
+          "force_n": 3.94,
+          "safety_status": "ok",
+          "seq": 2
+        },
+        "t_0003": {
+          "at": "2026-10-15T13:02:00.000+00:00",
+          "at_ms": 1792069320000,
+          "event": "test_started",
+          "force_n": 5.5,
+          "safety_status": "ok",
+          "seq": 3
+        }
+      },
+      "warnings": [
+        "Manually confirmed: no reliable sensor-based success signal."
+      ]
+    },
+    "cal_1792159200000_513f6d": {
+      "calibrated_force": 4.5,
+      "calibration_id": "cal_1792159200000_513f6d",
+      "calibration_outcome": "success",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_29ffb4969ca2c1ff0e38cec9f0515c18",
+      "confirmation_method": "manual",
+      "confirmed_at": "2026-10-16T14:04:20.000+00:00",
+      "confirmed_at_ms": 1792159460000,
+      "created_at": "2026-10-16T14:00:00.000+00:00",
+      "created_at_ms": 1792159200000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 5.31,
+      "input_properties": {
+        "depth_mm": 85.0,
+        "fragility": "fragile",
+        "friction_coefficient": 0.5,
+        "height_mm": 95.0,
+        "mass_g": 300.0,
+        "material": "ceramic",
+        "max_contact_force_n": 12.0,
+        "name": "Ceramic cup",
+        "object_id": "ceramic-cup",
+        "width_mm": 85.0
+      },
+      "last_verified_at": "2026-10-16T14:04:20.000+00:00",
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "notes": "Cup flexed at 5.5 N; 4.5 N holds with margin of safety reduced.",
+      "object_id": "ceramic-cup",
+      "original_llm_force": 5.31,
+      "prediction_id": "pred_1792159200000_77bbfe",
+      "prompt_version": "force-estimate-v1",
+      "safety_assessment": {
+        "can_save_as_calibrated": true,
+        "can_test": true,
+        "checks": [
+          {
+            "id": "force_definition",
+            "message": "Force definition: normal_force_per_finger.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_unit",
+            "message": "Force unit: N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_numeric",
+            "message": "Force is a valid number.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "object_fits",
+            "message": "Object width 85 mm fits the 120 mm opening.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "contact_limit_known",
+            "message": "Object contact-force limit: 12 N.",
+            "passed": true,
+            "severity": "info"
+          },
+          {
+            "id": "safe_range_exists",
+            "message": "Estimated permitted range 3.542-12.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "safety_margin_available",
+            "message": "Safety factor 1.5 is achievable.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "above_gripper_minimum",
+            "message": "Force 4.5 N vs gripper minimum 1 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "below_upper_limit",
+            "message": "Force is within the object max contact limit of 12.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "meets_holding_requirement",
+            "message": "Force meets the estimated holding requirement 3.542 N.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "meets_safety_margin",
+            "message": "Force 4.5 N is below the recommended 5.313 N (holding requirement x 1.5).",
+            "passed": false,
+            "severity": "warning"
+          }
+        ],
+        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "recommended_min_force_n": 5.313,
+        "required_min_force_n": 3.542,
+        "requires_override": false,
+        "safe_range_n": [
+          5.313,
+          12.0
+        ],
+        "selected_force_n": 4.5,
+        "status": "marginal",
+        "summary": "Meets the holding estimate but not the full safety margin.",
+        "upper_limit_n": 12.0,
+        "upper_limit_source": "object_max_contact"
+      },
+      "sensor_summary": {
+        "available": false,
+        "corroborated": false,
+        "data_source": "firebase_live",
+        "reason": "No telemetry node found in Firebase."
+      },
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-16T14:00:40.000+00:00",
+          "at_ms": 1792159240000,
+          "event": "test_started",
+          "force_n": 3.0,
+          "safety_status": "below_required",
+          "seq": 1
+        },
+        "t_0002": {
+          "at": "2026-10-16T14:01:20.000+00:00",
+          "at_ms": 1792159280000,
+          "event": "slipped",
+          "force_n": 3.0,
+          "safety_status": "below_required",
+          "seq": 2
+        },
+        "t_0003": {
+          "at": "2026-10-16T14:02:00.000+00:00",
+          "at_ms": 1792159320000,
+          "event": "test_started",
+          "force_n": 5.5,
+          "safety_status": "ok",
+          "seq": 3
+        },
+        "t_0004": {
+          "at": "2026-10-16T14:02:40.000+00:00",
+          "at_ms": 1792159360000,
+          "event": "damage_risk",
+          "force_n": 5.5,
+          "safety_status": "ok",
+          "seq": 4
+        },
+        "t_0005": {
+          "at": "2026-10-16T14:03:20.000+00:00",
+          "at_ms": 1792159400000,
+          "event": "test_started",
+          "force_n": 4.5,
+          "safety_status": "marginal",
+          "seq": 5
+        }
+      },
+      "warnings": [
+        "Force 4.5 N is below the recommended 5.313 N (holding requirement x 1.5).",
+        "Manually confirmed: no reliable sensor-based success signal."
+      ]
+    },
+    "cal_1792249200000_856cc3": {
+      "calibration_id": "cal_1792249200000_856cc3",
+      "calibration_outcome": "failed",
+      "calibration_status": "failed",
+      "configuration_key": "cfg_75342a85d16569b919b4b13eb49dd47b",
+      "created_at": "2026-10-17T15:00:00.000+00:00",
+      "created_at_ms": 1792249200000,
+      "finished_at": "2026-10-17T15:02:20.000+00:00",
+      "finished_at_ms": 1792249340000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 2.36,
+      "input_properties": {
+        "depth_mm": 60.0,
+        "fragility": "fragile",
+        "friction_coefficient": 0.3,
+        "height_mm": 60.0,
+        "mass_g": 80.0,
+        "material": "thin glass",
+        "max_contact_force_n": 6.0,
+        "name": "Fragile object",
+        "object_id": "fragile-object",
+        "width_mm": 60.0
+      },
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "notes": "Gripper jaw stalled before contact.",
+      "object_id": "fragile-object",
+      "original_llm_force": 2.36,
+      "prediction_id": "pred_1792249200000_6f95f2",
+      "prompt_version": "force-estimate-v1",
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-17T15:00:40.000+00:00",
+          "at_ms": 1792249240000,
+          "event": "test_started",
+          "force_n": 2.5,
+          "safety_status": "ok",
+          "seq": 1
+        },
+        "t_0002": {
+          "at": "2026-10-17T15:01:20.000+00:00",
+          "at_ms": 1792249280000,
+          "event": "failed",
+          "force_n": 2.5,
+          "safety_status": "ok",
+          "seq": 2
+        }
+      }
+    },
+    "cal_1792324800000_f1a234": {
+      "based_on_calibration_id": "cal_1791713160000_04fd7e",
+      "calibrated_force": 9.5,
+      "calibration_id": "cal_1792324800000_f1a234",
+      "calibration_outcome": "success",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_f28aa39b9cf305952555612beda580e8",
+      "confirmation_method": "manual",
+      "confirmed_at": "2026-10-18T12:01:40.000+00:00",
+      "confirmed_at_ms": 1792324900000,
+      "created_at": "2026-10-18T12:00:00.000+00:00",
+      "created_at_ms": 1792324800000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 9.0,
+      "input_properties": {
+        "depth_mm": 65.0,
+        "fragility": "moderate",
+        "friction_coefficient": 0.4,
+        "height_mm": 210.0,
+        "mass_g": 350.0,
+        "material": "PET plastic",
+        "max_contact_force_n": 20.0,
+        "name": "Plastic bottle",
+        "object_id": "plastic-bottle",
+        "width_mm": 65.0
+      },
+      "last_verified_at": "2026-10-18T12:01:40.000+00:00",
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "notes": "Re-verified after pad cleaning.",
+      "object_id": "plastic-bottle",
+      "original_llm_force": 7.75,
+      "prediction_id": "pred_1791712800000_651755",
+      "prompt_version": "force-estimate-v1",
+      "safety_assessment": {
+        "can_save_as_calibrated": true,
+        "can_test": true,
+        "checks": [
+          {
+            "id": "force_definition",
+            "message": "Force definition: normal_force_per_finger.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_unit",
+            "message": "Force unit: N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_numeric",
+            "message": "Force is a valid number.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "object_fits",
+            "message": "Object width 65 mm fits the 120 mm opening.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "contact_limit_known",
+            "message": "Object contact-force limit: 20 N.",
+            "passed": true,
+            "severity": "info"
+          },
+          {
+            "id": "safe_range_exists",
+            "message": "Estimated permitted range 5.165-20.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "safety_margin_available",
+            "message": "Safety factor 1.5 is achievable.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "above_gripper_minimum",
+            "message": "Force 9.5 N vs gripper minimum 1 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "below_upper_limit",
+            "message": "Force is within the object max contact limit of 20.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "meets_holding_requirement",
+            "message": "Force meets the estimated holding requirement 5.165 N.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "meets_safety_margin",
+            "message": "Force includes the configured safety margin.",
+            "passed": true,
+            "severity": "warning"
+          }
+        ],
+        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "recommended_min_force_n": 7.748,
+        "required_min_force_n": 5.165,
+        "requires_override": false,
+        "safe_range_n": [
+          7.748,
+          20.0
+        ],
+        "selected_force_n": 9.5,
+        "status": "ok",
+        "summary": "Within the estimated permitted range (unvalidated).",
+        "upper_limit_n": 20.0,
+        "upper_limit_source": "object_max_contact"
+      },
+      "sensor_summary": {
+        "available": false,
+        "corroborated": false,
+        "data_source": "firebase_live",
+        "reason": "No telemetry node found in Firebase."
+      },
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-18T12:00:40.000+00:00",
+          "at_ms": 1792324840000,
+          "event": "test_started",
+          "force_n": 9.5,
+          "safety_status": "ok",
+          "seq": 1
+        }
+      },
+      "warnings": [
+        "Manually confirmed: no reliable sensor-based success signal."
+      ]
+    },
+    "cal_1792335620000_faa55c": {
+      "calibrated_force": 22.0,
+      "calibration_id": "cal_1792335620000_faa55c",
+      "calibration_outcome": "success",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_a3f578102f275bba5c2a2cd13f773dac",
+      "confirmation_method": "sensor_assisted",
+      "confirmed_at": "2026-10-18T15:02:22.000+00:00",
+      "confirmed_at_ms": 1792335742000,
+      "created_at": "2026-10-18T15:00:20.000+00:00",
+      "created_at_ms": 1792335620000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 19.0,
+      "input_properties": {
+        "depth_mm": 25.0,
+        "fragility": "robust",
+        "friction_coefficient": 0.35,
+        "height_mm": 120.0,
+        "mass_g": 850.0,
+        "material": "steel",
+        "name": "Steel bracket",
+        "object_id": "steel-bracket",
+        "width_mm": 40.0
+      },
+      "last_verified_at": "2026-10-18T15:02:22.000+00:00",
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "steel-bracket",
+      "original_llm_force": 19.0,
+      "prediction_id": "pred_1792335600000_e8540f",
+      "prompt_version": "force-estimate-v1",
+      "safety_assessment": {
+        "can_save_as_calibrated": true,
+        "can_test": true,
+        "checks": [
+          {
+            "id": "force_definition",
+            "message": "Force definition: normal_force_per_finger.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_unit",
+            "message": "Force unit: N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "force_numeric",
+            "message": "Force is a valid number.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "object_fits",
+            "message": "Object width 40 mm fits the 120 mm opening.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "contact_limit_known",
+            "message": "No maximum allowable contact force was provided; only the gripper maximum is enforced.",
+            "passed": false,
+            "severity": "info"
+          },
+          {
+            "id": "safe_range_exists",
+            "message": "Estimated permitted range 14.337-40.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "safety_margin_available",
+            "message": "Safety factor 1.5 is achievable.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "above_gripper_minimum",
+            "message": "Force 22.0 N vs gripper minimum 1 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "below_upper_limit",
+            "message": "Force is within the gripper max limit of 40.0 N.",
+            "passed": true,
+            "severity": "blocking"
+          },
+          {
+            "id": "meets_holding_requirement",
+            "message": "Force meets the estimated holding requirement 14.337 N.",
+            "passed": true,
+            "severity": "warning"
+          },
+          {
+            "id": "meets_safety_margin",
+            "message": "Force includes the configured safety margin.",
+            "passed": true,
+            "severity": "warning"
+          }
+        ],
+        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "recommended_min_force_n": 21.505,
+        "required_min_force_n": 14.337,
+        "requires_override": false,
+        "safe_range_n": [
+          21.505,
+          40.0
+        ],
+        "selected_force_n": 22.0,
+        "status": "ok",
+        "summary": "Within the estimated permitted range (unvalidated).",
+        "upper_limit_n": 40.0,
+        "upper_limit_source": "gripper_max"
+      },
+      "sensor_summary": {
+        "available": true,
+        "corroborated": true,
+        "data_source": "firebase_live",
+        "snapshot": {
+          "age_s": 0.0,
+          "available": true,
+          "finger_opening_mm": 40.1,
+          "measured_force_n": 22.06,
+          "object_detected": true,
+          "operation_state": "holding",
+          "slip_detected": false,
+          "stale": false,
+          "timestamp_ms": 1792335742000
+        }
+      },
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-18T15:01:00.000+00:00",
+          "at_ms": 1792335660000,
+          "event": "test_started",
+          "force_n": 19.0,
+          "safety_status": "marginal",
+          "seq": 1
+        },
+        "t_0002": {
+          "at": "2026-10-18T15:01:40.000+00:00",
+          "at_ms": 1792335700000,
+          "event": "slipped",
+          "force_n": 19.0,
+          "safety_status": "marginal",
+          "seq": 2
+        },
+        "t_0003": {
+          "at": "2026-10-18T15:02:20.000+00:00",
+          "at_ms": 1792335740000,
+          "event": "test_started",
+          "force_n": 22.0,
+          "safety_status": "ok",
+          "seq": 3
+        }
+      }
+    },
+    "cal_1792407600000_dc7783": {
+      "based_on_calibration_id": "cal_1757926800000_aabab3",
+      "calibration_id": "cal_1792407600000_dc7783",
+      "calibration_outcome": "cancelled",
+      "calibration_status": "cancelled",
+      "configuration_key": "cfg_37c4e74a4ca0abfe26d1bcf3fe93f584",
+      "created_at": "2026-10-19T11:00:00.000+00:00",
+      "created_at_ms": 1792407600000,
+      "finished_at": "2026-10-19T11:01:40.000+00:00",
+      "finished_at_ms": 1792407700000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 4.0,
+      "input_properties": {
+        "depth_mm": 100.0,
+        "fragility": "moderate",
+        "friction_coefficient": 0.5,
+        "height_mm": 60.0,
+        "mass_g": 250.0,
+        "material": "cardboard",
+        "max_contact_force_n": 15.0,
+        "name": "Cardboard box",
+        "object_id": "cardboard-box",
+        "width_mm": 80.0
+      },
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "notes": "Operator stopped: box was wet.",
+      "object_id": "cardboard-box",
+      "original_llm_force": 4.43,
+      "prediction_id": "pred_1757926800000_b4ed91",
+      "prompt_version": "force-estimate-v1",
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-19T11:00:40.000+00:00",
+          "at_ms": 1792407640000,
+          "event": "test_started",
+          "force_n": 4.0,
+          "safety_status": "marginal",
+          "seq": 1
+        }
+      }
+    },
+    "cal_1792483200000_f38ed8": {
+      "based_on_calibration_id": "cal_1792069200000_d6eb78",
+      "calibration_id": "cal_1792483200000_f38ed8",
+      "calibration_status": "in_progress",
+      "configuration_key": "cfg_7562cd426f92c14fa181f911a8e83c5c",
+      "created_at": "2026-10-20T08:00:00.000+00:00",
+      "created_at_ms": 1792483200000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "initial_force": 5.5,
+      "input_properties": {
+        "depth_mm": 50.0,
+        "fragility": "robust",
+        "friction_coefficient": 0.45,
+        "height_mm": 50.0,
+        "mass_g": 200.0,
+        "material": "wood",
+        "name": "Wooden block",
+        "object_id": "wooden-block",
+        "width_mm": 50.0
+      },
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "wooden-block",
+      "original_llm_force": 3.94,
+      "prediction_id": "pred_1792069200000_72b827",
+      "prompt_version": "force-estimate-v1",
+      "tests": {
+        "t_0001": {
+          "at": "2026-10-20T08:00:40.000+00:00",
+          "at_ms": 1792483240000,
+          "event": "test_started",
+          "force_n": 6.0,
+          "safety_status": "ok",
+          "seq": 1
+        }
+      }
+    }
+  },
+  "grip_predictions": {
+    "pred_1757926800000_b4ed91": {
+      "assumptions": [
+        "Vertical lift",
+        "Two symmetric friction contacts"
+      ],
+      "confidence": "medium",
+      "configuration_key": "cfg_37c4e74a4ca0abfe26d1bcf3fe93f584",
+      "created_at": "2025-09-15T09:00:00.000+00:00",
+      "created_at_ms": 1757926800000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "input_properties": {
+        "depth_mm": 100.0,
+        "fragility": "moderate",
+        "friction_coefficient": 0.5,
+        "height_mm": 60.0,
+        "mass_g": 250.0,
+        "material": "cardboard",
+        "max_contact_force_n": 15.0,
+        "name": "Cardboard box",
+        "object_id": "cardboard-box",
+        "width_mm": 80.0
+      },
+      "llm_recommended_force": 4.43,
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "cardboard-box",
+      "persisted": true,
+      "prediction_id": "pred_1757926800000_b4ed91",
+      "prompt_version": "force-estimate-v1",
+      "rationale": "Sample record: Coulomb friction with a 1.5x margin for a vertical lift."
+    },
+    "pred_1791712800000_651755": {
+      "assumptions": [
+        "Vertical lift",
+        "Two symmetric friction contacts"
+      ],
+      "confidence": "medium",
+      "configuration_key": "cfg_f28aa39b9cf305952555612beda580e8",
+      "created_at": "2026-10-11T10:00:00.000+00:00",
+      "created_at_ms": 1791712800000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "input_properties": {
+        "depth_mm": 65.0,
+        "fragility": "moderate",
+        "friction_coefficient": 0.4,
+        "height_mm": 210.0,
+        "mass_g": 350.0,
+        "material": "PET plastic",
+        "max_contact_force_n": 20.0,
+        "name": "Plastic bottle",
+        "object_id": "plastic-bottle",
+        "width_mm": 65.0
+      },
+      "llm_recommended_force": 7.75,
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "plastic-bottle",
+      "persisted": true,
+      "prediction_id": "pred_1791712800000_651755",
+      "prompt_version": "force-estimate-v1",
+      "rationale": "Sample record: Coulomb friction with a 1.5x margin for a vertical lift."
+    },
+    "pred_1791802800000_74327c": {
+      "assumptions": [
+        "Vertical lift",
+        "Two symmetric friction contacts"
+      ],
+      "confidence": "medium",
+      "configuration_key": "cfg_7423534b39685bf1fecdda3c09a76fe8",
+      "created_at": "2026-10-12T11:00:00.000+00:00",
+      "created_at_ms": 1791802800000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "input_properties": {
+        "depth_mm": 70.0,
+        "fragility": "robust",
+        "friction_coefficient": 0.9,
+        "height_mm": 70.0,
+        "mass_g": 150.0,
+        "material": "rubber",
+        "name": "Rubber ball",
+        "object_id": "rubber-ball",
+        "width_mm": 70.0
+      },
+      "llm_recommended_force": 1.48,
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "rubber-ball",
+      "persisted": true,
+      "prediction_id": "pred_1791802800000_74327c",
+      "prompt_version": "force-estimate-v1",
+      "rationale": "Sample record: Coulomb friction with a 1.5x margin for a vertical lift."
+    },
+    "pred_1791975600000_6c206b": {
+      "assumptions": [
+        "Vertical lift",
+        "Two symmetric friction contacts"
+      ],
+      "confidence": "medium",
+      "configuration_key": "cfg_03aac8dbaa28632523bd77accc8b42be",
+      "created_at": "2026-10-14T11:00:00.000+00:00",
+      "created_at_ms": 1791975600000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "input_properties": {
+        "depth_mm": 66.0,
+        "fragility": "moderate",
+        "friction_coefficient": 0.35,
+        "height_mm": 122.0,
+        "mass_g": 380.0,
+        "material": "aluminum",
+        "max_contact_force_n": 25.0,
+        "name": "Aluminum can",
+        "object_id": "aluminum-can",
+        "width_mm": 66.0
+      },
+      "llm_recommended_force": 9.62,
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "aluminum-can",
+      "persisted": true,
+      "prediction_id": "pred_1791975600000_6c206b",
+      "prompt_version": "force-estimate-v1",
+      "rationale": "Sample record: Coulomb friction with a 1.5x margin for a vertical lift."
+    },
+    "pred_1792069200000_72b827": {
+      "assumptions": [
+        "Vertical lift",
+        "Two symmetric friction contacts"
+      ],
+      "confidence": "medium",
+      "configuration_key": "cfg_7562cd426f92c14fa181f911a8e83c5c",
+      "created_at": "2026-10-15T13:00:00.000+00:00",
+      "created_at_ms": 1792069200000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "input_properties": {
+        "depth_mm": 50.0,
+        "fragility": "robust",
+        "friction_coefficient": 0.45,
+        "height_mm": 50.0,
+        "mass_g": 200.0,
+        "material": "wood",
+        "name": "Wooden block",
+        "object_id": "wooden-block",
+        "width_mm": 50.0
+      },
+      "llm_recommended_force": 3.94,
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "wooden-block",
+      "persisted": true,
+      "prediction_id": "pred_1792069200000_72b827",
+      "prompt_version": "force-estimate-v1",
+      "rationale": "Sample record: Coulomb friction with a 1.5x margin for a vertical lift."
+    },
+    "pred_1792159200000_77bbfe": {
+      "assumptions": [
+        "Vertical lift",
+        "Two symmetric friction contacts"
+      ],
+      "confidence": "medium",
+      "configuration_key": "cfg_29ffb4969ca2c1ff0e38cec9f0515c18",
+      "created_at": "2026-10-16T14:00:00.000+00:00",
+      "created_at_ms": 1792159200000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "input_properties": {
+        "depth_mm": 85.0,
+        "fragility": "fragile",
+        "friction_coefficient": 0.5,
+        "height_mm": 95.0,
+        "mass_g": 300.0,
+        "material": "ceramic",
+        "max_contact_force_n": 12.0,
+        "name": "Ceramic cup",
+        "object_id": "ceramic-cup",
+        "width_mm": 85.0
+      },
+      "llm_recommended_force": 5.31,
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "ceramic-cup",
+      "persisted": true,
+      "prediction_id": "pred_1792159200000_77bbfe",
+      "prompt_version": "force-estimate-v1",
+      "rationale": "Sample record: Coulomb friction with a 1.5x margin for a vertical lift."
+    },
+    "pred_1792249200000_6f95f2": {
+      "assumptions": [
+        "Vertical lift",
+        "Two symmetric friction contacts"
+      ],
+      "confidence": "medium",
+      "configuration_key": "cfg_75342a85d16569b919b4b13eb49dd47b",
+      "created_at": "2026-10-17T15:00:00.000+00:00",
+      "created_at_ms": 1792249200000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "input_properties": {
+        "depth_mm": 60.0,
+        "fragility": "fragile",
+        "friction_coefficient": 0.3,
+        "height_mm": 60.0,
+        "mass_g": 80.0,
+        "material": "thin glass",
+        "max_contact_force_n": 6.0,
+        "name": "Fragile object",
+        "object_id": "fragile-object",
+        "width_mm": 60.0
+      },
+      "llm_recommended_force": 2.36,
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "fragile-object",
+      "persisted": true,
+      "prediction_id": "pred_1792249200000_6f95f2",
+      "prompt_version": "force-estimate-v1",
+      "rationale": "Sample record: Coulomb friction with a 1.5x margin for a vertical lift."
+    },
+    "pred_1792335600000_e8540f": {
+      "assumptions": [
+        "Vertical lift",
+        "Two symmetric friction contacts"
+      ],
+      "confidence": "medium",
+      "configuration_key": "cfg_a3f578102f275bba5c2a2cd13f773dac",
+      "created_at": "2026-10-18T15:00:00.000+00:00",
+      "created_at_ms": 1792335600000,
+      "force_definition": "normal_force_per_finger",
+      "force_unit": "N",
+      "gripper_configuration": {
+        "contact_pad_material": "silicone",
+        "finger_count": 2,
+        "force_definition": "normal_force_per_finger",
+        "force_unit": "N",
+        "gripper_id": "demo-parallel-gripper"
+      },
+      "input_properties": {
+        "depth_mm": 25.0,
+        "fragility": "robust",
+        "friction_coefficient": 0.35,
+        "height_mm": 120.0,
+        "mass_g": 850.0,
+        "material": "steel",
+        "name": "Steel bracket",
+        "object_id": "steel-bracket",
+        "width_mm": 40.0
+      },
+      "llm_recommended_force": 19.0,
+      "mode": "live",
+      "model_identifier": "sample-llm-v1 (illustrative, not a real model output)",
+      "object_id": "steel-bracket",
+      "persisted": true,
+      "prediction_id": "pred_1792335600000_e8540f",
+      "prompt_version": "force-estimate-v1",
+      "rationale": "Sample record: Coulomb friction with a 1.5x margin for a vertical lift."
+    }
+  },
+  "gripper_telemetry": {
+    "finger_opening_mm": 65.1,
+    "measured_force_n": 9.52,
+    "object_detected": true,
+    "operation_state": "holding",
+    "slip_detected": false,
+    "timestamp": 1792486800000
+  },
+  "operations": {
+    "op_1792054800000_06dea2": {
+      "calibration_id": "cal_1791975600000_e90751",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_03aac8dbaa28632523bd77accc8b42be",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "aluminum-can",
+      "operation_id": "op_1792054800000_06dea2",
+      "operation_result": "success",
+      "peak_measured_force_n": 12.24,
+      "selected_force_n": 12.0,
+      "timestamp": "2026-10-15T09:00:00.000+00:00",
+      "timestamp_ms": 1792054800000
+    },
+    "op_1792141200000_ec8b0e": {
+      "calibration_id": "cal_1791975600000_e90751",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_03aac8dbaa28632523bd77accc8b42be",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "aluminum-can",
+      "operation_id": "op_1792141200000_ec8b0e",
+      "operation_result": "success",
+      "peak_measured_force_n": 12.24,
+      "selected_force_n": 12.0,
+      "timestamp": "2026-10-16T09:00:00.000+00:00",
+      "timestamp_ms": 1792141200000
+    },
+    "op_1792227600000_5f7714": {
+      "calibration_id": "cal_1792069200000_d6eb78",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_7562cd426f92c14fa181f911a8e83c5c",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "wooden-block",
+      "operation_id": "op_1792227600000_5f7714",
+      "operation_result": "success",
+      "peak_measured_force_n": 5.61,
+      "selected_force_n": 5.5,
+      "timestamp": "2026-10-17T09:00:00.000+00:00",
+      "timestamp_ms": 1792227600000
+    },
+    "op_1792270800000_400de9": {
+      "calibration_id": "cal_1792159200000_513f6d",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_29ffb4969ca2c1ff0e38cec9f0515c18",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "ceramic-cup",
+      "operation_id": "op_1792270800000_400de9",
+      "operation_result": "success",
+      "peak_measured_force_n": 4.59,
+      "selected_force_n": 4.5,
+      "timestamp": "2026-10-17T21:00:00.000+00:00",
+      "timestamp_ms": 1792270800000
+    },
+    "op_1792314000000_e467b5": {
+      "calibration_id": "cal_1792159200000_513f6d",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_29ffb4969ca2c1ff0e38cec9f0515c18",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "ceramic-cup",
+      "operation_id": "op_1792314000000_e467b5",
+      "operation_result": "slipped",
+      "peak_measured_force_n": 4.59,
+      "selected_force_n": 4.5,
+      "timestamp": "2026-10-18T09:00:00.000+00:00",
+      "timestamp_ms": 1792314000000
+    },
+    "op_1792357200000_70415b": {
+      "calibration_id": "cal_1792324800000_f1a234",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_f28aa39b9cf305952555612beda580e8",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "plastic-bottle",
+      "operation_id": "op_1792357200000_70415b",
+      "operation_result": "success",
+      "peak_measured_force_n": 9.69,
+      "selected_force_n": 9.5,
+      "timestamp": "2026-10-18T21:00:00.000+00:00",
+      "timestamp_ms": 1792357200000,
+      "trace": [
+        {
+          "f": 0.0,
+          "o": 100.0,
+          "s": 0,
+          "st": "closing",
+          "t": 0.0
+        },
+        {
+          "f": 1.2,
+          "o": 96.9,
+          "s": 0,
+          "st": "closing",
+          "t": 0.25
+        },
+        {
+          "f": 2.4,
+          "o": 93.8,
+          "s": 0,
+          "st": "closing",
+          "t": 0.5
+        },
+        {
+          "f": 3.6,
+          "o": 90.7,
+          "s": 0,
+          "st": "closing",
+          "t": 0.75
+        },
+        {
+          "f": 4.8,
+          "o": 87.6,
+          "s": 0,
+          "st": "closing",
+          "t": 1.0
+        },
+        {
+          "f": 6.0,
+          "o": 84.5,
+          "s": 0,
+          "st": "closing",
+          "t": 1.25
+        },
+        {
+          "f": 7.2,
+          "o": 81.4,
+          "s": 0,
+          "st": "closing",
+          "t": 1.5
+        },
+        {
+          "f": 8.4,
+          "o": 78.3,
+          "s": 0,
+          "st": "closing",
+          "t": 1.75
+        },
+        {
+          "f": 9.5,
+          "o": 75.2,
+          "s": 0,
+          "st": "closing",
+          "t": 2.0
+        },
+        {
+          "f": 9.5,
+          "o": 72.1,
+          "s": 0,
+          "st": "closing",
+          "t": 2.25
+        },
+        {
+          "f": 9.5,
+          "o": 69.0,
+          "s": 0,
+          "st": "closing",
+          "t": 2.5
+        },
+        {
+          "f": 9.5,
+          "o": 65.9,
+          "s": 0,
+          "st": "closing",
+          "t": 2.75
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "holding",
+          "t": 3.0
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "holding",
+          "t": 3.25
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "holding",
+          "t": 3.5
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "holding",
+          "t": 3.75
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "holding",
+          "t": 4.0
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "holding",
+          "t": 4.25
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "holding",
+          "t": 4.5
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "holding",
+          "t": 4.75
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "lifting",
+          "t": 5.0
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "lifting",
+          "t": 5.25
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "lifting",
+          "t": 5.5
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "lifting",
+          "t": 5.75
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "lifting",
+          "t": 6.0
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "lifting",
+          "t": 6.25
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "lifting",
+          "t": 6.5
+        },
+        {
+          "f": 9.5,
+          "o": 65.0,
+          "s": 0,
+          "st": "lifting",
+          "t": 6.75
+        },
+        {
+          "f": 7.9,
+          "o": 70,
+          "s": 0,
+          "st": "releasing",
+          "t": 7.0
+        },
+        {
+          "f": 6.3,
+          "o": 75,
+          "s": 0,
+          "st": "releasing",
+          "t": 7.25
+        },
+        {
+          "f": 4.7,
+          "o": 80,
+          "s": 0,
+          "st": "releasing",
+          "t": 7.5
+        },
+        {
+          "f": 3.1,
+          "o": 85,
+          "s": 0,
+          "st": "releasing",
+          "t": 7.75
+        },
+        {
+          "f": 1.5,
+          "o": 90,
+          "s": 0,
+          "st": "releasing",
+          "t": 8.0
+        },
+        {
+          "f": 0,
+          "o": 95,
+          "s": 0,
+          "st": "releasing",
+          "t": 8.25
+        },
+        {
+          "f": 0,
+          "o": 100,
+          "s": 0,
+          "st": "releasing",
+          "t": 8.5
+        },
+        {
+          "f": 0,
+          "o": 100,
+          "s": 0,
+          "st": "releasing",
+          "t": 8.75
+        }
+      ]
+    },
+    "op_1792400400000_20e3f5": {
+      "calibration_id": "cal_1792335620000_faa55c",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_a3f578102f275bba5c2a2cd13f773dac",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "steel-bracket",
+      "operation_id": "op_1792400400000_20e3f5",
+      "operation_result": "success",
+      "peak_measured_force_n": 22.44,
+      "selected_force_n": 22.0,
+      "timestamp": "2026-10-19T09:00:00.000+00:00",
+      "timestamp_ms": 1792400400000
+    },
+    "op_1792400400000_7470fd": {
+      "calibration_id": "cal_1792324800000_f1a234",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_f28aa39b9cf305952555612beda580e8",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "plastic-bottle",
+      "operation_id": "op_1792400400000_7470fd",
+      "operation_result": "success",
+      "peak_measured_force_n": 9.69,
+      "selected_force_n": 9.5,
+      "timestamp": "2026-10-19T09:00:00.000+00:00",
+      "timestamp_ms": 1792400400000
+    },
+    "op_1792443600000_9ec5b9": {
+      "calibration_status": "uncalibrated",
+      "configuration_key": "cfg_37c4e74a4ca0abfe26d1bcf3fe93f584",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "cardboard-box",
+      "operation_id": "op_1792443600000_9ec5b9",
+      "operation_result": "slipped",
+      "peak_measured_force_n": 4.08,
+      "selected_force_n": 4.0,
+      "timestamp": "2026-10-19T21:00:00.000+00:00",
+      "timestamp_ms": 1792443600000
+    },
+    "op_1792443600000_9ef846": {
+      "calibration_id": "cal_1792324800000_f1a234",
+      "calibration_status": "calibrated",
+      "configuration_key": "cfg_f28aa39b9cf305952555612beda580e8",
+      "data_source": "firebase_live",
+      "duration_s": 7.7,
+      "mode": "live",
+      "object_id": "plastic-bottle",
+      "operation_id": "op_1792443600000_9ef846",
+      "operation_result": "success",
+      "peak_measured_force_n": 9.69,
+      "selected_force_n": 9.5,
+      "timestamp": "2026-10-19T21:00:00.000+00:00",
+      "timestamp_ms": 1792443600000
+    }
+  }
+}

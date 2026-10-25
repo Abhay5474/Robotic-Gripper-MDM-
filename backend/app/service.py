@@ -84,6 +84,8 @@ class Service:
         active = self.store.get_active(mode, key)
         if not active:
             return CalibrationLookup(state="not_found")
+        if active.get("calibration_status", "calibrated") != "calibrated":
+            return CalibrationLookup(state="invalidated", reason="The active calibration for this configuration was invalidated.")
         raw = self.store.get_calibration(mode, active.get("calibration_id", "")) if active.get("calibration_id") else None
         if not raw:
             return CalibrationLookup(state="inconsistent", reason="Active index points to a missing calibration record.")
@@ -342,20 +344,21 @@ class Service:
         stamp = self.store.stamp()
         _store_call(self.store.update_calibration, mode, cid, {
             "calibration_status": "invalidated", "invalidated_at": stamp["at"], "invalidation_reason": reason})
-        cleared = _store_call(self.store.clear_active_if, mode, raw["configuration_key"], cid)
+        cleared = _store_call(self.store.invalidate_active_if, mode, raw["configuration_key"], cid, stamp["ms"])
         return {"record": self._load_calibration(mode, cid), "active_cleared": cleared}
 
     # ------------------------------------------------------------ queries --
     def active_for_key(self, mode: str, key: str) -> dict:
         active = _store_call(self.store.get_active, mode, key)
-        if not active:
+        if not active or active.get("calibration_status", "calibrated") != "calibrated":
             raise ApiError(404, "no_active_calibration", "No successful calibration is active for this configuration.")
         return {"active": active, "record": _store_call(self.store.get_calibration, mode, active["calibration_id"])}
 
     def history(self, mode: str, key: str) -> dict:
         recs = _store_call(self.store.list_calibrations_for_key, mode, key)
         active = _store_call(self.store.get_active, mode, key)
-        return {"configuration_key": key, "active_calibration_id": (active or {}).get("calibration_id"), "records": recs}
+        live = active if active and active.get("calibration_status", "calibrated") == "calibrated" else None
+        return {"configuration_key": key, "active_calibration_id": (live or {}).get("calibration_id"), "records": recs}
 
     def recent_calibrations(self, mode: str, limit: int) -> list[dict]:
         return _store_call(self.store.list_recent_calibrations, mode, limit)

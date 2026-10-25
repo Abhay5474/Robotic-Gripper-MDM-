@@ -74,7 +74,7 @@ Next selection of the same key returns `source=calibration`, the slider is set t
 ## 8. Invalidating and replacing
 
 - **Replace:** confirm a new session for the same key; the index moves to the newest confirmation, older records stay for audit (the history marks which is active).
-- **Invalidate:** `POST /api/calibrations/{id}/invalidate {reason}` sets `invalidated`, and clears the index **only if it still points to that record**. The next selection calls the LLM.
+- **Invalidate:** `POST /api/calibrations/{id}/invalidate {reason}` sets `invalidated`, and turns the index entry into a tombstone (`calibration_status: "invalidated"`, no force) **only if it still points to that record**. The next selection calls the LLM; a later confirmation replaces the tombstone.
 - **Recalibrate:** Calibration History → Recalibrate loads the stored properties, and a new session starts from the saved force; the existing calibration stays active until the new one is confirmed.
 - Automatic non-reuse: staleness, tightened limits, changed properties (different key), inconsistent index.
 

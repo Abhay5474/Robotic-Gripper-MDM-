@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     app_env: str = "development"
     # Optional: serve the built frontend (frontend/dist) from this process for single-process deployments.
     frontend_dist: str | None = None
+    # Development only (STORE_BACKEND=memory): preload this RTDB export, e.g. ../samples/firebase_sample_data.json.
+    seed_file: str | None = None
+    seed_rebase: bool = True  # shift timestamps so the newest one is "now"
+    seed_namespaces: str = "live,demo"  # "live" = database root, "demo" = the demo/ namespace
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     # --- access control for the backend API -------------------------------

@@ -123,8 +123,9 @@ class PredictionRecord(BaseModel):
     force_unit: str
     confidence: str
     rationale: str
-    assumptions: list[str]
-    llm_warnings: list[str]
+    # RTDB does not store empty arrays, so these legitimately come back absent
+    assumptions: list[str] = Field(default_factory=list)
+    llm_warnings: list[str] = Field(default_factory=list)
     model_identifier: str
     prompt_version: str
     created_at: str

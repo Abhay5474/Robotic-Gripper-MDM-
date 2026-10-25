@@ -104,7 +104,7 @@ class Store:
         new_rank = (record["confirmed_at_ms"], record["calibration_id"])
 
         def fn(cur: Optional[dict]) -> dict:
-            if cur and cur.get("calibration_id") != record["calibration_id"]:
+            if cur and cur.get("calibration_status", "calibrated") == "calibrated" and cur.get("calibration_id") != record["calibration_id"]:
                 if (cur.get("confirmed_at_ms", 0), cur.get("calibration_id", "")) > new_rank:
                     raise TransactionAbort()
             return {
@@ -120,11 +120,19 @@ class Store:
 
         return self.db.transaction(self._p(mode, "active_calibrations", record["configuration_key"]), fn)
 
-    def clear_active_if(self, mode: str, key: str, cid: str) -> bool:
-        def fn(cur: Optional[dict]):
-            if not cur or cur.get("calibration_id") != cid:
+    def invalidate_active_if(self, mode: str, key: str, cid: str, at_ms: int) -> bool:
+        """If the index still points at `cid`, replace it with an invalidation tombstone.
+
+        A tombstone (not a delete) because RTDB transactions cannot return null through the Admin SDK.
+        The tombstone carries no calibrated_force, so it can never be reused.
+        """
+        def fn(cur: Optional[dict]) -> dict:
+            if not cur or cur.get("calibration_id") != cid or cur.get("calibration_status") != "calibrated":
                 raise TransactionAbort()
-            return None
+            return {
+                "calibration_id": cid, "calibration_status": "invalidated", "invalidated_at_ms": at_ms,
+                "confirmed_at_ms": cur.get("confirmed_at_ms", 0), "version": int(cur.get("version", 0)) + 1,
+            }
 
         committed, _ = self.db.transaction(self._p(mode, "active_calibrations", key), fn)
         return committed

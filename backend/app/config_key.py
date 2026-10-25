@@ -23,6 +23,11 @@ def _norm_text(s: str) -> str:
 
 
 def normalize_configuration(obj: ObjectProperties, limits: GripperLimits) -> dict[str, Any]:
+    return normalize_with_gripper(obj, limits.configuration())
+
+
+def normalize_with_gripper(obj: ObjectProperties, gripper_configuration: dict[str, Any]) -> dict[str, Any]:
+    """Same normalisation from a stored gripper_configuration (used to re-verify records read from the DB)."""
     return {
         "schema": SCHEMA,
         "object_id": obj.object_id,
@@ -33,7 +38,7 @@ def normalize_configuration(obj: ObjectProperties, limits: GripperLimits) -> dic
         "material": _norm_text(obj.material),
         "friction_coefficient": round(obj.friction_coefficient, 2),
         "fragility": obj.fragility,
-        "gripper": limits.configuration(),
+        "gripper": gripper_configuration,
     }
 
 

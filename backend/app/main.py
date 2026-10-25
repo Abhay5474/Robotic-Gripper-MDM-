@@ -41,6 +41,11 @@ def create_app(settings: Optional[Settings] = None, db: Optional[RtdbClient] = N
 
     if db is None:
         db = MemoryRtdb() if settings.store_backend == "memory" else FirebaseRtdb(settings)
+    if settings.seed_file:
+        if not isinstance(db, MemoryRtdb):
+            raise RuntimeError("SEED_FILE can only be used with STORE_BACKEND=memory (it would overwrite a real database).")
+        from .sample_data import load_into_memory
+        load_into_memory(db, json.loads(Path(settings.seed_file).read_text()), settings.seed_namespaces, settings.seed_rebase)
     if llm is None:
         try:
             llm = build_llm_client(settings)
