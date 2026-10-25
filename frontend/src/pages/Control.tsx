@@ -4,6 +4,7 @@ import ForceSummary from '@/components/ForceSummary'
 import OperationPanel from '@/components/OperationPanel'
 import ResolutionBanner from '@/components/ResolutionBanner'
 import SceneView from '@/components/SceneView'
+import ForceGauge from '@/components/viz/ForceGauge'
 import TelemetryTiles from '@/components/TelemetryTiles'
 import { Card } from '@/components/ui'
 import { SafetyBadge } from '@/components/SafetyPanel'
@@ -27,7 +28,10 @@ export default function Control() {
         <Card className="lg:col-span-3" title="Gripper view"><SceneView height="h-80" /></Card>
         <Card className="lg:col-span-2" title="Pick-and-place" subtitle="Run, record and log an operation"><OperationPanel onSaved={() => setSaved((n) => n + 1)} />{saved > 0 && <p className="mt-2 text-xs text-ok">Saved {saved} operation(s) this session - see Calibration History.</p>}</Card>
       </div>
-      <Card title="Live sensor readings"><TelemetryTiles /></Card>
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Card className="lg:col-span-2" title="Live sensor readings"><TelemetryTiles /></Card>
+        <Card title="Grip force gauge" subtitle="Measured vs target and permitted window"><ForceGauge /></Card>
+      </div>
     </div>
   )
 }

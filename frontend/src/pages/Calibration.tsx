@@ -1,5 +1,5 @@
-import { AlertOctagon, Ban, CheckCircle2, Play, RefreshCw, TriangleAlert, XCircle } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { AlertOctagon, Ban, CheckCircle2, Lightbulb, Play, RefreshCw, TriangleAlert, XCircle } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import ForceSlider from '@/components/ForceSlider'
 import ForceSummary from '@/components/ForceSummary'
 import ResolutionBanner from '@/components/ResolutionBanner'
@@ -8,6 +8,9 @@ import SceneView from '@/components/SceneView'
 import TelemetryTiles from '@/components/TelemetryTiles'
 import { Banner, Button, Card, Spinner } from '@/components/ui'
 import { fmtDate } from '@/lib/format'
+import { summarizeAttempts, suggestNext } from '@/lib/suggest'
+import AttemptsChart from '@/components/viz/AttemptsChart'
+import ForceEnvelope from '@/components/viz/ForceEnvelope'
 import { useApp } from '@/store/app'
 import { useForces } from '@/store/derived'
 import { useTelemetry } from '@/store/telemetry'
@@ -58,6 +61,9 @@ export default function Calibration() {
   const simRunning = useTelemetry((s) => s.simRunning)
   const f = useForces()
   const [confirming, setConfirming] = useState(false)
+  const limits = useApp((s) => s.health?.limits)
+  const setForce = useApp((s) => s.setForce)
+  const suggestion = useMemo(() => (session && limits ? suggestNext(summarizeAttempts(session.events), limits, f.safety) : null), [session, limits, f.safety])
 
   const last = session?.events[session.events.length - 1]
   const tested = last?.event === 'test_started' && selected != null && Math.abs(last.force - selected) < 1e-6
@@ -91,6 +97,8 @@ export default function Calibration() {
             <ForceSlider disabled={res.status !== 'ready' && !res.usingCached} />
           </Card>
 
+          <Card title="Force envelope" subtitle="Limits, estimated windows, the four forces and every test on one axis."><ForceEnvelope /></Card>
+
           <Card title="Calibration test" subtitle={session ? `Session ${session.record.calibration_id}` : 'A logged session starts when you press Start test.'}>
             <div className="space-y-4">
               {commandNote && <Banner tone="warn" icon={<TriangleAlert className="size-4" />}>{commandNote}</Banner>}
@@ -102,9 +110,15 @@ export default function Calibration() {
                 <Banner tone="neutral">Simulated run finished: <b>{simHint}</b>. This is a software hint only - you must still judge and confirm the result yourself.</Banner>
               )}
 
+              {suggestion && (
+                <Banner tone={suggestion.force == null ? 'warn' : 'neutral'} icon={<Lightbulb className="size-4" />}
+                  action={suggestion.force != null && suggestion.force !== selected ? <Button onClick={() => setForce(suggestion.force as number)} data-testid="apply-suggestion">Set slider to {suggestion.force.toFixed(2)} N</Button> : undefined}>
+                  <b>{suggestion.force == null ? 'No further force to try.' : `Suggested next test: ${suggestion.force.toFixed(2)} N.`}</b> {suggestion.reason}. <span className="text-slate-400">A suggestion only - nothing changes until you apply it and start a test.</span>
+                </Banner>
+              )}
               <div className="flex flex-wrap gap-2">
                 <Button variant="primary" disabled={!canTest} onClick={startTest} data-testid="start-test">{starting ? <Spinner /> : <Play className="size-4" />} Start test at {selected?.toFixed(2) ?? '—'} N</Button>
-                <Button variant="primary" className="!bg-ok hover:!bg-emerald-300" disabled={!canConfirm || confirming} onClick={() => setConfirming(true)} data-testid="confirm-success" title={canConfirm ? '' : 'Run a test at the selected force first'}><CheckCircle2 className="size-4" /> Confirm successful grasp</Button>
+                <Button variant="primary" className="!bg-ok hover:brightness-110" disabled={!canConfirm || confirming} onClick={() => setConfirming(true)} data-testid="confirm-success" title={canConfirm ? '' : 'Run a test at the selected force first'}><CheckCircle2 className="size-4" /> Confirm successful grasp</Button>
                 <Button variant="warn" disabled={!tested} onClick={() => mark('slipped')}>Object slipping</Button>
                 <Button variant="warn" disabled={!tested} onClick={() => mark('damage_risk')}>Damaged / at risk</Button>
                 <Button variant="danger" disabled={!tested} onClick={() => mark('failed')}><XCircle className="size-4" /> Test failed</Button>
@@ -127,6 +141,7 @@ export default function Calibration() {
 
         <div className="space-y-4">
           <Card title="Safety &amp; feasibility"><SafetyPanel safety={f.safety} /></Card>
+          <Card title="Test attempts" subtitle="Convergence of the force across tests"><AttemptsChart /></Card>
           <Card title="Live feedback"><div className="space-y-3"><SceneView height="h-52" /><TelemetryTiles /></div></Card>
         </div>
       </div>

@@ -4,6 +4,7 @@ import ForceSummary from '@/components/ForceSummary'
 import ResolutionBanner from '@/components/ResolutionBanner'
 import SafetyPanel from '@/components/SafetyPanel'
 import TelemetryTiles from '@/components/TelemetryTiles'
+import InsightsPanel from '@/components/InsightsPanel'
 import { Banner, Card, KV } from '@/components/ui'
 import { useApp } from '@/store/app'
 import { useForces } from '@/store/derived'
@@ -38,6 +39,7 @@ export default function Overview() {
         <Card title="Safety assessment (current force)"><SafetyPanel safety={f.safety} /></Card>
         <Card title="Live status"><TelemetryTiles /></Card>
       </div>
+      <InsightsPanel />
       {health && (
         <Card title="System configuration">
           <dl className="grid gap-x-8 sm:grid-cols-2">

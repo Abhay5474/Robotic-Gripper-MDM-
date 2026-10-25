@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     app_env: str = "development"
+    # Optional: serve the built frontend (frontend/dist) from this process for single-process deployments.
+    frontend_dist: str | None = None
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     # --- access control for the backend API -------------------------------

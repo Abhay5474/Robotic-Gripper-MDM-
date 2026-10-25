@@ -2,8 +2,9 @@ import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Too
 import { useApp } from '@/store/app'
 import { useForces } from '@/store/derived'
 import { useTelemetry } from '@/store/telemetry'
+import { useThemeColors } from '@/store/theme'
+import StateTimeline from './viz/StateTimeline'
 
-const AX = { stroke: '#64748b', fontSize: 11 }
 
 function Tip({ active, payload, unit }: { active?: boolean; payload?: readonly { value?: unknown }[]; unit: string }) {
   if (!active || !payload?.length) return null
@@ -16,6 +17,8 @@ export default function TelemetryCharts() {
   const source = useTelemetry((s) => s.source)
   const limits = useApp((s) => s.health?.limits)
   const f = useForces()
+  const c = useThemeColors()
+  const AX = { stroke: c.axis, fontSize: 11 }
   if (history.length < 2) return <div className="grid h-48 place-items-center rounded-lg border border-dashed border-line text-sm text-slate-400">{source ? 'Waiting for telemetry samples…' : 'No telemetry source is active.'}</div>
   const t0 = history[0].t
   const data = history.map((h) => ({ x: Number(((h.t - t0) / 1000).toFixed(1)), force: h.force, opening: h.opening, slip: h.slip }))
@@ -34,26 +37,27 @@ export default function TelemetryCharts() {
         <div className="h-60" role="img" aria-label="Measured gripping force over time against target">
           <ResponsiveContainer>
             <LineChart data={data} {...common}>
-              <CartesianGrid stroke="#1e2a47" strokeDasharray="3 3" />
-              <XAxis dataKey="x" {...AX} unit="s" /><YAxis {...AX} domain={[0, yMax]} width={36} />
+              <CartesianGrid stroke={c.grid} strokeDasharray="3 3" />
+              <XAxis dataKey="x" type="number" domain={['dataMin', 'dataMax']} tickCount={7} tickFormatter={(v: number) => `${Math.round(v)}s`} {...AX} /><YAxis {...AX} domain={[0, yMax]} width={36} />
               <Tooltip content={(p) => <Tip {...p} unit="N" />} />
-              {f.selected != null && <ReferenceLine y={f.selected} stroke="#22d3ee" strokeWidth={1.5} />}
-              {f.llm != null && <ReferenceLine y={f.llm} stroke="#a78bfa" strokeDasharray="5 4" />}
-              {f.calibrated != null && <ReferenceLine y={f.calibrated} stroke="#34d399" strokeDasharray="5 4" />}
-              <Line type="monotone" dataKey="force" stroke="#fb923c" strokeWidth={2} dot={false} isAnimationActive={false} connectNulls={false} />
+              {f.selected != null && <ReferenceLine y={f.selected} stroke={c.accent} strokeWidth={1.5} />}
+              {f.llm != null && <ReferenceLine y={f.llm} stroke={c.llm} strokeDasharray="5 4" />}
+              {f.calibrated != null && <ReferenceLine y={f.calibrated} stroke={c.cal} strokeDasharray="5 4" />}
+              <Line type="monotone" dataKey="force" stroke={c.meas} strokeWidth={2} dot={false} isAnimationActive={false} connectNulls={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </figure>
+      <StateTimeline history={history} />
       <figure>
         <figcaption className="mb-1 text-xs"><b className="text-slate-100">Finger opening (mm)</b></figcaption>
         <div className="h-40" role="img" aria-label="Finger opening over time">
           <ResponsiveContainer>
             <LineChart data={data} {...common}>
-              <CartesianGrid stroke="#1e2a47" strokeDasharray="3 3" />
-              <XAxis dataKey="x" {...AX} unit="s" /><YAxis {...AX} domain={[0, limits?.max_opening_mm ?? 'auto']} width={36} />
+              <CartesianGrid stroke={c.grid} strokeDasharray="3 3" />
+              <XAxis dataKey="x" type="number" domain={['dataMin', 'dataMax']} tickCount={7} tickFormatter={(v: number) => `${Math.round(v)}s`} {...AX} /><YAxis {...AX} domain={[0, limits?.max_opening_mm ?? 'auto']} width={36} />
               <Tooltip content={(p) => <Tip {...p} unit="mm" />} />
-              <Line type="monotone" dataKey="opening" stroke="#38bdf8" strokeWidth={2} dot={false} isAnimationActive={false} />
+              <Line type="monotone" dataKey="opening" stroke={c.opening} strokeWidth={2} dot={false} isAnimationActive={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -63,9 +67,9 @@ export default function TelemetryCharts() {
         <div className="h-24" role="img" aria-label="Slip detection over time">
           <ResponsiveContainer>
             <LineChart data={data} {...common}>
-              <CartesianGrid stroke="#1e2a47" strokeDasharray="3 3" />
-              <XAxis dataKey="x" {...AX} unit="s" /><YAxis {...AX} domain={[0, 1]} ticks={[0, 1]} width={36} />
-              <Line type="stepAfter" dataKey="slip" stroke="#f87171" strokeWidth={2} dot={false} isAnimationActive={false} connectNulls={false} />
+              <CartesianGrid stroke={c.grid} strokeDasharray="3 3" />
+              <XAxis dataKey="x" type="number" domain={['dataMin', 'dataMax']} tickCount={7} tickFormatter={(v: number) => `${Math.round(v)}s`} {...AX} /><YAxis {...AX} domain={[0, 1]} ticks={[0, 1]} width={36} />
+              <Line type="stepAfter" dataKey="slip" stroke={c.slip} strokeWidth={2} dot={false} isAnimationActive={false} connectNulls={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>

@@ -150,6 +150,18 @@ The slider is a software target. Unless a hardware command channel has been agre
 
 Selecting the same configuration later hits step 2 above: the slider is populated with the saved value, the UI says **"Calibrated force loaded from Firebase."** and shows the date and record id, and the LLM is not called. A saved calibration is **not** silently reused when it is stale (older than `CALIBRATION_MAX_AGE_DAYS`), invalidated, inconsistent with its index entry, or fails the safety checks under the *current* limits (e.g., a tightened contact-force limit). In those cases the UI shows it as "not applied" and queries the LLM. **Regenerate** asks the LLM again without touching the saved value; **Invalidate** and **Recalibrate** are in Calibration History.
 
+## Visualisation and UI extras
+
+- **Light / dark / system theme.** The light theme is a faint red-and-white palette; the choice is in the header and Settings and is applied before first paint. Chart and 3D colours are read from the same CSS variables, so every view follows the theme.
+- **Force envelope** (Calibration page): one axis showing gripper limits, the estimated slip/marginal/permitted/over-limit zones, LLM/selected/calibrated/measured values, and every test of the session.
+- **Test-attempts chart**: how the force converged from the LLM value to the final one, coloured by result.
+- **Grip-force gauge** (Gripper Control): measured needle vs target tick against the permitted window; shows "unavailable" rather than zero when there is no reading.
+- **Operation-state timeline** under the telemetry charts, and a **3D view** you can orbit/zoom with contact-force arrows that grow with the *measured* force (falls back to a message if WebGL is unavailable).
+- **Insights** (Overview): LLM-vs-calibrated comparison per configuration (mean error and over/under-estimate tendency) and operation outcomes. Descriptive only; it never changes prompts, limits or calibrations.
+- **Calibration assistant**: after a slip or damage-risk it *suggests* the next force (≈15% step, bisecting once a slipping and a risky force are known, never outside the permitted window, and it says so when no testable force remains). It only fills the slider on request; nothing is tested automatically.
+- **CSV export** of calibration records (History) and JSON export of an operation trace.
+- `make demo | backend | frontend | test | serve`; `FRONTEND_DIST=../frontend/dist` lets the backend serve the built app on one port; `.github/workflows/ci.yml` runs both test suites.
+
 ## Safety limitations
 
 - Force limits, step, opening, lift acceleration and safety factor are **demo values** until `GRIPPER_LIMITS_SOURCE=hardware_team`. The UI labels them everywhere.
@@ -175,8 +187,8 @@ The mode is switched only by the user (header toggle), and is locked while a cal
 ## Testing
 
 ```bash
-cd backend && .venv/bin/python -m pytest -q          # 87 tests, mocked Firebase + LLM
+cd backend && .venv/bin/python -m pytest -q          # 88 tests, mocked Firebase + LLM
 cd frontend && npm test && npm run typecheck && npm run build
 ```
 
-Backend tests cover: first selection → LLM → slider default; adjusting and confirming; saved record separate from the untouched prediction; automatic reuse and **a spy proving no LLM call on a cache hit**; different mass/friction/object id never reuse; failed calibrations never active; infeasible/untested/unconfirmed forces rejected; Firebase and LLM failures; invalid LLM output; staleness; sensor-assisted vs manual confirmation; demo/live segregation; concurrent confirmations keeping the active index consistent; auth; provider request shapes. Frontend tests cover the shared safety cases, telemetry normalisation/staleness, form validation, the simulator, the decision-flow store (cases A/B/C, cached local data), the slider, and demo/live labelling.
+Backend tests cover: first selection → LLM → slider default; adjusting and confirming; saved record separate from the untouched prediction; automatic reuse and **a spy proving no LLM call on a cache hit**; different mass/friction/object id never reuse; failed calibrations never active; infeasible/untested/unconfirmed forces rejected; Firebase and LLM failures; invalid LLM output; staleness; sensor-assisted vs manual confirmation; demo/live segregation; concurrent confirmations keeping the active index consistent; auth; provider request shapes. Frontend tests (84) cover the shared safety cases, the calibration assistant, analytics/CSV, theme switching, the gauge and envelope, telemetry normalisation/staleness, form validation, the simulator, the decision-flow store (cases A/B/C, cached local data), the slider, and demo/live labelling.

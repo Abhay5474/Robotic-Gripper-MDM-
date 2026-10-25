@@ -88,3 +88,20 @@ def test_mock_heuristic_output_passes_the_same_validation(client, app):
     app.state.service.llm = MockHeuristicClient()
     r = client.post("/api/predict-grip", json={"object": BOTTLE}).json()
     assert r["prediction"]["model_identifier"].startswith("mock-heuristic") and r["safety"]["status"] in ("ok", "marginal")
+
+
+def test_frontend_dist_is_served_with_spa_fallback_and_does_not_shadow_api(tmp_path, db, llm):
+    from fastapi.testclient import TestClient
+    from app.main import create_app
+    (tmp_path / "index.html").write_text("<html>app</html>")
+    (tmp_path / "assets").mkdir()
+    (tmp_path / "assets" / "a.js").write_text("console.log(1)")
+    (tmp_path.parent / "secret.txt").write_text("nope")
+    c = TestClient(create_app(Settings(_env_file=None, store_backend="memory", llm_provider="mock", frontend_dist=str(tmp_path)), db=db, llm=llm))
+    assert c.get("/calibration").text == "<html>app</html>"          # client-side route
+    assert c.get("/assets/a.js").text == "console.log(1)"
+    assert c.get("/api/health").json()["status"] in ("ok", "degraded")  # API still wins
+    assert c.get("/api/nope").status_code == 404
+    assert "nope" not in c.get("/../secret.txt").text and "nope" not in c.get("/%2e%2e/secret.txt").text  # no path traversal
+    with pytest.raises(RuntimeError):
+        create_app(Settings(_env_file=None, store_backend="memory", llm_provider="mock", frontend_dist=str(tmp_path / "missing")), db=db, llm=llm)

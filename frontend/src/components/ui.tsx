@@ -11,7 +11,7 @@ export function useNow(intervalMs = 1000) {
 
 export function Card({ title, subtitle, action, children, className }: { title?: ReactNode; subtitle?: ReactNode; action?: ReactNode; children: ReactNode; className?: string }) {
   return (
-    <section className={cx('rounded-xl border border-line bg-ink-800/80 p-4 sm:p-5', className)}>
+    <section className={cx('rounded-xl border border-line bg-ink-800/80 p-4 shadow-[var(--shadow-card)] sm:p-5', className)}>
       {(title || action) && (
         <header className="mb-3 flex items-start justify-between gap-3">
           <div>
@@ -48,7 +48,7 @@ export function Banner({ tone = 'neutral', icon, children, action }: { tone?: To
 
 type Variant = 'primary' | 'secondary' | 'danger' | 'warn' | 'ghost'
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-accent text-ink-950 hover:bg-cyan-300 font-semibold',
+  primary: 'bg-accent text-ink-950 hover:brightness-110 font-semibold',
   secondary: 'border border-line bg-ink-700 text-slate-100 hover:bg-ink-600',
   danger: 'border border-bad/50 bg-bad/10 text-bad hover:bg-bad/20',
   warn: 'border border-warn/50 bg-warn/10 text-warn hover:bg-warn/20',

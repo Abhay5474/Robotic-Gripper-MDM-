@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from .config import Settings, get_settings
 from .llm import LLMClient, LLMError, UnconfiguredLLM, build_llm_client
@@ -165,7 +165,27 @@ def create_app(settings: Optional[Settings] = None, db: Optional[RtdbClient] = N
     def force_target(req: ForceCommandRequest, mode: Mode):
         return service.force_command(mode, req)
 
+    _mount_frontend(app, settings.frontend_dist)
     return app
+
+
+def _mount_frontend(app: FastAPI, dist: Optional[str]) -> None:
+    """Serve the built SPA (with history-API fallback) after all /api routes are registered."""
+    if not dist:
+        return
+    root = Path(dist).resolve()
+    index = root / "index.html"
+    if not index.is_file():
+        raise RuntimeError(f"FRONTEND_DIST={dist!r} does not contain index.html (run `npm run build`).")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def spa(path: str):
+        if path.startswith("api/") or path == "api":
+            raise HTTPException(404, {"code": "not_found", "message": "No such API route."})
+        target = (root / path).resolve()
+        if path and root in target.parents and target.is_file():
+            return FileResponse(target)
+        return FileResponse(index)
 
 
 def _cid(v: str) -> str:

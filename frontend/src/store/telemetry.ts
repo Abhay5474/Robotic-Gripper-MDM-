@@ -4,7 +4,7 @@ import { GripperSimulator, type SimOutcomeHint } from '@/lib/simulator'
 import { normalizeTelemetry } from '@/lib/telemetry'
 import type { GripperLimits, Mode, ObjectProps, Telemetry, TraceRow } from '@/lib/types'
 
-export interface HistPoint { t: number; force: number | null; opening: number | null; slip: number | null }
+export interface HistPoint { t: number; force: number | null; opening: number | null; slip: number | null; state: string | null }
 const MAX_HIST = 600
 const MAX_TRACE = 400
 
@@ -45,7 +45,7 @@ export const useTelemetry = create<TState>((set, get) => {
     const patch: Partial<TState> = { latest: t }
     if (now - lastHist >= 100) {
       lastHist = now
-      const p: HistPoint = { t: t.timestamp_ms ?? now, force: t.measured_force_n, opening: t.finger_opening_mm, slip: t.slip_detected == null ? null : t.slip_detected ? 1 : 0 }
+      const p: HistPoint = { t: t.timestamp_ms ?? now, force: t.measured_force_n, opening: t.finger_opening_mm, slip: t.slip_detected == null ? null : t.slip_detected ? 1 : 0, state: t.operation_state }
       patch.history = [...st.history, p].slice(-MAX_HIST)
       if (st.recording.active) {
         const row: TraceRow = { t: Number(((now - st.recording.startedMs) / 1000).toFixed(2)), f: t.measured_force_n, o: t.finger_opening_mm, s: t.slip_detected == null ? null : Number(t.slip_detected), st: t.operation_state }

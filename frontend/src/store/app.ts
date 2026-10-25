@@ -87,7 +87,7 @@ export const useApp = create<AppState>((set, get) => ({
   },
 
   updateSettings(p) {
-    const settings = { ...get().settings, ...p }
+    const settings = { ...get().settings, ...p, theme: loadSettings().theme }
     saveSettings(settings)
     set({ settings })
     if (p.telemetryPath !== undefined) useTelemetry.getState().start(settings.mode, settings.telemetryPath, limitsOf(get()))

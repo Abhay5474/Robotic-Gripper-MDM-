@@ -1,16 +1,18 @@
 // Browser-only preferences. No secrets are stored in localStorage; the optional API token lives in sessionStorage.
 import type { Mode } from './types'
+import type { ThemePref } from './theme'
 
 const KEY = 'gripsense.settings.v1'
 export interface UiSettings {
   mode: Mode
+  theme: ThemePref
   staleAfterS: number | null // null = use backend default
   fineSteps: number // slider increments for +/- buttons, expressed in multiples of the gripper step
   coarseSteps: number
   telemetryPath: string
 }
 export const DEFAULT_SETTINGS: UiSettings = {
-  mode: 'demo', staleAfterS: null, fineSteps: 1, coarseSteps: 5,
+  mode: 'demo', theme: 'system', staleAfterS: null, fineSteps: 1, coarseSteps: 5,
   telemetryPath: import.meta.env.VITE_TELEMETRY_PATH ?? 'gripper_telemetry',
 }
 

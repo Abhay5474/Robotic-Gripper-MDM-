@@ -4,6 +4,7 @@ import { freshness } from '@/lib/telemetry'
 import { staleAfter, useApp } from '@/store/app'
 import { useTelemetry } from '@/store/telemetry'
 import { ModeBadge } from './ModeBadge'
+import ThemeToggle from './ThemeToggle'
 import { Banner, Pill, cx, useNow } from './ui'
 
 const NAV = [
@@ -80,7 +81,7 @@ export default function Layout() {
         <header className="sticky top-0 z-20 border-b border-line bg-ink-950/90 px-4 py-3 backdrop-blur sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-3"><ModeBadge mode={mode} /><StatusChips /></div>
-            <ModeSwitch />
+            <div className="flex items-center gap-2"><ThemeToggle /><ModeSwitch /></div>
           </div>
         </header>
         <main className="mx-auto max-w-7xl space-y-4 px-4 py-5 sm:px-6">

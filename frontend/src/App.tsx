@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from '@/components/Layout'
 import { Spinner } from '@/components/ui'
 import { useApp } from '@/store/app'
+import { useThemeBootstrap } from '@/store/theme'
 import Overview from '@/pages/Overview'
 import Control from '@/pages/Control'
 import Objects from '@/pages/Objects'
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
 
 export default function App() {
   const init = useApp((s) => s.init)
+  useThemeBootstrap()
   useEffect(() => { void init() }, [init])
   return <RouterProvider router={router} />
 }

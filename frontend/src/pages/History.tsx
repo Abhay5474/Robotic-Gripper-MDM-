@@ -5,9 +5,19 @@ import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, XAx
 import SceneView from '@/components/SceneView'
 import { Banner, Button, Card, KV, Pill, Spinner, cx } from '@/components/ui'
 import { api, ApiError } from '@/lib/api'
+import { calibrationsCsv } from '@/lib/analytics'
 import { fmtDate, fmtN, shortId } from '@/lib/format'
 import type { CalibrationRecord, OperationRecord, TraceRow } from '@/lib/types'
 import { useApp } from '@/store/app'
+import { useThemeColors } from '@/store/theme'
+
+function download(name: string, text: string, type: string) {
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(new Blob([text], { type }))
+  a.download = name
+  a.click()
+  URL.revokeObjectURL(a.href)
+}
 
 const STATUS_TONE = { calibrated: 'ok', in_progress: 'warn', failed: 'bad', cancelled: 'neutral', invalidated: 'bad' } as const
 
@@ -71,14 +81,15 @@ function CalibrationRow({ rec, onChanged }: { rec: CalibrationRecord; onChanged:
 }
 
 function TraceChart({ rows, cursor }: { rows: TraceRow[]; cursor: number }) {
+  const c = useThemeColors()
   return (
     <div className="h-36" role="img" aria-label="Recorded force trace">
       <ResponsiveContainer>
         <LineChart data={rows} margin={{ top: 6, right: 12, bottom: 0, left: 0 }}>
-          <CartesianGrid stroke="#1e2a47" strokeDasharray="3 3" />
-          <XAxis dataKey="t" stroke="#64748b" fontSize={11} unit="s" /><YAxis stroke="#64748b" fontSize={11} width={34} />
-          <Line dataKey="f" stroke="#fb923c" dot={false} strokeWidth={2} isAnimationActive={false} />
-          <ReferenceLine x={rows[cursor]?.t} stroke="#22d3ee" />
+          <CartesianGrid stroke={c.grid} strokeDasharray="3 3" />
+          <XAxis dataKey="t" stroke={c.axis} fontSize={11} unit="s" /><YAxis stroke={c.axis} fontSize={11} width={34} />
+          <Line dataKey="f" stroke={c.meas} dot={false} strokeWidth={2} isAnimationActive={false} />
+          <ReferenceLine x={rows[cursor]?.t} stroke={c.accent} />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -143,7 +154,7 @@ export default function HistoryPage() {
       </div>
       {tab === 'ops' ? <OperationsTab /> : (
         <Card title={`Calibrations (${mode} data)`} subtitle="Every record is kept for audit. Only the one marked active is reused automatically."
-          action={<div className="flex items-center gap-2"><select aria-label="Filter by status" value={filter} onChange={(e) => setFilter(e.target.value)} className="rounded-md border border-line bg-ink-900 px-2 py-1 text-xs"><option value="all">All</option>{Object.keys(STATUS_TONE).map((s) => <option key={s} value={s}>{s}</option>)}</select><Button variant="ghost" onClick={load}>Refresh</Button></div>}>
+          action={<div className="flex items-center gap-2"><select aria-label="Filter by status" value={filter} onChange={(e) => setFilter(e.target.value)} className="rounded-md border border-line bg-ink-900 px-2 py-1 text-xs"><option value="all">All</option>{Object.keys(STATUS_TONE).map((s) => <option key={s} value={s}>{s}</option>)}</select><Button variant="ghost" disabled={!shown?.length} onClick={() => download(`gripsense-calibrations-${mode}.csv`, calibrationsCsv(shown ?? []), 'text/csv')}>Export CSV</Button><Button variant="ghost" onClick={load}>Refresh</Button></div>}>
           {err && <Banner tone="bad">{err}</Banner>}
           {!recs && !err && <Spinner />}
           {shown && shown.length === 0 && <p className="text-sm text-slate-400">No calibration records yet.</p>}

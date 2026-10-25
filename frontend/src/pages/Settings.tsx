@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Banner, Button, Card, KV, Pill } from '@/components/ui'
+import ThemeToggle from '@/components/ThemeToggle'
 import { firebaseConfigured, getAuthSafe, onUser, signIn, signOutUser } from '@/lib/firebase'
 import { getApiToken, setApiToken } from '@/lib/settings'
 import { useApp } from '@/store/app'
@@ -37,6 +38,7 @@ export default function SettingsPage() {
         <div className="space-y-4">
           <Card title="Interface preferences">
             <div className="space-y-3 text-sm">
+              <div><span className="mb-1 block text-xs text-slate-400">Colour theme (light = faint red &amp; white)</span><ThemeToggle labels /></div>
               <label className="block"><span className="mb-1 block text-xs text-slate-400">Telemetry stale after (s) - blank uses the backend default ({health?.telemetry.stale_after_s ?? '—'})</span>
                 <input type="number" min="0.5" step="0.5" value={settings.staleAfterS ?? ''} onChange={(e) => updateSettings({ staleAfterS: e.target.value === '' ? null : num(e.target.value, 5) })} className="w-32 rounded-md border border-line bg-ink-900 px-2 py-1.5 font-mono" /></label>
               <label className="block"><span className="mb-1 block text-xs text-slate-400">Fine adjustment (× slider step)</span>
