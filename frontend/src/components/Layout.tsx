@@ -1,6 +1,6 @@
 import { Activity, AlertTriangle, Boxes, ChevronDown, ChevronRight, Cpu, Gauge, History, LayoutDashboard, Menu, PanelLeftClose, PanelLeftOpen, Search, Settings as Cog, SlidersHorizontal, WifiOff, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom'
 import { FastNavLink as NavLink } from './FastLink'
 import { fmtN } from '@/lib/format'
 import { objectKind } from '@/lib/objects'
@@ -229,6 +229,8 @@ export default function Layout() {
           <div key={location.pathname} className="page-enter space-y-4"><Outlet /></div>
         </main>
       </div>
+      {/* new pages open at the top; back/forward restores the previous position */}
+      <ScrollRestoration />
       <Toaster />
       <CommandPalette open={palette} onClose={() => setPalette(false)} />
     </div>
