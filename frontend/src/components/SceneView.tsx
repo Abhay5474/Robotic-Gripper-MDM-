@@ -144,18 +144,18 @@ export default function SceneView({ override, progress, object: objectProp, targ
       </div>
 
       {/* HUD */}
-      <div className="pointer-events-none absolute left-2 top-2 flex flex-wrap items-center gap-1.5 text-[11px]">
+      <div className="pointer-events-none absolute left-2 top-11 flex flex-wrap items-center gap-1.5 text-[11px] @lg:top-2">
         <span className={cx('rounded border px-1.5 py-0.5 font-bold tracking-wider', tag.cls)}>{tag.text}</span>
         <span className={cx(chip, 'font-mono text-slate-200')}>{t.operation_state ?? 'no state'}</span>
       </div>
       <div className="absolute right-2 top-2 flex items-center gap-1">
         {/* a dropdown in compact or narrow views (container query), view buttons when there is room */}
         <select aria-label="Camera view" value={view} onChange={(e) => { setView(e.target.value as ViewName); setNonce((n) => n + 1) }}
-          className={cx(chip, 'cursor-pointer py-1 text-[11px] font-medium text-slate-200', !compact && '@md:hidden')}>
+          className={cx(chip, 'cursor-pointer py-1 text-[11px] font-medium text-slate-200', !compact && '@lg:hidden')}>
           {VIEWS.map((v) => <option key={v.id} value={v.id}>{v.label}</option>)}
         </select>
         {!compact && (
-          <div role="group" aria-label="Camera view buttons" className={cx(chip, 'hidden gap-0.5 p-0.5 @md:flex')}>
+          <div role="group" aria-label="Camera view buttons" className={cx(chip, 'hidden gap-0.5 p-0.5 @lg:flex')}>
             {VIEWS.map((v) => (
               <button key={v.id} type="button" title={v.label} aria-pressed={view === v.id} onClick={() => { setView(v.id); setNonce((n) => n + 1) }}
                 className={cx('rounded px-1.5 py-0.5 text-[11px] font-medium transition-colors', view === v.id ? 'bg-accent text-ink-950' : 'text-slate-300 hover:text-slate-100')}>{v.short}</button>
@@ -173,7 +173,7 @@ export default function SceneView({ override, progress, object: objectProp, targ
           {balance && <span className={chip}><span className="text-slate-400">grip margin{inContact ? '' : ' (target)'} </span><span className={cx('font-mono', balance.tone === 'ok' ? 'text-ok' : balance.tone === 'warn' ? 'text-warn' : 'text-bad')}>{fmtMargin(balance.margin)}</span></span>}
         </div>
         {webgl && (
-          <div className={cx(chip, 'min-w-0 max-w-[45%] text-right text-[10.5px] leading-snug text-slate-400')}>
+          <div className={cx(chip, 'shrink-0 text-right text-[10.5px] leading-snug text-slate-400 @lg:min-w-0 @lg:max-w-[45%] @lg:shrink')}>
             <span className={cx('whitespace-nowrap', !compact && '@lg:hidden')}>{note[1]}</span>
             {!compact && <span className="hidden @lg:inline">{note[0]}</span>}
           </div>

@@ -88,7 +88,7 @@ function StatusPopover() {
   }, [open])
   const ok = !healthError && health?.store.reachable && health.llm.configured
   return (
-    <div ref={ref} className="relative shrink-0 xl:hidden">
+    <div ref={ref} className="relative shrink-0 2xl:hidden">
       <button type="button" aria-expanded={open} aria-label="System status" onClick={() => setOpen((o) => !o)} className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-ink-900 px-2 py-1.5 text-xs text-slate-300 hover:text-slate-100 sm:px-2.5">
         <span className={cx('size-2 rounded-full', ok ? 'bg-ok' : 'bg-bad')} /><span className="hidden sm:inline">System</span><ChevronDown className="size-3" />
       </button>
@@ -194,7 +194,7 @@ export default function Layout() {
           <div className="flex items-center gap-2 sm:gap-3">
             <button type="button" onClick={() => setDrawer(true)} aria-label="Open navigation" className="rounded-md p-1.5 text-slate-300 hover:bg-ink-700 lg:hidden"><Menu className="size-5" /></button>
             <div className="min-w-0 flex-1">
-              <div className="flex min-w-0 items-center gap-2 xl:flex-wrap">
+              <div className="flex min-w-0 items-center gap-2 2xl:flex-wrap">
                 {/* breadcrumb, not a second page title: every page renders its own <h1> */}
                 <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1 text-sm">
                   {crumb ? <>
@@ -204,7 +204,7 @@ export default function Layout() {
                   </> : <span className="truncate font-medium text-slate-200">GripSense AI</span>}
                 </nav>
                 <span className="hidden shrink-0 sm:inline-flex"><ModeBadge mode={mode} /></span>
-                <div className="hidden xl:block"><StatusChips /></div>
+                <div className="hidden 2xl:block"><StatusChips /></div>
                 <StatusPopover />
               </div>
             </div>
