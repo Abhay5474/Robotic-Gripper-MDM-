@@ -197,6 +197,25 @@ class CalibrationLookup(BaseModel):
     record: Optional[CalibrationRecord] = None
 
 
+class LookupRequest(BaseModel):
+    """Check many configurations for a reusable calibration at once. Never calls the LLM."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    objects: list[ObjectProperties] = Field(min_length=1, max_length=50)
+
+
+class LookupItem(BaseModel):
+    object_id: str
+    configuration_key: str
+    state: LookupState
+    reason: Optional[str] = None
+    calibrated_force: Optional[float] = None
+    calibration_id: Optional[str] = None
+    confirmed_at: Optional[str] = None
+    confirmation_method: Optional[str] = None
+
+
 class PredictGripResponse(BaseModel):
     configuration_key: str
     normalized_configuration: dict[str, Any]

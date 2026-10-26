@@ -22,6 +22,7 @@ export interface ThemeColors {
   accent: string; llm: string; cal: string; meas: string; bad: string; ok: string; warn: string
   object: string; on: string; grid: string; axis: string; opening: string; slip: string
   sceneBg: string; sceneGridA: string; sceneGridB: string; metal: string; palm: string; stem: string
+  table: string; tableEdge: string; floor: string; arm: string; joint: string; tray: string; leg: string
 }
 
 export function readThemeColors(): ThemeColors {
@@ -33,5 +34,7 @@ export function readThemeColors(): ThemeColors {
     object: v('--c-object', '#22d3ee'), on: v('--c-on', '#0b1220'), grid: v('--c-grid', '#1e2a47'), axis: v('--c-axis', '#64748b'), opening: v('--c-opening', '#38bdf8'), slip: v('--c-slip', '#f87171'),
     sceneBg: v('--c-scene-bg', '#0b1220'), sceneGridA: v('--c-scene-grid-a', '#27355a'), sceneGridB: v('--c-scene-grid-b', '#18223d'),
     metal: v('--c-metal', '#94a3b8'), palm: v('--c-palm', '#475569'), stem: v('--c-stem', '#334155'),
+    table: v('--c-table', '#1a2440'), tableEdge: v('--c-table-edge', '#2a3a62'), floor: v('--c-floor', '#0a1120'), arm: v('--c-arm', '#dfe5ee'), joint: v('--c-joint', '#2a3242'),
+    tray: v('--c-tray', '#22304f'), leg: v('--c-leg', '#2a3242'),
   }
 }

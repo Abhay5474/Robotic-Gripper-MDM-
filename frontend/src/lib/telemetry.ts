@@ -44,3 +44,29 @@ export function freshness(t: Telemetry | null, nowMs: number, staleAfterS: numbe
     ? { state: 'stale', ageS: sinceRx, reason: `No update for ${sinceRx.toFixed(1)} s and the hardware sends no timestamp.` }
     : { state: 'unknown', ageS: sinceRx, reason: 'Hardware timestamp missing; freshness cannot be verified.' }
 }
+
+export interface TelemetryStats { samples: number; spanS: number; rateHz: number | null; fMin: number | null; fMax: number | null; fMean: number | null; slipShare: number | null }
+
+/** Summary over received samples only. Missing values are skipped, never treated as zero. */
+export function telemetryStats(points: { t: number; force: number | null; slip: number | null }[]): TelemetryStats {
+  const n = points.length
+  const span = n > 1 ? (points[n - 1].t - points[0].t) / 1000 : 0
+  const forces = points.map((p) => p.force).filter((v): v is number => v != null && Number.isFinite(v))
+  const slips = points.map((p) => p.slip).filter((v): v is number => v != null)
+  return {
+    samples: n,
+    spanS: span,
+    rateHz: span > 0 ? (n - 1) / span : null,
+    fMin: forces.length ? Math.min(...forces) : null,
+    fMax: forces.length ? Math.max(...forces) : null,
+    fMean: forces.length ? forces.reduce((a, b) => a + b, 0) / forces.length : null,
+    slipShare: slips.length ? slips.filter((s) => s > 0).length / slips.length : null,
+  }
+}
+
+/** Keep only the last `windowS` seconds of samples (null = everything). */
+export function windowed<T extends { t: number }>(points: T[], windowS: number | null): T[] {
+  if (windowS == null || points.length === 0) return points
+  const end = points[points.length - 1].t
+  return points.filter((p) => end - p.t <= windowS * 1000)
+}

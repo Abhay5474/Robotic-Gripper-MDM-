@@ -19,6 +19,7 @@ from .schemas import (
     ConfirmRequest,
     ForceCommandRequest,
     InvalidateRequest,
+    LookupRequest,
     OperationRequest,
     PredictGripRequest,
     StartCalibrationRequest,
@@ -129,6 +130,10 @@ def create_app(settings: Optional[Settings] = None, db: Optional[RtdbClient] = N
     @app.get("/api/calibrations", dependencies=guard)
     def recent_calibrations(mode: Mode, limit: Annotated[int, Query(ge=1, le=200)] = 50):
         return {"records": service.recent_calibrations(mode, limit)}
+
+    @app.post("/api/calibrations/lookup", dependencies=guard)
+    def lookup_calibrations(req: LookupRequest, mode: Mode):
+        return {"items": service.lookup(mode, req.objects), "llm_called": False}
 
     @app.get("/api/calibrations/{configuration_key}", dependencies=guard)
     def active_calibration(configuration_key: str, mode: Mode):

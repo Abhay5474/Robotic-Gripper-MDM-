@@ -18,6 +18,7 @@ from .schemas import (
     CalibrationLookup,
     CalibrationRecord,
     ConfirmRequest,
+    LookupItem,
     ForceCommandRequest,
     GripperLimits,
     LLMForceResponse,
@@ -108,6 +109,20 @@ class Service:
         if sa.status not in ("ok", "marginal"):
             return CalibrationLookup(state="safety_failed", reason=f"Saved force fails current safety checks: {sa.summary}", record=rec)
         return CalibrationLookup(state="found_valid", record=rec)
+
+    def lookup(self, mode: str, objects: list[ObjectProperties]) -> list[LookupItem]:
+        """Calibration status for each configuration, using the same rules as prediction. No LLM call."""
+        out = []
+        for obj in objects:
+            key, _ = self._key(obj)
+            lk = _store_call(self._evaluate_active, mode, key, obj)
+            rec = lk.record
+            out.append(LookupItem(
+                object_id=obj.object_id, configuration_key=key, state=lk.state, reason=lk.reason,
+                calibrated_force=rec.calibrated_force if rec else None, calibration_id=rec.calibration_id if rec else None,
+                confirmed_at=rec.confirmed_at if rec else None, confirmation_method=rec.confirmation_method if rec else None,
+            ))
+        return out
 
     # ------------------------------------------------------------ LLM --
     def _recommend(self, obj: ObjectProperties) -> LLMForceResponse:

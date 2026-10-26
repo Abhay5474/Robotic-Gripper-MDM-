@@ -15,7 +15,9 @@ export interface SimRaw {
   timestamp: number
 }
 
-const DURATIONS: Partial<Record<SimState, number>> = { approaching: 1.2, closing: 1.2, holding: 0.8, lifting: 1.6, transporting: 1.6, releasing: 1.0 }
+/** Seconds per phase. Also used by the 3D view to pace the (schematic) arm motion. */
+export const PHASE_DURATIONS: Partial<Record<SimState, number>> = { approaching: 1.2, closing: 1.2, holding: 0.8, lifting: 1.6, transporting: 1.6, releasing: 1.0, complete: 1.4 }
+const DURATIONS = PHASE_DURATIONS
 const ORDER: SimState[] = ['approaching', 'closing', 'holding', 'lifting', 'transporting', 'releasing', 'complete']
 
 export class GripperSimulator {

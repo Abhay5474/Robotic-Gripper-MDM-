@@ -1,5 +1,5 @@
 import { getApiToken } from './settings'
-import type { ApiErrorBody, CalibrationRecord, Health, Mode, ObjectProps, OperationRecord, PredictGripResponse, SafetyAssessment, TestEventRecord } from './types'
+import type { ApiErrorBody, CalibrationRecord, Health, LookupItem, Mode, ObjectProps, OperationRecord, PredictGripResponse, SafetyAssessment, TestEventRecord } from './types'
 
 const BASE = import.meta.env.VITE_API_BASE ?? '/api'
 
@@ -46,6 +46,8 @@ export const api = {
     request<{ record: CalibrationRecord; active_updated: boolean; note?: string | null }>(mode, 'POST', `/calibrations/${id}/confirm`, body),
   invalidate: (mode: Mode, id: string, reason: string) =>
     request<{ record: CalibrationRecord; active_cleared: boolean }>(mode, 'POST', `/calibrations/${id}/invalidate`, { reason }),
+  /** Calibration status of many configurations at once. Never calls the LLM. */
+  lookup: (mode: Mode, objects: ObjectProps[]) => request<{ items: LookupItem[]; llm_called: false }>(mode, 'POST', '/calibrations/lookup', { objects }),
   history: (mode: Mode, key: string) =>
     request<{ configuration_key: string; active_calibration_id: string | null; records: CalibrationRecord[] }>(mode, 'GET', `/calibration-history/${key}`),
   recentCalibrations: (mode: Mode, limit = 100) => request<{ records: CalibrationRecord[] }>(mode, 'GET', `/calibrations?limit=${limit}`),

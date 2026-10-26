@@ -35,9 +35,13 @@ predict(config) ─ key ─► active_calibrations/{key}
 
 "Valid" means: the index entry points to an existing record with `calibration_status="calibrated"`, the same key, the same force definition/unit and force as the index, not older than `CALIBRATION_MAX_AGE_DAYS`, and the force passes the safety assessment (`ok` or `marginal`) under the **current** limits and properties.
 
+### Batch status (no LLM)
+
+`POST /api/calibrations/lookup {objects: [...]}` (max 50) evaluates each configuration exactly like step 3 above, but **never calls the LLM** and never writes anything. It returns `{object_id, configuration_key, state, calibrated_force, calibration_id, confirmed_at, confirmation_method}` per object. The object gallery uses it for its badges.
+
 ## 4. Safety assessment
 
-Per finger: `N_required = m·(g + a) / (finger_count · μ)`; recommended minimum = `N_required × holding_safety_factor`; upper limit = `min(gripper max, object max contact force if known)`.
+Per finger: `N_required = m·(g + a) / (finger_count · μ)`; recommended minimum = `N_required × holding_safety_factor`; upper limit = `min(gripper max, object max contact force if known)`. The UI also reports the **grip margin** `N / N_required` (= friction capacity ÷ design load): 1.0 is the estimated slip threshold and the safety factor is the target.
 
 | Status | Meaning | Test | Save as calibrated |
 |---|---|---|---|

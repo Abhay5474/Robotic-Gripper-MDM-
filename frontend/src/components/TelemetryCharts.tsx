@@ -1,7 +1,7 @@
-import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { CartesianGrid, Line, LineChart, ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useApp } from '@/store/app'
 import { useForces } from '@/store/derived'
-import { useTelemetry } from '@/store/telemetry'
+import { useTelemetry, type HistPoint } from '@/store/telemetry'
 import { useThemeColors } from '@/store/theme'
 import StateTimeline from './viz/StateTimeline'
 
@@ -12,8 +12,9 @@ function Tip({ active, payload, unit }: { active?: boolean; payload?: readonly {
   return <div className="rounded-md border border-line bg-ink-900 px-2.5 py-1.5 text-xs"><div className="font-mono">{p.value == null ? 'unavailable' : `${Number(p.value).toFixed(2)} ${unit}`}</div></div>
 }
 
-export default function TelemetryCharts() {
-  const history = useTelemetry((s) => s.history)
+export default function TelemetryCharts({ points }: { points?: HistPoint[] } = {}) {
+  const live = useTelemetry((s) => s.history)
+  const history = points ?? live
   const source = useTelemetry((s) => s.source)
   const limits = useApp((s) => s.health?.limits)
   const f = useForces()
@@ -33,6 +34,7 @@ export default function TelemetryCharts() {
           <span><i className="mr-1 inline-block h-0.5 w-4 bg-accent align-middle" />selected target</span>
           {f.llm != null && <span><i className="mr-1 inline-block h-0.5 w-4 bg-llm align-middle" />LLM</span>}
           {f.calibrated != null && <span><i className="mr-1 inline-block h-0.5 w-4 bg-cal align-middle" />calibrated</span>}
+          {f.safety?.safe_range_n && <span><i className="mr-1 inline-block h-2 w-4 rounded-sm bg-ok/20 align-middle" />permitted window</span>}
         </figcaption>
         <div className="h-60" role="img" aria-label="Measured gripping force over time against target">
           <ResponsiveContainer>
@@ -40,6 +42,8 @@ export default function TelemetryCharts() {
               <CartesianGrid stroke={c.grid} strokeDasharray="3 3" />
               <XAxis dataKey="x" type="number" domain={['dataMin', 'dataMax']} tickCount={7} tickFormatter={(v: number) => `${Math.round(v)}s`} {...AX} /><YAxis {...AX} domain={[0, yMax]} width={36} />
               <Tooltip content={(p) => <Tip {...p} unit="N" />} />
+              {f.safety?.safe_range_n && <ReferenceArea y1={f.safety.safe_range_n[0]} y2={f.safety.safe_range_n[1]} fill={c.ok} fillOpacity={0.1} stroke="none" ifOverflow="hidden" />}
+              {f.safety?.upper_limit_n != null && f.safety.upper_limit_n < yMax && <ReferenceLine y={f.safety.upper_limit_n} stroke={c.bad} strokeDasharray="6 4" label={{ value: 'limit', fill: c.bad, fontSize: 10, position: 'insideTopRight' }} />}
               {f.selected != null && <ReferenceLine y={f.selected} stroke={c.accent} strokeWidth={1.5} />}
               {f.llm != null && <ReferenceLine y={f.llm} stroke={c.llm} strokeDasharray="5 4" />}
               {f.calibrated != null && <ReferenceLine y={f.calibrated} stroke={c.cal} strokeDasharray="5 4" />}

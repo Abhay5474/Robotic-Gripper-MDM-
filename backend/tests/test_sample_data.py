@@ -248,3 +248,40 @@ def test_generation_is_independent_of_the_environment_and_follows_the_gripper_id
     default = TestClient(create_app(Settings(store_backend="memory", llm_provider="mock", _env_file=None), db=db, llm=FakeLLM()), headers={"X-GripSense-Mode": "live"})
     default.app.state.service.store.clock = lambda: NOW
     assert default.post("/api/predict-grip", json={"object": obj}).json()["calibration_lookup"]["state"] == "not_found"
+
+
+# ------------------------------------------------- batch lookup (no LLM)
+def test_batch_lookup_reports_every_state_without_calling_the_llm(env):
+    client, db, llm = env
+    presets = json.loads((Path(__file__).resolve().parents[2] / "shared" / "object_presets.json").read_text())["presets"]
+    r = client.post("/api/calibrations/lookup", json={"objects": presets})
+    assert r.status_code == 200 and r.json()["llm_called"] is False and llm.calls == 0
+    items = {i["object_id"]: i for i in r.json()["items"]}
+    assert len(items) == 8
+    assert items["plastic-bottle"]["state"] == "found_valid" and items["plastic-bottle"]["calibrated_force"] == 9.5
+    assert items["aluminum-can"]["calibrated_force"] == 12.0 and items["ceramic-cup"]["calibrated_force"] == 4.5
+    assert items["wooden-block"]["state"] == "found_valid"
+    assert items["rubber-ball"]["state"] == "invalidated" and items["rubber-ball"]["calibrated_force"] is None
+    assert items["cardboard-box"]["state"] == "stale" and items["cardboard-box"]["calibrated_force"] == 4.0
+    assert items["fragile-object"]["state"] == "not_found" and items["custom-object"]["state"] == "not_found"
+    # keys match what prediction computes
+    assert items["aluminum-can"]["configuration_key"] == predict(client, cal_by("aluminum-can", "calibrated")[0]).json()["configuration_key"]
+
+
+def test_batch_lookup_validation_and_store_errors(env):
+    client, db, _ = env
+    obj = cal_by("aluminum-can", "calibrated")[0]["input_properties"]
+    assert client.post("/api/calibrations/lookup", json={"objects": []}).status_code == 422
+    assert client.post("/api/calibrations/lookup", json={"objects": [obj] * 51}).status_code == 422
+    assert client.post("/api/calibrations/lookup", json={"objects": [{**obj, "mass_g": -1}]}).status_code == 422
+    from app.rtdb import RtdbError
+    db.fail_with = RtdbError("down")
+    r = client.post("/api/calibrations/lookup", json={"objects": [obj]})
+    assert r.status_code == 503 and r.json()["detail"]["code"] == "store_unavailable"
+
+
+def test_batch_lookup_respects_mode_namespaces(env):
+    client, _, _ = env
+    obj = cal_by("aluminum-can", "calibrated")[0]["input_properties"]
+    demo = client.post("/api/calibrations/lookup", json={"objects": [obj]}, headers={"X-GripSense-Mode": "demo"}).json()
+    assert demo["items"][0]["state"] == "not_found"  # live sample data is invisible in demo mode

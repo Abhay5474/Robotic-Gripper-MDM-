@@ -76,3 +76,23 @@ export function fingerprint(o: ObjectProps): string {
   return [o.object_id, r(o.mass_g, 1), r(o.width_mm, 1), r(o.height_mm, 1), r(o.depth_mm, 1), o.material.toLowerCase().replace(/\s+/g, ' ').trim(),
     r(o.friction_coefficient, 2), o.fragility, o.max_contact_force_n ?? 'none'].join('|')
 }
+
+/** Visual family of an object, used for its 3D shape and gallery illustration. Physics never depends on it. */
+export type ObjectKind = 'bottle' | 'can' | 'block' | 'box' | 'ball' | 'cup' | 'glass' | 'generic'
+const KIND_BY_ID: Record<string, ObjectKind> = {
+  'plastic-bottle': 'bottle', 'aluminum-can': 'can', 'wooden-block': 'block', 'cardboard-box': 'box',
+  'rubber-ball': 'ball', 'ceramic-cup': 'cup', 'fragile-object': 'glass',
+}
+export function objectKind(o: Pick<ObjectProps, 'object_id' | 'name' | 'material'> | null | undefined): ObjectKind {
+  if (!o) return 'generic'
+  if (KIND_BY_ID[o.object_id]) return KIND_BY_ID[o.object_id]
+  const t = `${o.name} ${o.material}`.toLowerCase()
+  if (/bottle/.test(t)) return 'bottle'
+  if (/\bcan\b|\btin\b/.test(t)) return 'can'
+  if (/\bball\b|sphere/.test(t)) return 'ball'
+  if (/\bcup\b|\bmug\b/.test(t)) return 'cup'
+  if (/glass|vase/.test(t)) return 'glass'
+  if (/cardboard|carton/.test(t)) return 'box'
+  if (/wood/.test(t)) return 'block'
+  return 'generic'
+}

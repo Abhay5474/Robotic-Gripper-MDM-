@@ -99,6 +99,17 @@ export interface CalibrationRecord {
 export type LookupState =
   | 'found_valid' | 'not_found' | 'stale' | 'invalidated' | 'safety_failed' | 'inconsistent' | 'skipped' | 'unavailable'
 
+export interface LookupItem {
+  object_id: string
+  configuration_key: string
+  state: LookupState
+  reason?: string | null
+  calibrated_force?: number | null
+  calibration_id?: string | null
+  confirmed_at?: string | null
+  confirmation_method?: string | null
+}
+
 export interface PredictGripResponse {
   configuration_key: string
   source: 'calibration' | 'llm'

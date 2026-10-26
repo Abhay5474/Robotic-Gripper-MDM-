@@ -31,6 +31,8 @@ let unsub: (() => void) | null = null
 let timer: ReturnType<typeof setInterval> | null = null
 let sim: GripperSimulator | null = null
 let lastHist = 0
+let lastSig = ''
+let lastPush = 0
 
 function downsample(rows: TraceRow[]): TraceRow[] {
   if (rows.length <= MAX_TRACE) return rows
@@ -82,7 +84,12 @@ export const useTelemetry = create<TState>((set, get) => {
           const dt = Math.min(0.25, (nowP - last) / 1000)
           last = nowP
           const raw = sim!.step(dt, Date.now())
-          ingest({ ...raw, timestamp_ms: raw.timestamp, received_ms: Date.now() })
+          // an idle simulator repeats the same reading: publish it only on change, plus a 1 s heartbeat
+          const sig = `${raw.measured_force_n}|${raw.finger_opening_mm}|${raw.object_detected}|${raw.slip_detected}|${raw.operation_state}`
+          if (sig !== lastSig || Date.now() - lastPush >= 1000) {
+            lastSig = sig; lastPush = Date.now()
+            ingest({ ...raw, timestamp_ms: raw.timestamp, received_ms: Date.now() })
+          }
           const running = sim!.running
           if (running !== get().simRunning || sim!.hint !== get().simHint || running) set({ simRunning: running, simHint: sim!.hint, simRunTime: sim!.runTime })
         }, 100)

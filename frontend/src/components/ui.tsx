@@ -1,4 +1,4 @@
-import { useEffect, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import type { Tone } from '@/lib/safety'
 
 export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ')
@@ -77,4 +77,45 @@ export function Spinner({ label = 'Loading' }: { label?: string }) {
 
 export function KV({ k, v }: { k: string; v: ReactNode }) {
   return <div className="flex justify-between gap-4 border-b border-line/60 py-1.5 text-sm last:border-0"><dt className="text-slate-400">{k}</dt><dd className="text-right font-mono text-slate-100">{v}</dd></div>
+}
+
+export function Kbd({ children }: { children: ReactNode }) {
+  return <kbd className="ml-1 hidden rounded border border-current/30 px-1 font-mono text-[10px] leading-4 opacity-70 sm:inline-block">{children}</kbd>
+}
+
+/** Accessible modal: Esc closes, focus moves in on open and returns on close, Tab stays inside. */
+export function Modal({ open, onClose, title, children, labelledBy = 'modal-title', testId }: { open: boolean; onClose: () => void; title: ReactNode; children: ReactNode; labelledBy?: string; testId?: string }) {
+  const panel = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!open) return
+    const prev = document.activeElement as HTMLElement | null
+    const focusables = () => Array.from(panel.current?.querySelectorAll<HTMLElement>('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])') ?? []).filter((el) => !el.hasAttribute('disabled'))
+    focusables()[0]?.focus()
+    const key = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.stopPropagation(); onClose() }
+      if (e.key === 'Tab') {
+        const f = focusables(); if (!f.length) return
+        const first = f[0], last = f[f.length - 1]
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+      }
+    }
+    window.addEventListener('keydown', key, true)
+    return () => { window.removeEventListener('keydown', key, true); prev?.focus?.() }
+  }, [open, onClose])
+  if (!open) return null
+  return (
+    <div className="fixed inset-0 z-[80] grid place-items-center p-4">
+      <div className="absolute inset-0 bg-ink-950/70 backdrop-blur-sm animate-[fade-in_.15s_ease-out]" onClick={onClose} aria-hidden />
+      <div ref={panel} role="dialog" aria-modal="true" aria-labelledby={labelledBy} data-testid={testId}
+        className="relative w-full max-w-lg rounded-2xl border border-line bg-ink-800 p-5 shadow-2xl animate-[pop-in_.18s_ease-out]">
+        <h2 id={labelledBy} className="mb-3 text-base font-semibold text-slate-100">{title}</h2>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+export function Skeleton({ className }: { className?: string }) {
+  return <div className={cx('animate-pulse rounded-md bg-ink-700/70', className)} aria-hidden />
 }
