@@ -7,6 +7,7 @@
 *.pem
 serviceAccount*.json
 *-firebase-adminsdk-*.json
+firebase-key.json
 backend/.venv/
 __pycache__/
 .pytest_cache/

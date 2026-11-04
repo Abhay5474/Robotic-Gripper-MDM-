@@ -139,6 +139,15 @@ Frontend (`frontend/.env`): `VITE_API_BASE`, `VITE_FIREBASE_API_KEY|AUTH_DOMAIN|
 
 ## Configuring Firebase
 
+### Run against this project's Firebase database (Windows)
+
+`run-offline.ps1` never touches Firebase (in-memory store, Firebase switched off). To store everything in **mdmproject123-8770f**:
+
+1. Firebase console → Project settings → **Service accounts** → **Generate new private key**. This downloads a private JSON key: keep it out of git and out of chat (`*-firebase-adminsdk-*.json` and `firebase-key.json` are git-ignored).
+2. Leave it in Downloads, or put it in the project folder, then run `powershell -ExecutionPolicy Bypass -File .\run-firebase.ps1` (or add `-Key C:\path\to\key.json`).
+
+The script installs `firebase-admin`, builds the UI with the web config, checks the connection and prints **CONNECTED to Firebase** or the exact error, then serves http://localhost:8000. Predictions, calibrations and operations then appear in the database (DEMO-mode records under `demo/`, LIVE-mode records at the root).
+
 ### Live telemetry for this project (`mdmproject123-8770f`)
 
 The browser's Firebase web config is committed in `frontend/.env.development` and `frontend/.env.production`. These values are public identifiers, not secrets; access is controlled by the database rules. Only **LIVE** mode uses them. **DEMO** mode always uses the built-in simulator, and `run-offline.ps1` / `run-offline.sh` set `VITE_FIREBASE_DISABLED=1`, so the offline run never contacts Firebase.
