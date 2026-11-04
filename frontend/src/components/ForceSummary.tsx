@@ -22,13 +22,16 @@ export default function ForceSummary({ compact = false }: { compact?: boolean })
   const measured = latest?.measured_force_n ?? null
   const unit = 'per finger'
   const ml = useMl((s) => s.data)
+  const object = useApp((s) => s.resolution.object)
   return (
     <div className="space-y-3">
       <div className={compact ? 'grid grid-cols-2 gap-3' : 'grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-5'}>
         <Stat label="LLM recommended" tone="text-llm" value={fmtN(f.llm)} sub={f.llm == null ? 'No LLM call for this configuration' : `Initial estimate, ${unit}`} badge={<Bot className="size-4 text-llm" />} />
         <Stat label="ML model" tone="text-ml" value={ml?.available ? fmtN(ml.model_recommended) : ml ? 'offline' : '…'}
-          sub={ml?.available ? `min ${fmtN(ml.model_min)} × 1.5 · ${ml.status === 'training' ? `training ${ml.epoch}/${ml.epochs}` : 'trained model'}` : ml ? 'Start the ML Lab (run-mlsim)' : 'Asking the ML Lab…'}
-          badge={<BrainCircuit className="size-4 text-ml" />} />
+          sub={ml?.available
+            ? <>{object?.name ?? 'this object'}: {fmtN(ml.model_min)} × 1.5{ml.status === 'training' ? ` · training ${ml.epoch}/${ml.epochs}` : ''}</>
+            : ml ? 'Start the ML Lab (run-mlsim)' : 'Asking the ML Lab…'}
+          badge={<a href={`http://${window.location.hostname || '127.0.0.1'}:8100`} target="_blank" rel="noopener noreferrer" title="Open the ML Lab (port 8100)" aria-label="Open the ML Lab"><BrainCircuit className="size-4 text-ml" /></a>} />
         <Stat label="Selected target" tone="text-accent" value={fmtN(f.selected)} sub="Slider value (software target)" badge={<Target className="size-4 text-accent" />} />
         <Stat label="Measured (actual)" tone="text-meas" value={measured == null ? 'unavailable' : fmtN(measured)}
           sub={fr.state === 'fresh' || fr.state === 'unknown' ? (fr.state === 'unknown' ? fr.reason : 'Sensor reading') : fr.reason}

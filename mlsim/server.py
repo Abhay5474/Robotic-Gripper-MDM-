@@ -59,6 +59,7 @@ class Lab:
         self.stop_flag = threading.Event()
         self.cfg = {"epochs": 150, "lr": 0.01, "hidden": 16, "delay_ms": 120}
         self.lr_halflife = 40  # epochs: the learning rate halves every 40 epochs (steadier convergence)
+        self.link: dict | None = None  # the latest question from GripSense (its requests carry object_id/name)
         self.reset()
 
     # ------------------------------------------------------------------ training
@@ -160,7 +161,8 @@ class Lab:
 
     def state(self) -> dict:
         with self.lock:
-            return {"status": self.status, "epoch": self.epoch, "config": self.cfg, "history": self.history,
+            link = {**self.link, "age_s": round(time.time() - self.link["at"], 1)} if self.link else None
+            return {"status": self.status, "epoch": self.epoch, "config": self.cfg, "history": self.history, "gripsense": link,
                     "preset_history": self.preset_history, "dataset": {"rows": len(self.rows), "train": len(self.train_rows),
                     "val": len(self.val_rows), "materials": MATS, "fragility": list(FRAGILITY)}, **self.snapshot}
 
@@ -233,6 +235,10 @@ class Handler(BaseHTTPRequestHandler):
             except (KeyError, TypeError, ValueError):
                 return self._json({"error": "mass_g > 0, friction_coefficient > 0 and a known fragility are required"}, 400)
             m = LAB.predict(r)
+            if body.get("object_id"):
+                LAB.link = {"at": time.time(), "object_id": str(body["object_id"]), "name": str(body.get("name") or body["object_id"]),
+                            "input": {**r, "material_text": str(body.get("material", ""))},
+                            "model_min": round(m, 2), "model_recommended": round(m * SAFETY_FACTOR, 2), "epoch": LAB.epoch}
             return self._json({"model_min": round(m, 2), "model_recommended": round(m * SAFETY_FACTOR, 2),
                                "physics_min": round(physics_required(r["mass_g"], r["friction_coefficient"]), 2),
                                "material": r["material"], "epoch": LAB.epoch, "epochs": LAB.cfg["epochs"], "status": LAB.status,

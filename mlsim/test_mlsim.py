@@ -64,6 +64,11 @@ def test_server_trains_and_predicts():
         assert {p["id"] for p in s["presets"]} >= {"plastic-bottle", "fragile-object"}
         p = call("/api/predict", {"material": "glass", "mass_g": 80, "friction_coefficient": 0.3, "width_mm": 60, "fragility": "fragile"})
         assert p["model_min"] > 0 and abs(p["model_recommended"] - 1.5 * p["model_min"]) < 0.02
+        assert call("/api/state")["gripsense"] is None  # the page's own form is not GripSense
+        g = call("/api/predict", {"object_id": "wooden-block", "name": "Wooden block", "material": "wood", "mass_g": 200,
+                                  "friction_coefficient": 0.45, "width_mm": 50, "height_mm": 50, "fragility": "robust"})
+        link = call("/api/state")["gripsense"]
+        assert link["name"] == "Wooden block" and link["model_recommended"] == g["model_recommended"] and link["age_s"] < 5
         with urllib.request.urlopen(base + "/dataset.csv") as r:
             assert r.read().startswith(b"trial_id,material")
     finally:

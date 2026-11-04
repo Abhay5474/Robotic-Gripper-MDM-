@@ -62,6 +62,13 @@ td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,Consolas,monospace
   <div class="card kpi"><div class="k">Within ±10 %</div><div class="v" id="w10">-</div><div class="n">of the force that held</div></div>
 </section>
 
+<section class="card" id="link" style="margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px">
+  <div><h2 style="display:flex;align-items:center;gap:8px"><span id="linkDot" style="width:10px;height:10px;border-radius:50%;background:var(--muted);display:inline-block"></span>Live link with GripSense</h2>
+    <div class="sub" style="margin:0" id="linkSub">Waiting for GripSense (http://localhost:8000) to ask about an object…</div></div>
+  <div id="linkBody" style="display:flex;flex-wrap:wrap;gap:18px;align-items:baseline"></div>
+  <button id="linkUse" style="margin-left:auto" disabled>Use in “Try the model”</button>
+</section>
+
 <section class="grid g2" style="margin-bottom:14px">
   <div class="card"><h2>Learning curve</h2><p class="sub">Error on the training trials and on held-out validation trials, per epoch (log scale).</p>
     <div class="legend"><span><i style="background:var(--model)"></i>training</span><span><i style="background:var(--phys)"></i>validation</span></div>
@@ -96,10 +103,12 @@ td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,Consolas,monospace
     <p class="note">Each row: one simulated calibration. The object was tested at rising force steps (0.5 N, or 0.25 N if fragile) until it held; <b>min_holding_force_n</b> is the label. The same file is in the project at <code>mlsim\data\grasp_trials.csv</code>.</p></div>
   <div class="card"><h2>Try the model</h2><p class="sub">Ask the current model about any object.</p>
     <div class="controls" style="margin-bottom:12px">
+      <label class="f">Object<select id="pObj" style="width:150px"></select></label>
       <label class="f">Material<select id="pMat"></select></label>
       <label class="f">Mass (g)<input id="pMass" type="number" value="350" min="1"></label>
       <label class="f">Est. μ<input id="pMu" type="number" value="0.4" step="0.01" min="0.05"></label>
       <label class="f">Width (mm)<input id="pWidth" type="number" value="65"></label>
+      <label class="f">Height (mm)<input id="pHeight" type="number" value="210"></label>
       <label class="f">Fragility<select id="pFrag"></select></label>
       <button id="predict" class="primary">Predict</button>
     </div>
@@ -212,8 +221,24 @@ function drawWidth(s) {
 
 let last = null, busy = false
 async function api(path, body) { const r = await fetch(path, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); return r.json() }
+function fillTry(o) {
+  $('pMat').value = o.material; $('pMass').value = o.mass_g; $('pMu').value = o.friction_coefficient
+  $('pWidth').value = o.width_mm; $('pHeight').value = o.height_mm; $('pFrag').value = o.fragility
+}
+function renderLink(g) {
+  const live = g && g.age_s < 30
+  $('linkDot').style.background = live ? 'var(--ok)' : g ? 'var(--warn)' : 'var(--muted)'
+  $('linkUse').disabled = !g
+  if (!g) return
+  const i = g.input
+  $('linkSub').textContent = live ? `Connected: GripSense asked ${g.age_s < 2 ? 'just now' : Math.round(g.age_s) + ' s ago'} (it re-asks every 8 s).` : `Last question ${Math.round(g.age_s)} s ago - is GripSense still open?`
+  $('linkBody').innerHTML = `<div><div class="k" style="font-size:11px;color:var(--muted)">OBJECT</div><b>${g.name}</b></div>` +
+    `<div><div class="k" style="font-size:11px;color:var(--muted)">INPUTS SENT</div>${i.mass_g} g · μ ${i.friction_coefficient} · ${i.width_mm} × ${i.height_mm} mm · ${i.fragility} · ${i.material_text || i.material} → ${i.material}</div>` +
+    `<div><div class="k" style="font-size:11px;color:var(--muted)">ANSWER SHOWN IN GRIPSENSE</div><span class="out" style="color:var(--model)">${fmt(g.model_recommended)} N</span> <span class="note">= ${fmt(g.model_min)} N × 1.5</span></div>`
+}
 function render(s) {
   last = s
+  renderLink(s.gripsense)
   const st = $('status'); st.textContent = s.status; st.className = 'pill ' + s.status
   $('prog').style.width = (100 * s.epoch / s.config.epochs) + '%'; $('epochTxt').textContent = `epoch ${s.epoch} / ${s.config.epochs}`
   const lh = s.history[s.history.length - 1]
@@ -240,8 +265,9 @@ $('csvBtn').onclick = async () => {
     setTimeout(() => URL.revokeObjectURL(url), 2000); $('csvMsg').textContent = 'Saved grasp_trials.csv to your Downloads folder.'
   } catch (e) { $('csvMsg').textContent = 'Download failed (' + e.message + '). Open the raw CSV instead, or use mlsim\\data\\grasp_trials.csv.' }
 }
+$('linkUse').onclick = () => { if (last && last.gripsense) { fillTry(last.gripsense.input); $('pObj').value = last.gripsense.object_id; $('predict').click() } }
 $('predict').onclick = async () => {
-  const r = await api('/api/predict', { material: $('pMat').value, mass_g: +$('pMass').value, friction_coefficient: +$('pMu').value, width_mm: +$('pWidth').value, fragility: $('pFrag').value })
+  const r = await api('/api/predict', { material: $('pMat').value, mass_g: +$('pMass').value, friction_coefficient: +$('pMu').value, width_mm: +$('pWidth').value, height_mm: +$('pHeight').value, fragility: $('pFrag').value })
   if (r.error) { $('oNote').textContent = r.error; return }
   $('oMin').textContent = fmt(r.model_min) + ' N'; $('oRec').textContent = fmt(r.model_recommended) + ' N'; $('oPhys').textContent = fmt(r.physics_min) + ' N'
   $('oNote').textContent = r.epoch ? `Answered by the model after ${r.epoch} epochs. The recommended force adds GripSense's ×1.5 holding margin.` : 'The network is untrained: this is a guess. Press Train.'
@@ -250,6 +276,11 @@ $('predict').onclick = async () => {
   const s = await api('/api/state')
   $('pMat').innerHTML = s.dataset.materials.map((m) => `<option>${m}</option>`).join('')
   $('pFrag').innerHTML = s.dataset.fragility.map((m) => `<option ${m === 'moderate' ? 'selected' : ''}>${m}</option>`).join('')
+  // same inputs as GripSense's presets, so the answer matches the ML marker there exactly
+  $('pObj').innerHTML = s.presets.map((o) => `<option value="${o.id}">${o.name}</option>`).join('') + '<option value="">custom…</option>'
+  $('pObj').onchange = () => { const o = s.presets.find((x) => x.id === $('pObj').value); if (o) { fillTry(o); $('predict').click() } }
+  fillTry(s.presets[0])
+  for (const id of ['pMat', 'pMass', 'pMu', 'pWidth', 'pHeight', 'pFrag']) $(id).addEventListener('input', () => { $('pObj').value = '' })
   const d = await api('/api/dataset')
   $('dsInfo').textContent = `${d.total} simulated grasp trials · ${s.dataset.train} for training, ${s.dataset.val} held out for validation · first 40 shown`
   $('dsTable').innerHTML = '<tr>' + d.columns.map((c) => `<th>${c}</th>`).join('') + '</tr>' + d.rows.map((r) => '<tr>' + d.columns.map((c) => `<td class="${typeof r[c] === 'number' ? 'num' : ''}">${r[c]}</td>`).join('') + '</tr>').join('')
