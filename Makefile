@@ -1,4 +1,4 @@
-.PHONY: setup backend frontend demo demo-sample test build serve sample sample-check
+.PHONY: setup backend frontend demo demo-sample offline test build serve sample sample-check
 
 setup:            ## install backend + frontend dependencies
 	cd backend && python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
@@ -12,6 +12,9 @@ frontend:         ## Vite dev server on :5173 (proxies /api)
 
 demo:             ## API with NO credentials: in-memory store + offline heuristic (development only)
 	cd backend && STORE_BACKEND=memory LLM_PROVIDER=mock .venv/bin/uvicorn app.main:app_factory --factory --port 8000
+
+offline:          ## fully offline: no Firebase package, mock LLM, sample data, built UI on :8000 (see run-offline.sh)
+	./run-offline.sh
 
 demo-sample:      ## like `demo`, preloaded with samples/firebase_sample_data.json (live + demo namespaces)
 	cd backend && STORE_BACKEND=memory LLM_PROVIDER=mock SEED_FILE=../samples/firebase_sample_data.json .venv/bin/uvicorn app.main:app_factory --factory --port 8000

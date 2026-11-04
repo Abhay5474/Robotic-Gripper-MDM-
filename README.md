@@ -13,11 +13,31 @@ We are **not** training a model. An existing LLM API gives a starting point; the
 
 ## Contents
 
-- [Architecture](#architecture) · [Repository layout](#repository-layout) · [Setup](#setup) · [Environment variables](#environment-variables)
+- **[Run fully offline](#run-fully-offline-no-firebase-no-llm-no-keys)** · [Architecture](#architecture) · [Repository layout](#repository-layout) · [Setup](#setup) · [Environment variables](#environment-variables)
 - [LLM provider](#configuring-the-llm-provider) · [Firebase](#configuring-firebase)
 - [How prediction works](#how-force-prediction-works) · [Slider calibration](#how-slider-calibration-works) · [Saving](#how-successful-calibrations-are-saved) · [Reuse](#how-calibrated-forces-are-reused)
 - [Safety limitations](#safety-limitations) · [Demo vs live mode](#demo-mode-and-live-mode) · [Testing](#testing)
 - Docs: [docs/CALIBRATION_WORKFLOW.md](docs/CALIBRATION_WORKFLOW.md), [docs/FIREBASE_INTEGRATION.md](docs/FIREBASE_INTEGRATION.md)
+
+
+## Run fully offline (no Firebase, no LLM, no keys)
+
+One command installs what is needed and starts everything on **http://localhost:8000**:
+
+```powershell
+# Windows (PowerShell), from the repository folder
+powershell -ExecutionPolicy Bypass -File .\run-offline.ps1
+```
+```bash
+# Linux / macOS
+./run-offline.sh            # or: make offline
+```
+
+- Database: in-memory, preloaded with `samples/firebase_sample_data.json` (reset on every start).
+- LLM: the labelled `mock` physics heuristic; no LLM service is called.
+- Telemetry: the built-in simulator (DEMO mode).
+- Installs `backend/requirements-offline.txt`, which leaves out `firebase-admin`. Any `backend/.env` or `frontend/.env` settings are overridden for the run, so it never contacts Firebase.
+- UI text still says "Firebase" (e.g. "loaded from Firebase"); in this mode that means the in-memory stand-in, which the header labels `memory, dev`.
 
 ## Architecture
 
