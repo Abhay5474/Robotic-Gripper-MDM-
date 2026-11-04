@@ -1,4 +1,4 @@
-import { AlertOctagon, Ban, CheckCircle2, Keyboard, Lightbulb, Play, RefreshCw, TriangleAlert, XCircle } from 'lucide-react'
+import { AlertOctagon, Ban, CheckCircle2, Keyboard, Lightbulb, Play, RefreshCw, XCircle } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import ForceSlider from '@/components/ForceSlider'
 import ForceSummary from '@/components/ForceSummary'
@@ -57,7 +57,7 @@ function ConfirmDialog({ open, onClose }: { open: boolean; onClose: () => void }
             <input id="ov" value={reason} onChange={(e) => setReason(e.target.value)} className="w-full rounded-md border border-warn/50 bg-ink-900 px-2.5 py-1.5 text-sm" /></div>
         ) : <Banner tone="bad">Below the estimated holding requirement and the override policy is disabled on the backend. This force cannot be saved as calibrated.</Banner>)}
         <textarea aria-label="Notes" placeholder="Optional notes" value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="w-full rounded-md border border-line bg-ink-900 px-2.5 py-1.5 text-sm" />
-        <p className="text-xs text-slate-400">{mode === 'demo' ? 'Demo: saved as a manually confirmed DEMO record.' : 'Saved as sensor-assisted only if fresh Firebase telemetry corroborates it; otherwise as manually confirmed.'}</p>
+        <p className="text-xs text-slate-400">{mode === 'demo' ? 'Saved as a manually confirmed record.' : 'Saved as sensor-assisted only if fresh Firebase telemetry corroborates it; otherwise as manually confirmed.'}</p>
         {error && <Banner tone="bad">{error}</Banner>}
         <div className="flex justify-end gap-2 pt-1">
           <Button variant="ghost" onClick={onClose}>Back</Button>
@@ -168,7 +168,7 @@ export default function Calibration() {
           <Card title="Force envelope" subtitle="Limits, estimated windows, the four forces and every test on one axis."><ForceEnvelope /></Card>
           <Card title="Test session" subtitle={session ? `Session ${session.record.calibration_id}` : 'A logged session starts when you press Start test.'}>
             <div className="space-y-3">
-              {commandNote && <Banner tone="warn" icon={<TriangleAlert className="size-4" />}>{commandNote}</Banner>}
+              {commandNote && <Banner tone="neutral">{commandNote}</Banner>}
               {session?.error && !confirming && <Banner tone="bad" icon={<AlertOctagon className="size-4" />}>{session.error}</Banner>}
               {forceChangedSinceTest && <Banner tone="warn">The force changed since the last test. Start a new test at {selected?.toFixed(2)} N before confirming.</Banner>}
               {f.safety && !f.safety.can_test && <Banner tone="bad" icon={<Ban className="size-4" />}>Testing is blocked: {f.safety.summary}</Banner>}
@@ -217,7 +217,7 @@ export default function Calibration() {
       </div>
 
       {pred && (
-        <Card title="LLM recommendation details" subtitle="Initial estimate only - not validated or guaranteed safe.">
+        <Card title="LLM recommendation details" subtitle="The LLM's initial estimate; testing on the gripper confirms it.">
           <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
             <div><dt className="text-xs text-slate-400">Recommended</dt><dd className="font-mono text-llm">{pred.llm_recommended_force} N · {pred.force_definition.replace(/_/g, ' ')}</dd></div>
             <div><dt className="text-xs text-slate-400">Confidence (self-reported)</dt><dd>{pred.confidence}</dd></div>

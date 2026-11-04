@@ -99,6 +99,11 @@ export interface CalibrationRecord {
 export type LookupState =
   | 'found_valid' | 'not_found' | 'stale' | 'invalidated' | 'safety_failed' | 'inconsistent' | 'skipped' | 'unavailable'
 
+/** The ML Lab's force for an object (display only; trained on synthetic data). */
+export type MlPrediction =
+  | { available: true; model_min: number; model_recommended: number; epoch: number; epochs: number; status: string; mae_n: number | null; trained_on: string }
+  | { available: false; reason: string }
+
 export interface LookupItem {
   object_id: string
   configuration_key: string

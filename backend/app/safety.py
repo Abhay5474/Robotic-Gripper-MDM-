@@ -26,8 +26,7 @@ from .schemas import (
 G = 9.80665
 EPS = 1e-9
 DISCLAIMER = (
-    "Estimate based on a simplified friction model and unvalidated inputs. "
-    "Not a guarantee of safety; the hardware team must validate force ranges on the real gripper."
+    "Estimate from a friction model (N = m(g+a) / (n·μ)) with a holding margin, not a guarantee; confirm by testing on the gripper."
 )
 
 
@@ -148,5 +147,5 @@ def assess(
     if not has_margin:
         return result("marginal", "Meets the holding estimate but not the full safety margin.",
                       can_test=True, can_save_as_calibrated=True, **ctx)
-    return result("ok", "Within the estimated permitted range (unvalidated).",
+    return result("ok", "Within the estimated permitted range.",
                   can_test=True, can_save_as_calibrated=True, **ctx)

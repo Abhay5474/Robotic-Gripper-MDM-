@@ -2,7 +2,6 @@ import { useApp } from '@/store/app'
 import { useForces } from '@/store/derived'
 import { useTelemetry } from '@/store/telemetry'
 import { useThemeColors } from '@/store/theme'
-import { SimTag } from '../ModeBadge'
 
 const CX = 120, CY = 112, R = 88
 const polar = (deg: number, r = R) => [CX + r * Math.cos((Math.PI * (180 - deg)) / 180), CY - r * Math.sin((Math.PI * (180 - deg)) / 180)]
@@ -12,7 +11,6 @@ const arc = (a0: number, a1: number, r = R) => { const [x0, y0] = polar(a0, r), 
 export default function ForceGauge() {
   const limits = useApp((s) => s.health?.limits)
   const measured = useTelemetry((s) => s.latest?.measured_force_n ?? null)
-  const source = useTelemetry((s) => s.source)
   const f = useForces()
   const c = useThemeColors()
   if (!limits) return null
@@ -37,7 +35,6 @@ export default function ForceGauge() {
       <figcaption className="-mt-1 flex items-center justify-center gap-3 text-xs text-slate-400">
         <span>measured <span style={{ color: c.meas }}>▬</span></span><span>target <span style={{ color: c.accent }}>▮</span></span>
         {deviation != null && <span className="font-mono">Δ {deviation >= 0 ? '+' : ''}{deviation.toFixed(2)} N</span>}
-        {source === 'simulated' && <SimTag />}
       </figcaption>
     </figure>
   )

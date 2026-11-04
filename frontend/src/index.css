@@ -13,6 +13,7 @@
   --color-warn: #fbbf24;
   --color-bad: #f87171;
   --color-llm: #a78bfa;
+  --color-ml: #f472b6;
   --color-cal: #34d399;
   --color-meas: #fb923c;
   --shadow-card: 0 0 0 0 transparent;
@@ -45,6 +46,7 @@ html[data-theme="light"] {
   --color-warn: #a04507;
   --color-bad: #7f1d1d;
   --color-llm: #6d28d9;
+  --color-ml: #a21caf;
   --color-cal: #047857;
   --color-meas: #0369a1;
   --color-slate-100: #2a1519;

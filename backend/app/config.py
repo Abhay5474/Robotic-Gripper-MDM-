@@ -66,6 +66,10 @@ class Settings(BaseSettings):
     command_channel: Literal["none", "rtdb"] = "none"
     command_path: str = "gripper_commands"
 
+    # --- ML Lab (mlsim/server.py): a separately trained force model, shown alongside the other forces --------
+    ml_lab_url: str = "http://127.0.0.1:8100"
+    ml_lab_timeout_s: float = 2.0
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

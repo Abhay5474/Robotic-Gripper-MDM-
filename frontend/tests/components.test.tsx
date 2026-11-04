@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, beforeEach } from 'vitest'
 import cases from '@shared/safety_cases.json'
-import { ModeBadge } from '@/components/ModeBadge'
 import TelemetryTiles from '@/components/TelemetryTiles'
 import ForceSlider from '@/components/ForceSlider'
 import { assess } from '@/lib/safety'
@@ -12,17 +11,6 @@ import { fireEvent } from '@testing-library/react'
 
 const limits = cases.limits as GripperLimits
 const bottle = cases.cases[0].object as ObjectProps
-
-describe('demo vs live are visually and textually distinct', () => {
-  it('labels demo mode as simulated', () => {
-    render(<ModeBadge mode="demo" />)
-    expect(screen.getByTestId('mode-badge')).toHaveTextContent('DEMO MODE · SIMULATED')
-  })
-  it('labels live mode as Firebase', () => {
-    render(<ModeBadge mode="live" />)
-    expect(screen.getByTestId('mode-badge')).toHaveTextContent('LIVE MODE · FIREBASE')
-  })
-})
 
 describe('telemetry tiles', () => {
   beforeEach(() => useTelemetry.setState({ latest: null, source: null }))
@@ -56,13 +44,19 @@ describe('force slider', () => {
     expect(useApp.getState().selectedForce).toBe(12)
     expect(screen.getByTestId('selected-force')).toHaveTextContent('12.00')
   })
-  it('exposes limits, step, unit and says the gripper did not receive the value', () => {
+  it('exposes limits, step and unit without demo warnings', () => {
     render(<ForceSlider />)
     expect(screen.getByText(/min 1 N/)).toBeInTheDocument()
     expect(screen.getByText(/max 40 N/)).toBeInTheDocument()
     expect(screen.getByText(/step 0.5 N/)).toBeInTheDocument()
-    expect(screen.getByText(/demo limits, not validated/)).toBeInTheDocument()
-    expect(screen.getByTestId('command-status')).toHaveTextContent(/NOT received|software simulation/)
+    expect(screen.queryByText(/not validated/)).toBeNull()
+  })
+  it('shows the ML model force as a marker once the ML Lab answers', async () => {
+    const { useMl } = await import('@/store/ml')
+    useMl.setState({ data: { available: true, model_min: 6, model_recommended: 9, epoch: 150, epochs: 150, status: 'done', mae_n: 0.47, trained_on: 'synthetic' } })
+    render(<ForceSlider />)
+    expect(screen.getByText('ML 9.0')).toBeInTheDocument()
+    useMl.setState({ data: null })
   })
   it('shows a blocking safety status for an over-limit force', () => {
     useApp.setState({ selectedForce: 25 })

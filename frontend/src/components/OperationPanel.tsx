@@ -84,7 +84,7 @@ export default function OperationPanel({ onSaved }: { onSaved?: () => void }) {
           ) : recording.active
             ? <Button variant="danger" onClick={stopLive}><CircleStop className="size-4" />Stop recording &amp; log</Button>
             : <Button variant="primary" disabled={!ready || !latest} onClick={startRecording}><Circle className="size-4" />Start recording telemetry</Button>}
-          <span className="text-xs text-slate-400">{mode === 'demo' ? 'Software simulation only.' : 'The app cannot move the gripper: run the operation on the hardware while recording.'}</span>
+          {mode === 'live' && <span className="text-xs text-slate-400">Run the operation on the gripper while recording.</span>}
         </div>
       )}
       {pending && (

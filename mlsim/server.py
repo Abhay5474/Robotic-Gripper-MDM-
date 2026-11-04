@@ -14,7 +14,7 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from dataset import FRAGILITY, MATERIALS, generate, material_of, physics_required, read_csv, true_min_force, write_csv
+from dataset import FRAGILITY, generate, material_of, physics_required, read_csv, true_min_force, write_csv
 from model import MATS, MLP, features
 
 HERE = Path(__file__).parent
@@ -224,17 +224,19 @@ class Handler(BaseHTTPRequestHandler):
             LAB.reset(**cfg)
         elif path == "/api/predict":
             try:
-                r = {"material": body.get("material", "plastic"), "mass_g": float(body["mass_g"]),
+                # free-text materials (GripSense sends e.g. "PET plastic", "thin glass") map onto the dataset's
+                r = {"material": material_of(str(body.get("material", "plastic"))), "mass_g": float(body["mass_g"]),
                      "width_mm": float(body.get("width_mm", 60)), "height_mm": float(body.get("height_mm", 100)),
                      "friction_coefficient": float(body["friction_coefficient"]), "fragility": body.get("fragility", "moderate")}
-                if r["material"] not in MATERIALS or r["fragility"] not in FRAGILITY or r["mass_g"] <= 0 or r["friction_coefficient"] <= 0:
+                if r["fragility"] not in FRAGILITY or r["mass_g"] <= 0 or r["friction_coefficient"] <= 0:
                     raise ValueError
             except (KeyError, TypeError, ValueError):
-                return self._json({"error": "mass_g > 0, friction_coefficient > 0, and a known material / fragility are required"}, 400)
+                return self._json({"error": "mass_g > 0, friction_coefficient > 0 and a known fragility are required"}, 400)
             m = LAB.predict(r)
             return self._json({"model_min": round(m, 2), "model_recommended": round(m * SAFETY_FACTOR, 2),
                                "physics_min": round(physics_required(r["mass_g"], r["friction_coefficient"]), 2),
-                               "epoch": LAB.epoch})
+                               "material": r["material"], "epoch": LAB.epoch, "epochs": LAB.cfg["epochs"], "status": LAB.status,
+                               "metrics": LAB.snapshot["metrics"], "trained_on": "synthetic"})
         else:
             return self._json({"error": "not found"}, 404)
         self._json({"ok": True, "status": LAB.status})
@@ -245,8 +247,15 @@ def main():
     ap = argparse.ArgumentParser(description="GripSense ML Lab (synthetic data)")
     ap.add_argument("--port", type=int, default=8100)
     ap.add_argument("--host", default="127.0.0.1")
+    ap.add_argument("--no-autotrain", action="store_true", help="start untrained (otherwise it trains once at startup, ~5 s)")
     args = ap.parse_args()
     LAB = Lab()
+    if not args.no_autotrain:
+        # a ready model for GripSense straight away; press "Train again" on the page to watch it learn
+        LAB.reset(delay_ms=0)
+        LAB.start()
+        LAB.thread.join()
+        LAB.cfg["delay_ms"] = 120
     srv = ThreadingHTTPServer((args.host, args.port), Handler)
     print(f"GripSense ML Lab on http://localhost:{args.port}  (synthetic dataset: {len(LAB.rows)} trials) - Ctrl+C to stop")
     try:

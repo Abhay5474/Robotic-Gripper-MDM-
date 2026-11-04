@@ -1,4 +1,4 @@
-import { Activity, AlertTriangle, Boxes, ChevronDown, ChevronRight, Cpu, Gauge, History, LayoutDashboard, Menu, PanelLeftClose, PanelLeftOpen, Search, Settings as Cog, SlidersHorizontal, WifiOff, X } from 'lucide-react'
+import { Activity, Boxes, ChevronDown, ChevronRight, Cpu, Gauge, History, LayoutDashboard, Menu, PanelLeftClose, PanelLeftOpen, Search, Settings as Cog, SlidersHorizontal, WifiOff, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom'
 import { FastNavLink as NavLink } from './FastLink'
@@ -9,8 +9,8 @@ import { staleAfter, useApp } from '@/store/app'
 import { useForces } from '@/store/derived'
 import { useTelemetry } from '@/store/telemetry'
 import CommandPalette, { useCommandPaletteHotkey } from './CommandPalette'
+import { useMlSync } from '@/store/ml'
 import { CAL_TONE } from './ForceSummary'
-import { ModeBadge } from './ModeBadge'
 import ObjectArt from './ObjectArt'
 import ThemeToggle from './ThemeToggle'
 import Toaster from './Toaster'
@@ -63,12 +63,11 @@ function StatusChips({ vertical = false }: { vertical?: boolean }) {
         <>
           <Pill tone={health.store.reachable ? 'ok' : 'bad'} title={health.store.error ?? undefined}>RTDB {health.store.reachable ? 'reachable' : 'unreachable'}{health.store.dev_only && ' (memory, dev)'}</Pill>
           <Pill tone={health.llm.configured ? (health.llm.is_mock ? 'warn' : 'ok') : 'bad'}>LLM {health.llm.configured ? (health.llm.is_mock ? 'MOCK heuristic' : health.llm.model) : 'not configured'}</Pill>
-          {health.limits.limits_source === 'demo' && <Pill tone="warn" title="Force limits are placeholders until the hardware team supplies validated values">Demo gripper limits</Pill>}
         </>
       )}
       {mode === 'live' ? (
         <Pill tone={conn !== 'connected' ? 'bad' : fr.state === 'fresh' ? 'ok' : 'warn'} title={fr.reason}>Telemetry: {conn !== 'connected' ? conn : fr.state}</Pill>
-      ) : source === 'simulated' && <Pill tone="warn">Telemetry: simulated</Pill>}
+      ) : source === 'simulated' && <Pill>Telemetry: simulated</Pill>}
     </div>
   )
 }
@@ -163,6 +162,7 @@ export default function Layout() {
   const [palette, setPalette] = useState(false)
   const openPalette = useCallback(() => setPalette(true), [])
   useCommandPaletteHotkey(openPalette)
+  useMlSync()
   useEffect(() => { setDrawer(false) }, [location.pathname])
   useEffect(() => { try { localStorage.setItem('gripsense.sidebar.collapsed', collapsed ? '1' : '0') } catch { /* ignore */ } }, [collapsed])
   useEffect(() => {
@@ -203,7 +203,6 @@ export default function Layout() {
                     <span aria-current="page" className="truncate font-medium text-slate-200">{crumb.label}</span>
                   </> : <span className="truncate font-medium text-slate-200">GripSense AI</span>}
                 </nav>
-                <span className="hidden shrink-0 sm:inline-flex"><ModeBadge mode={mode} /></span>
                 <div className="hidden 2xl:block"><StatusChips /></div>
                 <StatusPopover />
               </div>
@@ -217,11 +216,7 @@ export default function Layout() {
           </div>
         </header>
         <main id="main" className="mx-auto max-w-[96rem] space-y-4 px-4 py-5 sm:px-6">
-          {mode === 'demo' ? (
-            <Banner tone="warn" icon={<AlertTriangle className="size-4" />}>
-              <b>DEMO MODE.</b> Sensor readings come from a software simulation, not from the gripper. Calibrations and operations are stored under the separate <code className="font-mono">demo/</code> namespace and are <b>not</b> hardware calibrations.
-            </Banner>
-          ) : conn !== 'connected' && (
+          {mode === 'live' && conn !== 'connected' && (
             <Banner tone="bad" icon={<WifiOff className="size-4" />}>
               <b>LIVE MODE - no telemetry connection ({conn}).</b> {connDetail} No simulated values are being substituted; readings show as unavailable.
             </Banner>

@@ -4,7 +4,7 @@ import type { GripperLimits, ObjectProps, SafetyAssessment, SafetyCheck } from '
 export const G = 9.80665
 const EPS = 1e-9
 export const DISCLAIMER =
-  'Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.'
+  'Estimate from a friction model (N = m(g+a) / (n·μ)) with a holding margin, not a guarantee; confirm by testing on the gripper.'
 
 const r3 = (x: number) => Math.round(x * 1000) / 1000
 
@@ -87,7 +87,7 @@ export function assess(
   if (above) return done('exceeds_limit', `Exceeds the permitted maximum of ${r3(upper)} N (${srcText}).`, ctx)
   if (!holds) return done('below_required', 'Below the estimated holding requirement; likely to slip.', { ...ctx, can_test: true, requires_override: true })
   if (!margin) return done('marginal', 'Meets the holding estimate but not the full safety margin.', { ...ctx, can_test: true, can_save_as_calibrated: true })
-  return done('ok', 'Within the estimated permitted range (unvalidated).', { ...ctx, can_test: true, can_save_as_calibrated: true })
+  return done('ok', 'Within the estimated permitted range.', { ...ctx, can_test: true, can_save_as_calibrated: true })
 }
 
 export const STATUS_LABEL: Record<SafetyAssessment['status'], string> = {

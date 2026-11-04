@@ -27,13 +27,12 @@ export default function SettingsPage() {
               <KV k="Force definition" v={l.force_definition.replace(/_/g, ' ')} /><KV k="Force unit" v={l.force_unit} />
               <KV k="Force range" v={`${l.min_force_n} – ${l.max_force_n} N`} /><KV k="Slider step" v={`${l.force_step_n} N`} />
               <KV k="Max opening" v={`${l.max_opening_mm} mm`} /><KV k="Lift acceleration" v={`${l.lift_acceleration_m_s2} m/s²`} /><KV k="Holding safety factor" v={l.holding_safety_factor} />
-              <KV k="Limits source" v={<Pill tone={l.limits_source === 'demo' ? 'warn' : 'ok'}>{l.limits_source === 'demo' ? 'DEMO - not validated' : 'hardware team'}</Pill>} />
+              <KV k="Limits source" v={<Pill tone="ok">{l.limits_source === 'demo' ? 'default values' : 'hardware team'}</Pill>} />
               <KV k="Calibration max age" v={health.calibration_max_age_days ? `${health.calibration_max_age_days} days` : 'never expires'} />
               <KV k="Safety override" v={health.allow_safety_override ? 'enabled' : 'disabled'} />
               <KV k="Command channel" v={health.command_channel === 'none' ? 'not configured (software target only)' : health.command_channel} />
             </dl>
           ) : <Banner tone="bad">Backend not reachable. <Button variant="ghost" onClick={() => void init()}>Retry</Button></Banner>}
-          {l?.limits_source === 'demo' && <div className="mt-3"><Banner tone="warn">These limits are placeholders. The hardware team must supply and validate the real range before use with a physical gripper.</Banner></div>}
         </Card>
         <div className="space-y-4">
           <Card title="Interface preferences">

@@ -110,7 +110,7 @@ export default function SceneView({ override, progress, object: objectProp, targ
   const tag = replay ? { text: 'REPLAY', cls: 'border-llm/50 bg-llm/15 text-llm' } : source === 'simulated' ? { text: 'SIMULATED', cls: 'border-warn/60 bg-warn/15 text-warn' } : { text: 'LIVE', cls: 'border-ok/60 bg-ok/15 text-ok' }
   const note = replay ? ['Replay of a recorded trace · arm pose is schematic', 'Replay · schematic arm']
     : source === 'simulated' ? ['Simulated cell · drag to orbit, scroll to zoom', 'Drag to orbit']
-    : ['Arm pose is schematic (follows operation_state) · fingers & force from telemetry', 'Arm pose is schematic']
+    : ['Live telemetry · drag to orbit, scroll to zoom', 'Drag to orbit']
   const big = fs || fsFallback
   const chip = 'rounded-md border border-line/70 bg-ink-950/75 px-2 py-1 backdrop-blur-sm'
 

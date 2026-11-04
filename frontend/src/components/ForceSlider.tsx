@@ -1,6 +1,7 @@
 import { Minus, Plus } from 'lucide-react'
 import { useApp } from '@/store/app'
 import { useForces } from '@/store/derived'
+import { useMlForce } from '@/store/ml'
 import { SafetyBadge } from './SafetyPanel'
 import { Button, cx } from './ui'
 
@@ -15,6 +16,7 @@ export default function ForceSlider({ disabled }: { disabled?: boolean }) {
   const nudge = useApp((s) => s.nudge)
   const settings = useApp((s) => s.settings)
   const f = useForces()
+  const mlForce = useMlForce()
   if (!limits) return null
   const { min_force_n: lo, max_force_n: hi, force_step_n: step } = limits
   const off = disabled || f.selected == null
@@ -44,7 +46,7 @@ export default function ForceSlider({ disabled }: { disabled?: boolean }) {
       <div className="flex items-center gap-2">
         <Button aria-label={`Decrease force by ${settings.coarseSteps * step} N`} disabled={off} onClick={() => nudge(-1, 'coarse')}>−{(settings.coarseSteps * step).toFixed(1)}</Button>
         <Button aria-label={`Decrease force by ${settings.fineSteps * step} N`} disabled={off} onClick={() => nudge(-1, 'fine')}><Minus className="size-4" /></Button>
-        <div className="relative min-w-0 flex-1 pb-9 pt-2">
+        <div className="relative min-w-0 flex-1 pb-12 pt-2">
           <div className="pointer-events-none absolute inset-x-0 top-[22px] h-2.5 overflow-hidden rounded-full bg-ink-600" aria-hidden>
             {safe && <div className="absolute inset-y-0 bg-ok/50" style={{ left: pct(safe[0], lo, hi), width: `calc(${pct(safe[1], lo, hi)} - ${pct(safe[0], lo, hi)})` }} />}
             {upper != null && upper < hi && <div className="absolute inset-y-0 right-0 bg-bad/50" style={{ left: pct(upper, lo, hi) }} />}
@@ -52,11 +54,11 @@ export default function ForceSlider({ disabled }: { disabled?: boolean }) {
           <input aria-label="Gripping force (N)" className="force-range relative" type="range" min={lo} max={hi} step={step} disabled={off}
             value={f.selected ?? lo} onChange={(e) => setForce(Number(e.target.value))}
             aria-valuetext={f.selected == null ? 'no value' : `${f.selected} newtons`} />
-          {[{ v: f.llm, c: 'bg-llm', l: 'LLM', up: false }, { v: f.calibrated, c: 'bg-cal', l: f.calibratedApplicable ? 'Calibrated' : 'Saved (not applied)', up: true }].map((m) =>
+          {[{ v: f.llm, c: 'bg-llm', t: 'text-llm', l: 'LLM', row: 0 }, { v: f.calibrated, c: 'bg-cal', t: 'text-cal', l: f.calibratedApplicable ? 'Calibrated' : 'Saved (not applied)', row: 0 }, { v: mlForce, c: 'bg-ml', t: 'text-ml', l: 'ML', row: 1 }].map((m) =>
             m.v != null && (
               <div key={m.l} className="pointer-events-none absolute top-[14px] -translate-x-1/2" style={{ left: `calc(${pct(m.v, lo, hi)} * 1)` }}>
                 <div className={cx('mx-auto h-[26px] w-0.5', m.c)} />
-                <div className={cx('mt-1.5 -translate-y-0 whitespace-nowrap text-[11px] font-medium', m.up ? 'text-cal' : 'text-llm')}>{m.l} {m.v.toFixed(1)}</div>
+                <div className={cx('-translate-y-0 whitespace-nowrap text-[11px] font-medium', m.row ? 'mt-5' : 'mt-1.5', m.t)}>{m.l} {m.v.toFixed(1)}</div>
               </div>
             ))}
         </div>
@@ -67,19 +69,17 @@ export default function ForceSlider({ disabled }: { disabled?: boolean }) {
       <div className="flex flex-wrap justify-between gap-x-6 gap-y-1 font-mono text-xs text-slate-400">
         <span>min {lo} N</span>
         <span>step {step} N</span>
-        <span>max {hi} N {limits.limits_source === 'demo' && <b className="font-sans text-warn">(demo limits, not validated)</b>}</span>
+        <span>max {hi} N</span>
       </div>
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500">
         <span><i className="mr-1 inline-block h-2 w-3 rounded-sm bg-ok/60" />estimated permitted range</span>
         <span><i className="mr-1 inline-block h-2 w-3 rounded-sm bg-bad/60" />above object/gripper limit</span>
       </div>
-      <p className="rounded-md border border-line bg-ink-900/60 px-3 py-2 text-xs text-slate-300" data-testid="command-status">
-        {mode === 'demo'
-          ? 'Demo: the slider drives the software simulation only. No hardware exists in this mode.'
-          : channel === 'rtdb'
-            ? 'Live: the target is sent to Firebase only when you press Start test; the hardware must acknowledge it separately (acknowledgement is not assumed).'
-            : 'Software target only - the physical gripper has NOT received this value (no hardware command channel is configured).'}
-      </p>
+      {mode === 'live' && (
+        <p className="rounded-md border border-line bg-ink-900/60 px-3 py-2 text-xs text-slate-300" data-testid="command-status">
+          {channel === 'rtdb' ? 'Start test sends this target to the gripper through Firebase.' : 'Set this force on the gripper, then press Start test.'}
+        </p>
+      )}
     </div>
   )
 }

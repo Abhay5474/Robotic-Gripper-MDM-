@@ -44,7 +44,7 @@ function CalibrationRow({ rec, onChanged }: { rec: CalibrationRecord; onChanged:
         <td className="py-2 text-sm">{rec.input_properties.name}<div className="font-mono text-[10px] text-slate-500">{rec.configuration_key.slice(0, 14)}…</div></td>
         <td className="py-2 font-mono text-sm text-llm">{fmtN(rec.original_llm_force)}</td>
         <td className="py-2 font-mono text-sm text-cal">{fmtN(rec.calibrated_force)}</td>
-        <td className="py-2"><Pill tone={STATUS_TONE[rec.calibration_status]}>{rec.calibration_status.replace('_', ' ')}</Pill>{rec.mode === 'demo' && <span className="ml-1 text-[10px] font-bold text-warn">DEMO</span>}</td>
+        <td className="py-2"><Pill tone={STATUS_TONE[rec.calibration_status]}>{rec.calibration_status.replace('_', ' ')}</Pill></td>
         <td className="py-2 text-xs text-slate-400">{rec.confirmation_method?.replace('_', '-') ?? '—'}</td>
       </tr>
       {open && (
@@ -189,7 +189,7 @@ export default function HistoryPage() {
         ))}
       </div>
       {tab === 'ops' ? <OperationsTab /> : (
-        <Card title={`Calibrations (${mode} data)`} subtitle="Every record is kept for audit. Only the one marked active is reused automatically."
+        <Card title="Calibrations" subtitle="Every record is kept for audit. Only the one marked active is reused automatically."
           action={<div className="flex flex-wrap items-center justify-end gap-2">
             <label className="relative"><Search className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-slate-500" /><input aria-label="Search calibrations" placeholder="Search object, key, id" value={q} onChange={(e) => setQ(e.target.value)} className="w-44 rounded-md border border-line bg-ink-900 py-1 pl-7 pr-2 text-xs" /></label>
             <Button variant="ghost" aria-pressed={grouped} onClick={() => setGrouped((g) => !g)} className={grouped ? 'text-accent' : ''}><Layers className="size-4" />Group</Button>

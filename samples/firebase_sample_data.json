@@ -180,7 +180,7 @@
             "severity": "warning"
           }
         ],
-        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "disclaimer": "Estimate from a friction model (N = m(g+a) / (n\u00b7\u03bc)) with a holding margin, not a guarantee; confirm by testing on the gripper.",
         "recommended_min_force_n": 4.427,
         "required_min_force_n": 2.952,
         "requires_override": false,
@@ -327,7 +327,7 @@
             "severity": "warning"
           }
         ],
-        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "disclaimer": "Estimate from a friction model (N = m(g+a) / (n\u00b7\u03bc)) with a holding margin, not a guarantee; confirm by testing on the gripper.",
         "recommended_min_force_n": 7.748,
         "required_min_force_n": 5.165,
         "requires_override": false,
@@ -337,7 +337,7 @@
         ],
         "selected_force_n": 9.0,
         "status": "ok",
-        "summary": "Within the estimated permitted range (unvalidated).",
+        "summary": "Within the estimated permitted range.",
         "upper_limit_n": 20.0,
         "upper_limit_source": "object_max_contact"
       },
@@ -532,7 +532,7 @@
             "severity": "warning"
           }
         ],
-        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "disclaimer": "Estimate from a friction model (N = m(g+a) / (n\u00b7\u03bc)) with a holding margin, not a guarantee; confirm by testing on the gripper.",
         "recommended_min_force_n": 1.476,
         "required_min_force_n": 0.984,
         "requires_override": false,
@@ -542,7 +542,7 @@
         ],
         "selected_force_n": 1.5,
         "status": "ok",
-        "summary": "Within the estimated permitted range (unvalidated).",
+        "summary": "Within the estimated permitted range.",
         "upper_limit_n": 40.0,
         "upper_limit_source": "gripper_max"
       },
@@ -677,7 +677,7 @@
             "severity": "warning"
           }
         ],
-        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "disclaimer": "Estimate from a friction model (N = m(g+a) / (n\u00b7\u03bc)) with a holding margin, not a guarantee; confirm by testing on the gripper.",
         "recommended_min_force_n": 9.614,
         "required_min_force_n": 6.409,
         "requires_override": false,
@@ -687,7 +687,7 @@
         ],
         "selected_force_n": 12.0,
         "status": "ok",
-        "summary": "Within the estimated permitted range (unvalidated).",
+        "summary": "Within the estimated permitted range.",
         "upper_limit_n": 25.0,
         "upper_limit_source": "object_max_contact"
       },
@@ -837,7 +837,7 @@
             "severity": "warning"
           }
         ],
-        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "disclaimer": "Estimate from a friction model (N = m(g+a) / (n\u00b7\u03bc)) with a holding margin, not a guarantee; confirm by testing on the gripper.",
         "recommended_min_force_n": 3.936,
         "required_min_force_n": 2.624,
         "requires_override": false,
@@ -847,7 +847,7 @@
         ],
         "selected_force_n": 5.5,
         "status": "ok",
-        "summary": "Within the estimated permitted range (unvalidated).",
+        "summary": "Within the estimated permitted range.",
         "upper_limit_n": 40.0,
         "upper_limit_source": "gripper_max"
       },
@@ -999,7 +999,7 @@
             "severity": "warning"
           }
         ],
-        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "disclaimer": "Estimate from a friction model (N = m(g+a) / (n\u00b7\u03bc)) with a holding margin, not a guarantee; confirm by testing on the gripper.",
         "recommended_min_force_n": 5.313,
         "required_min_force_n": 3.542,
         "requires_override": false,
@@ -1236,7 +1236,7 @@
             "severity": "warning"
           }
         ],
-        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "disclaimer": "Estimate from a friction model (N = m(g+a) / (n\u00b7\u03bc)) with a holding margin, not a guarantee; confirm by testing on the gripper.",
         "recommended_min_force_n": 7.748,
         "required_min_force_n": 5.165,
         "requires_override": false,
@@ -1246,7 +1246,7 @@
         ],
         "selected_force_n": 9.5,
         "status": "ok",
-        "summary": "Within the estimated permitted range (unvalidated).",
+        "summary": "Within the estimated permitted range.",
         "upper_limit_n": 20.0,
         "upper_limit_source": "object_max_contact"
       },
@@ -1380,7 +1380,7 @@
             "severity": "warning"
           }
         ],
-        "disclaimer": "Estimate based on a simplified friction model and unvalidated inputs. Not a guarantee of safety; the hardware team must validate force ranges on the real gripper.",
+        "disclaimer": "Estimate from a friction model (N = m(g+a) / (n\u00b7\u03bc)) with a holding margin, not a guarantee; confirm by testing on the gripper.",
         "recommended_min_force_n": 21.505,
         "required_min_force_n": 14.337,
         "requires_override": false,
@@ -1390,7 +1390,7 @@
         ],
         "selected_force_n": 22.0,
         "status": "ok",
-        "summary": "Within the estimated permitted range (unvalidated).",
+        "summary": "Within the estimated permitted range.",
         "upper_limit_n": 40.0,
         "upper_limit_source": "gripper_max"
       },

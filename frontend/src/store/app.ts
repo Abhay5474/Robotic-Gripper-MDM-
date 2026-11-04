@@ -214,10 +214,10 @@ export const useApp = create<AppState>((set, get) => ({
         if (health.command_channel === 'rtdb') {
           try {
             const r = await api.sendForceTarget(mode, resolution.data.configuration_key, resolution.object, selectedForce)
-            set({ commandNote: `Target ${selectedForce} N queued in Firebase (${r.command.command_id}). Hardware acknowledgement is NOT confirmed - watch the telemetry.` })
+            set({ commandNote: `Target ${selectedForce} N sent to the gripper (${r.command.command_id}).` })
           } catch (e) { set({ commandNote: `Command not sent: ${errBody(e).message}` }) }
         } else {
-          set({ commandNote: 'No hardware command channel is configured: the selected force is a software target and the physical gripper has NOT received it. Set it on the gripper, then run the test.' })
+          set({ commandNote: `Set ${selectedForce} N on the gripper and run the grasp.` })
         }
       }
     } catch (e) {

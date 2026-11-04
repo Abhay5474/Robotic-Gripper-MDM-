@@ -41,7 +41,9 @@ powershell -ExecutionPolicy Bypass -File .\run-offline.ps1
 
 ## ML Lab (separate demo, port 8100)
 
-`run-mlsim.ps1` (Windows) or `./run-mlsim.sh` starts the ML Lab on **http://localhost:8100**, next to GripSense. It trains a small neural network live on a **synthetic** dataset of 900 simulated grasp trials, and shows how it learns the force each object needs (learning curve, predicted vs actual, per-object forces, learned material and width effects). It is standard-library Python with no packages and no network. GripSense itself does not use this model. Details: [mlsim/README.md](mlsim/README.md).
+`run-mlsim.ps1` (Windows) or `./run-mlsim.sh` starts the ML Lab on **http://localhost:8100**, next to GripSense. It trains a small neural network on a **synthetic** dataset of 900 simulated grasp trials (once at startup, and again live whenever you press Train) and shows how it learns the force each object needs. It is standard-library Python with no packages and no network.
+
+GripSense shows the model's force for the current object as an **ML model** card next to the other forces, and as an **ML** marker on the force slider. The backend fetches it from the ML Lab (`POST /api/ml-prediction`, `ML_LAB_URL`, default `http://127.0.0.1:8100`). It is display only: it never selects, tests or saves a force. If the ML Lab is not running the card says so. Details: [mlsim/README.md](mlsim/README.md).
 
 ## Architecture
 
@@ -230,7 +232,7 @@ Selecting the same configuration later hits step 2 above: the slider is populate
 
 ## Safety limitations
 
-- Force limits, step, opening, lift acceleration and safety factor are **demo values** until `GRIPPER_LIMITS_SOURCE=hardware_team`. The UI labels them everywhere.
+- Force limits, step, opening, lift acceleration and safety factor are **default values** until `GRIPPER_LIMITS_SOURCE=hardware_team`; the source is shown on the Settings page.
 - The feasibility model is `N = m(g+a) / (n·μ)` with a margin. It ignores torque, pad compliance, dynamic loads, object deformation, and wrong friction estimates. A recommendation within the "estimated range" is not proof of safety.
 - The LLM output is an unvalidated starting point; a model's self-reported confidence is shown but not trusted.
 - One successful lift is not proof of safety under all conditions; calibrations are keyed to the exact properties and re-checked on load, and they can be invalidated.

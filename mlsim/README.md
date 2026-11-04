@@ -1,7 +1,9 @@
 # GripSense ML Lab
 
 A separate demo that trains a small neural network, live, to predict how much grip force each object
-needs. It runs on its own port (8100) next to GripSense (8000) and does not change or feed the main app.
+needs. It runs on its own port (8100) next to GripSense (8000). GripSense shows its force for the current object
+(the **ML model** card and the **ML** marker on the slider) but never uses it to select, test or save a force.
+It trains once at startup (~5 s) so a prediction is ready; press **Train again** on the page to watch it learn.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\run-mlsim.ps1     # Windows

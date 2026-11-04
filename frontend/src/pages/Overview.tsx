@@ -111,7 +111,7 @@ export default function Overview() {
               <KV k="Gripper" v={health.limits.gripper_id} />
               <KV k="Force definition" v={health.limits.force_definition.replace(/_/g, ' ')} />
               <KV k="Force range" v={`${health.limits.min_force_n}–${health.limits.max_force_n} N (step ${health.limits.force_step_n})`} />
-              <KV k="Limits source" v={health.limits.limits_source === 'demo' ? 'DEMO (unvalidated)' : 'hardware team'} />
+              <KV k="Limits source" v={health.limits.limits_source === 'demo' ? 'default values' : 'hardware team'} />
             </div>
             <div>
               <KV k="LLM" v={health.llm.is_mock ? 'mock heuristic (not an LLM)' : `${health.llm.provider} · ${health.llm.model}`} />

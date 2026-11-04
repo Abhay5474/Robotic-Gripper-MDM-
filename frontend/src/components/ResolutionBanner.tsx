@@ -45,7 +45,7 @@ export default function ResolutionBanner() {
       {d.source === 'calibration' && lk.record && (
         <Banner tone="ok" icon={<CheckCircle2 className="size-4" />}>
           <b>Calibrated force loaded from Firebase.</b> Previously calibrated force loaded - the LLM was not queried.
-          <div className="mt-0.5 text-xs text-slate-300">Calibrated {fmtDate(lk.record.confirmed_at)} · record <code className="font-mono">{lk.record.calibration_id}</code> · {lk.record.confirmation_method === 'sensor_assisted' ? 'sensor-assisted confirmation' : 'manually confirmed'}{lk.record.mode === 'demo' && ' · DEMO record'}</div>
+          <div className="mt-0.5 text-xs text-slate-300">Calibrated {fmtDate(lk.record.confirmed_at)} · record <code className="font-mono">{lk.record.calibration_id}</code> · {lk.record.confirmation_method === 'sensor_assisted' ? 'sensor-assisted confirmation' : 'manually confirmed'}</div>
         </Banner>
       )}
       {d.source === 'llm' && (

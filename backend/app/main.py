@@ -3,7 +3,9 @@
 import json
 import secrets
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated, Any, Callable, Optional
+
+import httpx
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,6 +23,7 @@ from .schemas import (
     InvalidateRequest,
     LookupRequest,
     OperationRequest,
+    ObjectProperties,
     PredictGripRequest,
     StartCalibrationRequest,
     TestEventRequest,
@@ -31,8 +34,21 @@ from .store import Store
 PRESETS_FILE = Path(__file__).resolve().parents[2] / "shared" / "object_presets.json"
 
 
-def create_app(settings: Optional[Settings] = None, db: Optional[RtdbClient] = None, llm: Optional[LLMClient] = None) -> FastAPI:
+MlFetch = Callable[[dict], dict]
+
+
+def http_ml_fetch(settings: Settings) -> MlFetch:
+    def fetch(payload: dict) -> dict:
+        r = httpx.post(f"{settings.ml_lab_url.rstrip('/')}/api/predict", json=payload, timeout=settings.ml_lab_timeout_s)
+        r.raise_for_status()
+        return r.json()
+    return fetch
+
+
+def create_app(settings: Optional[Settings] = None, db: Optional[RtdbClient] = None, llm: Optional[LLMClient] = None,
+               ml_fetch: Optional[MlFetch] = None) -> FastAPI:
     settings = settings or get_settings()
+    ml_fetch = ml_fetch or http_ml_fetch(settings)
     if settings.app_env == "production" and (settings.store_backend == "memory" or settings.llm_provider == "mock"):
         raise RuntimeError("In-memory store and mock LLM are development-only and cannot run with APP_ENV=production.")
     if settings.auth_mode == "bearer" and settings.api_bearer_token is None:
@@ -130,6 +146,17 @@ def create_app(settings: Optional[Settings] = None, db: Optional[RtdbClient] = N
     @app.get("/api/calibrations", dependencies=guard)
     def recent_calibrations(mode: Mode, limit: Annotated[int, Query(ge=1, le=200)] = 50):
         return {"records": service.recent_calibrations(mode, limit)}
+
+    @app.post("/api/ml-prediction", dependencies=guard)
+    def ml_prediction(obj: ObjectProperties) -> dict[str, Any]:
+        """The ML Lab's predicted force for this object. Display only: never used to select, test or save a force."""
+        try:
+            r = ml_fetch(obj.model_dump(mode="json"))
+            return {"available": True, "model_min": float(r["model_min"]), "model_recommended": float(r["model_recommended"]),
+                    "epoch": int(r.get("epoch", 0)), "epochs": int(r.get("epochs", 0)), "status": str(r.get("status", "")),
+                    "mae_n": (r.get("metrics") or {}).get("mae"), "trained_on": r.get("trained_on", "synthetic")}
+        except (httpx.HTTPError, KeyError, TypeError, ValueError) as e:
+            return {"available": False, "reason": f"ML Lab not reachable at {settings.ml_lab_url} ({type(e).__name__}). Start it with run-mlsim.ps1."}
 
     @app.post("/api/calibrations/lookup", dependencies=guard)
     def lookup_calibrations(req: LookupRequest, mode: Mode):
