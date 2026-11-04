@@ -13,7 +13,7 @@ We are **not** training a model. An existing LLM API gives a starting point; the
 
 ## Contents
 
-- **[Run fully offline](#run-fully-offline-no-firebase-no-llm-no-keys)** · [Architecture](#architecture) · [Repository layout](#repository-layout) · [Setup](#setup) · [Environment variables](#environment-variables)
+- **[Run fully offline](#run-fully-offline-no-firebase-no-llm-no-keys)** · [ML Lab](#ml-lab-separate-demo-port-8100) · [Architecture](#architecture) · [Repository layout](#repository-layout) · [Setup](#setup) · [Environment variables](#environment-variables)
 - [LLM provider](#configuring-the-llm-provider) · [Firebase](#configuring-firebase)
 - [How prediction works](#how-force-prediction-works) · [Slider calibration](#how-slider-calibration-works) · [Saving](#how-successful-calibrations-are-saved) · [Reuse](#how-calibrated-forces-are-reused)
 - [Safety limitations](#safety-limitations) · [Demo vs live mode](#demo-mode-and-live-mode) · [Testing](#testing)
@@ -38,6 +38,10 @@ powershell -ExecutionPolicy Bypass -File .\run-offline.ps1
 - Telemetry: the built-in simulator (DEMO mode).
 - Installs `backend/requirements-offline.txt`, which leaves out `firebase-admin`. Any `backend/.env` or `frontend/.env` settings are overridden for the run, so it never contacts Firebase.
 - UI text still says "Firebase" (e.g. "loaded from Firebase"); in this mode that means the in-memory stand-in, which the header labels `memory, dev`.
+
+## ML Lab (separate demo, port 8100)
+
+`run-mlsim.ps1` (Windows) or `./run-mlsim.sh` starts the ML Lab on **http://localhost:8100**, next to GripSense. It trains a small neural network live on a **synthetic** dataset of 900 simulated grasp trials, and shows how it learns the force each object needs (learning curve, predicted vs actual, per-object forces, learned material and width effects). It is standard-library Python with no packages and no network. GripSense itself does not use this model. Details: [mlsim/README.md](mlsim/README.md).
 
 ## Architecture
 

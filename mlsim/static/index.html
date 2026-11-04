@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GripSense ML Lab</title>
+<style>
+:root{--bg:#fff8f8;--card:#fff;--ink:#2a1519;--muted:#6f545b;--line:#f3d2d6;--accent:#c8123c;--ok:#047857;--warn:#a04507;--model:#c8123c;--phys:#6d28d9;--truth:#047857;--cal:#0369a1;--grid:#f6dde0}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1220;--card:#111a2e;--ink:#e2e8f0;--muted:#94a3b8;--line:#243152;--accent:#22d3ee;--ok:#34d399;--warn:#fbbf24;--model:#22d3ee;--phys:#a78bfa;--truth:#34d399;--cal:#fb923c;--grid:#1e2a47}}
+:root[data-theme=dark]{--bg:#0b1220;--card:#111a2e;--ink:#e2e8f0;--muted:#94a3b8;--line:#243152;--accent:#22d3ee;--ok:#34d399;--warn:#fbbf24;--model:#22d3ee;--phys:#a78bfa;--truth:#34d399;--cal:#fb923c;--grid:#1e2a47}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1320px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+h1{margin:0;font-size:22px}h2{margin:0 0 2px;font-size:15px}.sub{color:var(--muted);font-size:12.5px;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.badge{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:600;color:var(--muted)}
+.badge.warn{border-color:color-mix(in srgb,var(--warn) 50%,transparent);color:var(--warn);background:color-mix(in srgb,var(--warn) 10%,transparent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}.g5{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+@media (max-width:520px){.g2{grid-template-columns:1fr}}
+.controls{display:flex;flex-wrap:wrap;align-items:end;gap:10px}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:11.5px;color:var(--muted)}
+input,select{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;width:96px}
+button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:8px 14px;font:600 13px Inter,system-ui,sans-serif;cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--card)}button:disabled{opacity:.45;cursor:not-allowed}
+.kpi .k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.kpi .v{font:700 24px ui-monospace,Menlo,Consolas,monospace;margin-top:2px}.kpi .n{font-size:12px;color:var(--muted)}
+.bar{height:6px;border-radius:9px;background:var(--grid);overflow:hidden;margin-top:8px}.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}
+canvas{width:100%;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted);margin:4px 0 6px}.legend i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-size:12.5px}th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);font-weight:600}
+td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,Consolas,monospace}.scroll{overflow:auto;max-height:320px}
+.note{font-size:12px;color:var(--muted);margin-top:8px}.out{font:700 20px ui-monospace,Menlo,monospace}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--line)}
+.pill.training{color:var(--accent);border-color:var(--accent)}.pill.done{color:var(--ok);border-color:var(--ok)}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div>
+    <h1>GripSense ML Lab</h1>
+    <div class="sub" style="margin:2px 0 0">A neural network learning how much grip force each object needs, trained live in this page's server.</div>
+    <div class="badges">
+      <span class="badge warn">SYNTHETIC DATASET · simulated grasp trials, not real measurements</span>
+      <span class="badge">Separate from GripSense · its forces are not used by the calibration app</span>
+    </div>
+  </div>
+  <div class="controls">
+    <label class="f">Epochs<input id="epochs" type="number" min="10" max="1000" step="10"></label>
+    <label class="f" title="Starting value; it halves every 40 epochs">Learning rate<input id="lr" type="number" min="0.0001" max="0.1" step="0.001"></label>
+    <label class="f">Hidden units<input id="hidden" type="number" min="2" max="64" step="1"></label>
+    <label class="f">Speed<select id="speed"><option value="300">slow</option><option value="120">normal</option><option value="20">fast</option><option value="0">max</option></select></label>
+    <button id="reset">Reset</button>
+    <button id="train" class="primary">Train</button>
+  </div>
+</header>
+
+<section class="grid g5" style="margin-bottom:14px">
+  <div class="card kpi"><div class="k">Status</div><div class="v" style="font-size:18px"><span id="status" class="pill">ready</span></div><div class="bar"><i id="prog"></i></div><div class="n" id="epochTxt">epoch 0</div></div>
+  <div class="card kpi"><div class="k">Training loss</div><div class="v" id="trainLoss">-</div><div class="n">MSE, log force (scaled)</div></div>
+  <div class="card kpi"><div class="k">Validation loss</div><div class="v" id="valLoss">-</div><div class="n">on <span id="nval">-</span> unseen trials</div></div>
+  <div class="card kpi"><div class="k">Model error</div><div class="v" id="mae">-</div><div class="n">formula alone: <b id="pmae">-</b></div></div>
+  <div class="card kpi"><div class="k">Within ±10 %</div><div class="v" id="w10">-</div><div class="n">of the force that held</div></div>
+</section>
+
+<section class="grid g2" style="margin-bottom:14px">
+  <div class="card"><h2>Learning curve</h2><p class="sub">Error on the training trials and on held-out validation trials, per epoch (log scale).</p>
+    <div class="legend"><span><i style="background:var(--model)"></i>training</span><span><i style="background:var(--phys)"></i>validation</span></div>
+    <canvas id="loss" height="240"></canvas></div>
+  <div class="card"><h2>Predicted vs actual</h2><p class="sub">Each dot is a validation trial the model never trained on. On the diagonal = perfect.</p>
+    <canvas id="scatter" height="262"></canvas></div>
+</section>
+
+<section class="grid g2" style="margin-bottom:14px">
+  <div class="card"><h2>How much force each object needs</h2><p class="sub">Solid bar: the model's learned minimum holding force for the GripSense objects. Faint bar: with GripSense's ×1.5 margin, which is what a calibrated force is comparable to.</p>
+    <div class="legend"><span><i style="background:var(--model)"></i>model</span><span><i style="background:var(--phys)"></i>formula N = m(g+a)/(2μ)</span><span><i style="background:var(--truth)"></i>simulator truth</span><span><i style="background:var(--model);opacity:.3"></i>model recommended ×1.5</span><span><i style="background:var(--cal)"></i>GripSense calibrated (sample, includes the margin)</span></div>
+    <canvas id="objects" height="300"></canvas>
+    <div class="scroll" style="max-height:none;margin-top:8px"><table id="objTable"></table></div></div>
+  <div class="card"><h2>Watching it learn, object by object</h2><p class="sub">The model's prediction for each object at every epoch: it starts as a guess and settles on what the trials show.</p>
+    <div class="legend" id="objLegend"></div>
+    <canvas id="evolve" height="372"></canvas></div>
+</section>
+
+<section class="grid g2" style="margin-bottom:14px">
+  <div class="card"><h2>What it discovered: materials</h2><p class="sub">Force needed relative to the formula, for a 300 g, 60 mm object with μ estimated at 0.5. The formula assumes 1.0 for every material; the hidden truth differs, and the model has to find it from the rows alone.</p>
+    <div class="legend"><span><i style="background:var(--model)"></i>learned</span><span><i style="background:var(--truth)"></i>hidden truth</span></div>
+    <canvas id="materials" height="250"></canvas></div>
+  <div class="card"><h2>What it discovered: contact width</h2><p class="sub">Narrow objects touch less pad area and need extra force. Nothing tells the model this; compare the curve it inferred from the trials with the hidden truth. (300 g plastic, μ 0.5)</p>
+    <div class="legend"><span><i style="background:var(--model)"></i>learned</span><span><i style="background:var(--truth)"></i>hidden truth</span></div>
+    <canvas id="width" height="250"></canvas></div>
+</section>
+
+<section class="grid g2">
+  <div class="card"><h2>Dataset</h2><p class="sub" id="dsInfo">-</p>
+    <div class="scroll"><table id="dsTable"></table></div>
+    <p class="note">Each row: one simulated calibration. The object was tested at rising force steps (0.5 N, or 0.25 N if fragile) until it held; <b>min_holding_force_n</b> is the label. <a id="csv" href="/dataset.csv" style="color:var(--accent)">Download CSV</a></p></div>
+  <div class="card"><h2>Try the model</h2><p class="sub">Ask the current model about any object.</p>
+    <div class="controls" style="margin-bottom:12px">
+      <label class="f">Material<select id="pMat"></select></label>
+      <label class="f">Mass (g)<input id="pMass" type="number" value="350" min="1"></label>
+      <label class="f">Est. μ<input id="pMu" type="number" value="0.4" step="0.01" min="0.05"></label>
+      <label class="f">Width (mm)<input id="pWidth" type="number" value="65"></label>
+      <label class="f">Fragility<select id="pFrag"></select></label>
+      <button id="predict" class="primary">Predict</button>
+    </div>
+    <div class="grid g5" style="grid-template-columns:repeat(3,1fr)">
+      <div><div class="k" style="font-size:11px;color:var(--muted)">MODEL MINIMUM</div><div class="out" id="oMin">-</div></div>
+      <div><div class="k" style="font-size:11px;color:var(--muted)">RECOMMENDED (×1.5)</div><div class="out" id="oRec">-</div></div>
+      <div><div class="k" style="font-size:11px;color:var(--muted)">FORMULA</div><div class="out" id="oPhys" style="color:var(--phys)">-</div></div>
+    </div>
+    <p class="note" id="oNote">Train first for a meaningful answer: an untrained network guesses.</p></div>
+</section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id)
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim()
+const PALETTE = ['#c8123c', '#0369a1', '#047857', '#a04507', '#6d28d9', '#0d9488', '#be185d']
+const PALETTE_DARK = ['#22d3ee', '#fb923c', '#34d399', '#fbbf24', '#a78bfa', '#f472b6', '#60a5fa']
+const dark = () => css('--bg') === '#0b1220'
+const fmt = (v, d = 2) => v == null || !isFinite(v) ? '-' : Number(v).toFixed(d)
+
+function ctx2d(c) {
+  const dpr = window.devicePixelRatio || 1, w = c.clientWidth, h = Number(c.getAttribute('height'))
+  if (c.width !== Math.round(w * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); c.style.height = h + 'px' }
+  const g = c.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h)
+  g.font = '11px Inter,system-ui,sans-serif'; return { g, w, h }
+}
+function axes(g, w, h, p, xr, yr, { logY = false, xl = '', yl = '', xt, yt } = {}) {
+  const X = (v) => p.l + (v - xr[0]) / (xr[1] - xr[0]) * (w - p.l - p.r)
+  const Y = (v) => { const t = logY ? (Math.log10(v) - Math.log10(yr[0])) / (Math.log10(yr[1]) - Math.log10(yr[0])) : (v - yr[0]) / (yr[1] - yr[0]); return h - p.b - t * (h - p.t - p.b) }
+  g.strokeStyle = css('--grid'); g.fillStyle = css('--muted'); g.lineWidth = 1
+  for (const v of yt) { const y = Y(v); g.beginPath(); g.moveTo(p.l, y); g.lineTo(w - p.r, y); g.stroke(); g.textAlign = 'right'; g.fillText(logY ? v.toPrecision(1) : +v.toFixed(2), p.l - 6, y + 4) }
+  for (const v of xt) { const x = X(v); g.textAlign = 'center'; g.fillText(+v.toFixed(2), x, h - p.b + 15) }
+  g.textAlign = 'center'; if (xl) g.fillText(xl, (p.l + w - p.r) / 2, h - 2)
+  if (yl) { g.save(); g.translate(11, (p.t + h - p.b) / 2); g.rotate(-Math.PI / 2); g.fillText(yl, 0, 0); g.restore() }
+  return { X, Y }
+}
+const ticks = (lo, hi, n = 5) => { const s = (hi - lo) / n, m = Math.pow(10, Math.floor(Math.log10(s))), st = [1, 2, 2.5, 5, 10].map((k) => k * m).find((k) => k >= s) || s; const out = []; for (let v = Math.ceil(lo / st) * st; v <= hi + 1e-9; v += st) out.push(+v.toFixed(6)); return out }
+function line(g, pts, X, Y, color, width = 2, dash = []) { g.strokeStyle = color; g.lineWidth = width; g.setLineDash(dash); g.beginPath(); pts.forEach(([a, b], i) => i ? g.lineTo(X(a), Y(b)) : g.moveTo(X(a), Y(b))); g.stroke(); g.setLineDash([]) }
+
+function drawLoss(s) {
+  const { g, w, h } = ctx2d($('loss')); const H = s.history, p = { l: 48, r: 12, t: 10, b: 30 }
+  const E = Math.max(s.config.epochs, 10), vals = H.flatMap((r) => [r.train, r.val]).filter((v) => v > 0)
+  const lo = vals.length ? Math.pow(10, Math.floor(Math.log10(Math.min(...vals)))) : 0.001, hi = vals.length ? Math.pow(10, Math.ceil(Math.log10(Math.max(...vals)))) : 1
+  const yt = []; for (let v = lo; v <= hi * 1.0001; v *= 10) yt.push(v)
+  const { X, Y } = axes(g, w, h, p, [0, E], [lo, hi], { logY: true, xl: 'epoch', xt: ticks(0, E), yt })
+  if (!H.length) { g.fillStyle = css('--muted'); g.textAlign = 'center'; g.fillText('Press Train to start', w / 2, h / 2); return }
+  line(g, H.map((r) => [r.epoch, Math.max(lo, r.train)]), X, Y, css('--model'))
+  line(g, H.map((r) => [r.epoch, Math.max(lo, r.val)]), X, Y, css('--phys'))
+}
+function drawScatter(s) {
+  const { g, w, h } = ctx2d($('scatter')); const pts = s.scatter, p = { l: 44, r: 12, t: 10, b: 32 }
+  const mx = Math.max(5, ...pts.flatMap((q) => [q[0], q[1]])) * 1.05
+  const { X, Y } = axes(g, w, h, p, [0, mx], [0, mx], { xl: 'actual force that held (N)', yl: 'model prediction (N)', xt: ticks(0, mx), yt: ticks(0, mx) })
+  line(g, [[0, 0], [mx, mx]], X, Y, css('--muted'), 1, [4, 4])
+  g.fillStyle = css('--model'); g.globalAlpha = 0.55
+  for (const [a, b] of pts) { g.beginPath(); g.arc(X(a), Y(Math.min(b, mx)), 3, 0, 7); g.fill() }
+  g.globalAlpha = 1
+}
+function drawObjects(s) {
+  const { g, w, h } = ctx2d($('objects')); const P = s.presets, p = { l: 104, r: 14, t: 6, b: 24 }
+  const mx = Math.max(4, ...P.flatMap((o) => [o.model_recommended, o.physics_min, o.simulator_truth, o.calibrated || 0])) * 1.08
+  const rowH = (h - p.t - p.b) / P.length, X = (v) => p.l + v / mx * (w - p.l - p.r)
+  g.strokeStyle = css('--grid'); g.fillStyle = css('--muted'); g.textAlign = 'center'
+  for (const v of ticks(0, mx)) { g.beginPath(); g.moveTo(X(v), p.t); g.lineTo(X(v), h - p.b); g.stroke(); g.fillText(v, X(v), h - 8) }
+  P.forEach((o, i) => {
+    const y = p.t + i * rowH, cy = y + rowH / 2
+    g.fillStyle = css('--ink'); g.textAlign = 'right'; g.fillText(o.name, p.l - 8, cy + 4)
+    g.fillStyle = css('--model'); g.globalAlpha = 0.22; g.fillRect(p.l, cy - rowH * 0.22, X(o.model_recommended) - p.l, rowH * 0.44)
+    g.globalAlpha = 0.85; g.fillRect(p.l, cy - rowH * 0.22, X(o.model_min) - p.l, rowH * 0.44); g.globalAlpha = 1
+    const mark = (v, c, shape) => { if (v == null) return; const x = X(v); g.fillStyle = c; g.strokeStyle = c; g.lineWidth = 2.5
+      if (shape === 'bar') { g.beginPath(); g.moveTo(x, cy - rowH * 0.36); g.lineTo(x, cy + rowH * 0.36); g.stroke() }
+      else if (shape === 'dot') { g.beginPath(); g.arc(x, cy, 4.5, 0, 7); g.fill() }
+      else { g.beginPath(); g.moveTo(x, cy - 6); g.lineTo(x + 6, cy); g.lineTo(x, cy + 6); g.lineTo(x - 6, cy); g.closePath(); g.fill() } }
+    mark(o.physics_min, css('--phys'), 'bar'); mark(o.simulator_truth, css('--truth'), 'dot'); mark(o.calibrated, css('--cal'), 'diamond')
+  })
+  $('objTable').innerHTML = '<tr><th>Object</th><th>Material</th><th class="num">Model min</th><th class="num">×1.5</th><th class="num">Formula</th><th class="num">Truth</th><th class="num">Calibrated</th></tr>' +
+    P.map((o) => `<tr><td>${o.name}</td><td>${o.material}</td><td class="num" style="color:var(--model);font-weight:700">${fmt(o.model_min)}</td><td class="num">${fmt(o.model_recommended)}</td><td class="num">${fmt(o.physics_min)}</td><td class="num">${fmt(o.simulator_truth)}</td><td class="num">${o.calibrated == null ? '-' : fmt(o.calibrated)}</td></tr>`).join('')
+}
+function drawEvolve(s) {
+  const { g, w, h } = ctx2d($('evolve')); const H = s.preset_history, P = s.presets, p = { l: 40, r: 12, t: 10, b: 30 }
+  const pal = dark() ? PALETTE_DARK : PALETTE, E = Math.max(s.config.epochs, 10)
+  const mx = Math.max(4, ...H.flatMap((r) => r.pred), ...P.map((o) => o.simulator_truth)) * 1.08
+  const { X, Y } = axes(g, w, h, p, [0, E], [0, mx], { xl: 'epoch', yl: 'predicted min force (N)', xt: ticks(0, E), yt: ticks(0, mx) })
+  P.forEach((o, i) => {
+    line(g, [[0, o.simulator_truth], [E, o.simulator_truth]], X, Y, pal[i % pal.length], 1, [3, 4])
+    if (H.length) line(g, H.map((r) => [r.epoch, r.pred[i]]), X, Y, pal[i % pal.length], 2)
+  })
+  $('objLegend').innerHTML = P.map((o, i) => `<span><i style="background:${pal[i % pal.length]}"></i>${o.name}</span>`).join('') + '<span>dashed = simulator truth</span>'
+}
+function drawMaterials(s) {
+  const { g, w, h } = ctx2d($('materials')); const M = s.materials, p = { l: 40, r: 10, t: 10, b: 34 }
+  const lo = 0.6, hi = 1.6, bw = (w - p.l - p.r) / M.length
+  const Y = (v) => h - p.b - (v - lo) / (hi - lo) * (h - p.t - p.b)
+  g.strokeStyle = css('--grid'); g.fillStyle = css('--muted'); g.textAlign = 'right'
+  for (const v of [0.6, 0.8, 1, 1.2, 1.4, 1.6]) { g.beginPath(); g.moveTo(p.l, Y(v)); g.lineTo(w - p.r, Y(v)); g.stroke(); g.fillText('×' + v.toFixed(1), p.l - 5, Y(v) + 4) }
+  g.strokeStyle = css('--phys'); g.setLineDash([5, 4]); g.beginPath(); g.moveTo(p.l, Y(1)); g.lineTo(w - p.r, Y(1)); g.stroke(); g.setLineDash([])
+  M.forEach((m, i) => {
+    const x = p.l + i * bw
+    const bar = (v, off, c) => { const y0 = Y(1), y1 = Y(Math.max(lo, Math.min(hi, v))); g.fillStyle = c; g.fillRect(x + bw * off, Math.min(y0, y1), bw * 0.34, Math.abs(y1 - y0)) }
+    bar(m.learned, 0.14, css('--model')); bar(m.truth, 0.52, css('--truth'))
+    g.fillStyle = css('--muted'); g.textAlign = 'center'; g.fillText(m.material, x + bw / 2, h - 18)
+  })
+}
+function drawWidth(s) {
+  const { g, w, h } = ctx2d($('width')); const C = s.curves.width, p = { l: 44, r: 12, t: 10, b: 32 }
+  const mx = Math.max(...C.flatMap((c) => [c.model, c.truth])) * 1.15
+  const { X, Y } = axes(g, w, h, p, [20, 110], [0, mx], { xl: 'width between finger pads (mm)', yl: 'min force (N)', xt: ticks(20, 110), yt: ticks(0, mx) })
+  line(g, C.map((c) => [c.x, c.truth]), X, Y, css('--truth'), 2, [5, 4]); line(g, C.map((c) => [c.x, c.model]), X, Y, css('--model'), 2.5)
+}
+
+let last = null, busy = false
+async function api(path, body) { const r = await fetch(path, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); return r.json() }
+function render(s) {
+  last = s
+  const st = $('status'); st.textContent = s.status; st.className = 'pill ' + s.status
+  $('prog').style.width = (100 * s.epoch / s.config.epochs) + '%'; $('epochTxt').textContent = `epoch ${s.epoch} / ${s.config.epochs}`
+  const lh = s.history[s.history.length - 1]
+  $('trainLoss').textContent = lh ? fmt(lh.train, 4) : '-'; $('valLoss').textContent = lh ? fmt(lh.val, 4) : '-'
+  $('nval').textContent = s.dataset.val; $('mae').textContent = fmt(s.metrics.mae) + ' N'; $('pmae').textContent = fmt(s.metrics.physics_mae) + ' N'
+  $('w10').textContent = Math.round(s.metrics.within10 * 100) + ' %'
+  $('train').textContent = s.status === 'training' ? 'Pause' : s.status === 'done' ? 'Train again' : s.epoch ? 'Resume' : 'Train'
+  for (const k of ['epochs', 'lr', 'hidden']) if (document.activeElement !== $(k)) $(k).value = s.config[k]
+  if (document.activeElement !== $('speed')) $('speed').value = String(s.config.delay_ms)
+  for (const el of ['epochs', 'lr', 'hidden', 'speed', 'reset']) $(el).disabled = s.status === 'training'
+  drawLoss(s); drawScatter(s); drawObjects(s); drawEvolve(s); drawMaterials(s); drawWidth(s)
+}
+async function poll() { try { render(await api('/api/state')) } catch (e) { $('status').textContent = 'server offline' } setTimeout(poll, last && last.status === 'training' ? 250 : 1500) }
+
+$('train').onclick = async () => { if (last && last.status === 'training') await api('/api/pause', {}); else await api('/api/train', {}); render(await api('/api/state')) }
+$('reset').onclick = async () => { await api('/api/reset', { epochs: +$('epochs').value, lr: +$('lr').value, hidden: +$('hidden').value, delay_ms: +$('speed').value }); render(await api('/api/state')) }
+$('speed').onchange = $('reset').onclick
+$('predict').onclick = async () => {
+  const r = await api('/api/predict', { material: $('pMat').value, mass_g: +$('pMass').value, friction_coefficient: +$('pMu').value, width_mm: +$('pWidth').value, fragility: $('pFrag').value })
+  if (r.error) { $('oNote').textContent = r.error; return }
+  $('oMin').textContent = fmt(r.model_min) + ' N'; $('oRec').textContent = fmt(r.model_recommended) + ' N'; $('oPhys').textContent = fmt(r.physics_min) + ' N'
+  $('oNote').textContent = r.epoch ? `Answered by the model after ${r.epoch} epochs. The recommended force adds GripSense's ×1.5 holding margin.` : 'The network is untrained: this is a guess. Press Train.'
+}
+;(async () => {
+  const s = await api('/api/state')
+  $('pMat').innerHTML = s.dataset.materials.map((m) => `<option>${m}</option>`).join('')
+  $('pFrag').innerHTML = s.dataset.fragility.map((m) => `<option ${m === 'moderate' ? 'selected' : ''}>${m}</option>`).join('')
+  const d = await api('/api/dataset')
+  $('dsInfo').textContent = `${d.total} simulated grasp trials · ${s.dataset.train} for training, ${s.dataset.val} held out for validation · first 40 shown`
+  $('dsTable').innerHTML = '<tr>' + d.columns.map((c) => `<th>${c}</th>`).join('') + '</tr>' + d.rows.map((r) => '<tr>' + d.columns.map((c) => `<td class="${typeof r[c] === 'number' ? 'num' : ''}">${r[c]}</td>`).join('') + '</tr>').join('')
+  render(s); poll()
+  addEventListener('resize', () => last && render(last))
+})()
+</script>
+</body>
+</html>
