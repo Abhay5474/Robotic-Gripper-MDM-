@@ -133,6 +133,24 @@ Frontend (`frontend/.env`): `VITE_API_BASE`, `VITE_FIREBASE_API_KEY|AUTH_DOMAIN|
 
 ## Configuring Firebase
 
+### Live telemetry for this project (`mdmproject123-8770f`)
+
+The browser's Firebase web config is committed in `frontend/.env.development` and `frontend/.env.production`. These values are public identifiers, not secrets; access is controlled by the database rules. Only **LIVE** mode uses them. **DEMO** mode always uses the built-in simulator, and `run-offline.ps1` / `run-offline.sh` set `VITE_FIREBASE_DISABLED=1`, so the offline run never contacts Firebase.
+
+LIVE mode listens to `/gripper_telemetry`. The hardware (or you, in the Firebase console) writes:
+
+```json
+{ "measured_force_n": 4.2, "finger_opening_mm": 64.5, "object_detected": true, "slip_detected": false,
+  "operation_state": "holding", "timestamp": 1793040000000 }
+```
+
+`timestamp` is epoch milliseconds (seconds or an ISO string also work). Missing fields show as "unavailable"; nothing is filled in.
+
+The browser must be allowed to read that node. Either sign in on the Settings page (Firebase Auth email/password, matching `database.rules.json`: `auth != null`), or, for a quick demo only, allow public read of that one node: `"gripper_telemetry": { ".read": true }`.
+
+Saving calibrations to Firebase is a backend job and needs the service-account key in `backend/.env` (`STORE_BACKEND=firebase`, `FIREBASE_DATABASE_URL`, `FIREBASE_CREDENTIALS_PATH`). Without it, LIVE-mode calibrations stay in the backend's memory store.
+
+
 1. Create a Realtime Database; note its URL.
 2. Create a service account (Project settings → Service accounts → Generate key). Put the file **outside the repo** (git-ignored patterns exist) and point `FIREBASE_CREDENTIALS_PATH` at it, or pass the JSON via `FIREBASE_CREDENTIALS_JSON`.
 3. Add the indexes/rules from `database.rules.json` (`grip_calibrations` needs `.indexOn: ["configuration_key","created_at_ms"]`).
@@ -235,4 +253,4 @@ cd backend && .venv/bin/python -m pytest -q          # 132 tests, mocked Firebas
 cd frontend && npm test && npm run typecheck && npm run build
 ```
 
-Backend tests cover: first selection → LLM → slider default; adjusting and confirming; saved record separate from the untouched prediction; automatic reuse and **a spy proving no LLM call on a cache hit**; different mass/friction/object id never reuse; failed calibrations never active; infeasible/untested/unconfirmed forces rejected; Firebase and LLM failures; invalid LLM output; staleness; sensor-assisted vs manual confirmation; demo/live segregation; concurrent confirmations keeping the active index consistent; auth; provider request shapes. Frontend tests (140) cover the arm IK and motion planner, grip margin, the free-body diagram, the object gallery, the command palette, hotkeys, toasts, the workflow stepper, the 2D fallback of the 3D view, the shared safety cases, the calibration assistant, analytics/CSV, theme switching, the gauge and envelope, telemetry normalisation/staleness, form validation, the simulator, the decision-flow store (cases A/B/C, cached local data), the slider, and demo/live labelling.
+Backend tests cover: first selection → LLM → slider default; adjusting and confirming; saved record separate from the untouched prediction; automatic reuse and **a spy proving no LLM call on a cache hit**; different mass/friction/object id never reuse; failed calibrations never active; infeasible/untested/unconfirmed forces rejected; Firebase and LLM failures; invalid LLM output; staleness; sensor-assisted vs manual confirmation; demo/live segregation; concurrent confirmations keeping the active index consistent; auth; provider request shapes. Frontend tests (142) cover the arm IK and motion planner, grip margin, the free-body diagram, the object gallery, the command palette, hotkeys, toasts, the workflow stepper, the 2D fallback of the 3D view, the shared safety cases, the calibration assistant, analytics/CSV, theme switching, the gauge and envelope, telemetry normalisation/staleness, form validation, the simulator, the decision-flow store (cases A/B/C, cached local data), the slider, and demo/live labelling.

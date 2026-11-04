@@ -1,6 +1,9 @@
 .env
 .env.*
 !.env.example
+# public Firebase web config for LIVE mode (no secrets); see frontend/.env.production
+!frontend/.env.development
+!frontend/.env.production
 *.pem
 serviceAccount*.json
 *-firebase-adminsdk-*.json

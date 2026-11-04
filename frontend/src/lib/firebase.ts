@@ -10,7 +10,10 @@ const cfg = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
-export const firebaseConfigured = Boolean(cfg.databaseURL && cfg.apiKey && cfg.projectId)
+// VITE_FIREBASE_DISABLED=1 (set by run-offline.ps1 / run-offline.sh) keeps a build fully offline even
+// though frontend/.env.production carries the project's web config.
+const disabled = ['1', 'true', 'yes'].includes(String(import.meta.env.VITE_FIREBASE_DISABLED ?? '').toLowerCase())
+export const firebaseConfigured = !disabled && Boolean(cfg.databaseURL && cfg.apiKey && cfg.projectId)
 
 let app: FirebaseApp | null = null
 function getApp(): FirebaseApp | null {

@@ -12,7 +12,7 @@ cd "$ROOT/backend"
 cd "$ROOT/frontend"
 [ -d node_modules ] || npm install
 VITE_FIREBASE_API_KEY= VITE_FIREBASE_AUTH_DOMAIN= VITE_FIREBASE_DATABASE_URL= VITE_FIREBASE_PROJECT_ID= VITE_FIREBASE_APP_ID= \
-  VITE_API_BASE=/api npm run build
+  VITE_FIREBASE_DISABLED=1 VITE_API_BASE=/api npm run build
 cd "$ROOT/backend"
 echo "==> GripSense AI (offline) on http://localhost:$PORT  - Ctrl+C to stop"
 STORE_BACKEND=memory LLM_PROVIDER=mock SEED_FILE=../samples/firebase_sample_data.json FRONTEND_DIST=../frontend/dist \

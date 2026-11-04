@@ -32,6 +32,7 @@ try {
   if (-not (Test-Path 'node_modules')) { Write-Host '==> npm install' -ForegroundColor Cyan; npm install; if ($LASTEXITCODE) { throw 'npm install failed' } }
   # blank Firebase web config so the build can never connect to Firebase
   foreach ($v in 'VITE_FIREBASE_API_KEY', 'VITE_FIREBASE_AUTH_DOMAIN', 'VITE_FIREBASE_DATABASE_URL', 'VITE_FIREBASE_PROJECT_ID', 'VITE_FIREBASE_APP_ID') { Set-Item "env:$v" '' }
+  $env:VITE_FIREBASE_DISABLED = '1'   # PowerShell deletes empty variables, so blanking alone would let frontend\.env.production through
   $env:VITE_API_BASE = '/api'
   Write-Host '==> Building the frontend' -ForegroundColor Cyan
   npm run build
