@@ -201,7 +201,7 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/api/dataset":
             self._json({"columns": list(LAB.rows[0].keys()), "rows": LAB.rows[:40], "total": len(LAB.rows)})
         elif path == "/dataset.csv":
-            self._send(200, DATA.read_bytes(), "text/csv", {"Content-Disposition": "attachment; filename=grasp_trials.csv"})
+            self._send(200, DATA.read_bytes(), "text/csv; charset=utf-8", {"Content-Disposition": 'attachment; filename="grasp_trials.csv"'})
         else:
             self._json({"error": "not found"}, 404)
 

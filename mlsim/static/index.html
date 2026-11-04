@@ -92,7 +92,8 @@ td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,Consolas,monospace
 <section class="grid g2">
   <div class="card"><h2>Dataset</h2><p class="sub" id="dsInfo">-</p>
     <div class="scroll"><table id="dsTable"></table></div>
-    <p class="note">Each row: one simulated calibration. The object was tested at rising force steps (0.5 N, or 0.25 N if fragile) until it held; <b>min_holding_force_n</b> is the label. <a id="csv" href="/dataset.csv" style="color:var(--accent)">Download CSV</a></p></div>
+    <div class="controls" style="margin-top:10px"><button id="csvBtn" class="primary">Download CSV</button><a href="/dataset.csv" target="_blank" rel="noopener" style="color:var(--accent);font-size:12.5px">or open the raw CSV</a><span id="csvMsg" class="note" style="margin:0"></span></div>
+    <p class="note">Each row: one simulated calibration. The object was tested at rising force steps (0.5 N, or 0.25 N if fragile) until it held; <b>min_holding_force_n</b> is the label. The same file is in the project at <code>mlsim\data\grasp_trials.csv</code>.</p></div>
   <div class="card"><h2>Try the model</h2><p class="sub">Ask the current model about any object.</p>
     <div class="controls" style="margin-bottom:12px">
       <label class="f">Material<select id="pMat"></select></label>
@@ -230,6 +231,15 @@ async function poll() { try { render(await api('/api/state')) } catch (e) { $('s
 $('train').onclick = async () => { if (last && last.status === 'training') await api('/api/pause', {}); else await api('/api/train', {}); render(await api('/api/state')) }
 $('reset').onclick = async () => { await api('/api/reset', { epochs: +$('epochs').value, lr: +$('lr').value, hidden: +$('hidden').value, delay_ms: +$('speed').value }); render(await api('/api/state')) }
 $('speed').onchange = $('reset').onclick
+// fetch + Blob + a[download]: saves the file directly in every browser
+$('csvBtn').onclick = async () => {
+  try {
+    const r = await fetch('/dataset.csv'); if (!r.ok) throw new Error('HTTP ' + r.status)
+    const url = URL.createObjectURL(new Blob([await r.text()], { type: 'text/csv;charset=utf-8' }))
+    const a = document.createElement('a'); a.href = url; a.download = 'grasp_trials.csv'; document.body.append(a); a.click(); a.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 2000); $('csvMsg').textContent = 'Saved grasp_trials.csv to your Downloads folder.'
+  } catch (e) { $('csvMsg').textContent = 'Download failed (' + e.message + '). Open the raw CSV instead, or use mlsim\\data\\grasp_trials.csv.' }
+}
 $('predict').onclick = async () => {
   const r = await api('/api/predict', { material: $('pMat').value, mass_g: +$('pMass').value, friction_coefficient: +$('pMu').value, width_mm: +$('pWidth').value, fragility: $('pFrag').value })
   if (r.error) { $('oNote').textContent = r.error; return }

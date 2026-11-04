@@ -6,5 +6,5 @@ param([int]$Port = 8100)
 $ErrorActionPreference = 'Stop'
 $py = Join-Path $PSScriptRoot 'backend\.venv\Scripts\python.exe'
 if (-not (Test-Path $py)) { $py = 'python' }
-Start-Job -ScriptBlock { param($u) Start-Sleep 2; Start-Process $u } -ArgumentList "http://localhost:$Port" | Out-Null
+Start-Job -ScriptBlock { param($u) Start-Sleep 2; Start-Process $u } -ArgumentList "http://127.0.0.1:$Port" | Out-Null
 & $py (Join-Path $PSScriptRoot 'mlsim\server.py') --port $Port
